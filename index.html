@@ -288,6 +288,205 @@
     min-height: 36px;
   }
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" onerror="this.onerror=null;this.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';document.head.appendChild(s);">
+let map = null;
+let currentTileMode = 'road';
+let googleRoadLayer = null;
+let googleSatLayer = null;
+let markersByDay = {};
+let allMarkers = [];
+let currentActiveDay = '1';
+let isMapExpanded = false;
+
+const DAY_COLORS = {
+  '1': '#059669',
+  '2': '#d97706',
+  '3': '#0284c7',
+  '4': '#db2777'
+};
+
+function initMobileMap() {
+  if (typeof L === 'undefined') {
+    setTimeout(initMobileMap, 200);
+    return;
+  }
+  const mapEl = document.getElementById('mobile-map');
+  if (!mapEl || map) return;
+
+  googleRoadLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+    attribution: '&copy; Google Maps',
+    maxZoom: 20
+  });
+
+  googleSatLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+    attribution: '&copy; Google Satellite',
+    maxZoom: 20
+  });
+
+  map = L.map('mobile-map', {
+    layers: [googleRoadLayer],
+    zoomControl: true,
+    scrollWheelZoom: false
+  });
+
+  // Create markers for all stops
+  ITINERARY_DATA.days.forEach(d => {
+    markersByDay[d.day] = [];
+    const color = DAY_COLORS[d.day] || '#0284c7';
+    d.stops.forEach(s => {
+      if (!s.lat || !s.lng) return;
+      const pin = createCustomPin(s.num, color, s.isTier1);
+      const marker = L.marker([s.lat, s.lng], { icon: pin });
+      
+      const popupHtml = `
+        <div style="direction:rtl;text-align:right;font-family:-apple-system,BlinkMacSystemFont,sans-serif;min-width:180px;font-size:12px;">
+          <strong style="color:${color};font-size:13px;">#${s.num}. ${s.name}</strong><br>
+          <span style="color:#64748b;">⏳ ${s.time}</span><br>
+          <span style="font-weight:700;">🎟️ ${s.cost_he || 'חינם'}</span><br>
+          <div style="margin-top:6px;">
+            <a href="#card-${s.id}" onclick="scrollToCard('${s.id}')" style="color:#0284c7;font-weight:700;text-decoration:none;">⬇️ גלול לפרטי התחנה</a>
+          </div>
+        </div>
+      `;
+      marker.bindPopup(popupHtml);
+      marker.stopId = s.id;
+      marker.dayNum = d.day;
+      marker.on('click', () => {
+        scrollToCard(s.id);
+      });
+
+      markersByDay[d.day].push(marker);
+      allMarkers.push(marker);
+    });
+  });
+
+  filterMapMarkers('1');
+}
+
+function createCustomPin(num, color, isTier1) {
+  const size = isTier1 ? 30 : 26;
+  const border = isTier1 ? '3px solid #fef08a' : '2px solid #ffffff';
+  const shadow = isTier1 ? '0 3px 8px rgba(0,0,0,0.5)' : '0 2px 5px rgba(0,0,0,0.35)';
+  const html = `<div style="
+    background:${color};
+    color:#ffffff;
+    width:${size}px;
+    height:${size}px;
+    border-radius:50%;
+    border:${border};
+    box-shadow:${shadow};
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:900;
+    font-size:${isTier1 ? '13px' : '11px'};
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  ">${num}</div>`;
+  return L.divIcon({
+    html: html,
+    className: 'custom-map-pin',
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
+    popupAnchor: [0, -size / 2]
+  });
+}
+
+function filterMapMarkers(dayNum) {
+  if (!map) return;
+  currentActiveDay = String(dayNum);
+  
+  // Update day indicator badge
+  const badge = document.getElementById('map-day-indicator');
+  if (badge) {
+    badge.textContent = 'יום ' + dayNum;
+    badge.style.color = DAY_COLORS[dayNum] || '#0284c7';
+  }
+
+  // Remove all markers
+  allMarkers.forEach(m => map.removeLayer(m));
+
+  // Add active day markers
+  const activeMarkers = markersByDay[currentActiveDay] || [];
+  activeMarkers.forEach(m => map.addLayer(m));
+
+  fitDayBounds();
+}
+
+function fitDayBounds() {
+  if (!map) return;
+  const activeMarkers = markersByDay[currentActiveDay] || [];
+  if (activeMarkers.length === 0) return;
+  const group = L.featureGroup(activeMarkers);
+  map.fitBounds(group.getBounds(), { padding: [35, 35], maxZoom: 14 });
+}
+
+function toggleMapTiles() {
+  if (!map) return;
+  const btn = document.getElementById('btn-toggle-tiles');
+  if (currentTileMode === 'road') {
+    map.removeLayer(googleRoadLayer);
+    map.addLayer(googleSatLayer);
+    currentTileMode = 'sat';
+    if (btn) btn.textContent = '🗺️ מפה רגילה';
+  } else {
+    map.removeLayer(googleSatLayer);
+    map.addLayer(googleRoadLayer);
+    currentTileMode = 'road';
+    if (btn) btn.textContent = '🛰️ לוויין';
+  }
+}
+
+function toggleMapHeight() {
+  const mapEl = document.getElementById('mobile-map');
+  const btn = document.getElementById('btn-toggle-map-size');
+  if (!mapEl) return;
+  isMapExpanded = !isMapExpanded;
+  mapEl.style.height = isMapExpanded ? '440px' : '280px';
+  if (btn) btn.textContent = isMapExpanded ? '📐 צמצם מפה' : '📐 הגדל מפה';
+  setTimeout(() => { if (map) map.invalidateSize(); }, 300);
+}
+
+function scrollToCard(stopId) {
+  const card = document.getElementById('card-' + stopId);
+  if (card) {
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card.style.outline = '3px solid var(--primary)';
+    card.style.outlineOffset = '3px';
+    setTimeout(() => { card.style.outline = 'none'; }, 2000);
+  }
+}
+
+function focusStopOnMap(gmapsUrl, btnEl) {
+  if (!map) return;
+  const card = btnEl.closest('.stop-card');
+  if (!card) return;
+  const stopId = card.id.replace('card-', '');
+  
+  // Find marker
+  const m = allMarkers.find(marker => marker.stopId === stopId);
+  if (m) {
+    // Scroll to map
+    const mapWrapper = document.querySelector('.map-card-wrapper');
+    if (mapWrapper) mapWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    map.setView(m.getLatLng(), 15, { animate: true });
+    m.openPopup();
+  }
+}
+
+// Hook into existing switchTab to sync map
+const origSwitchTab = switchTab;
+switchTab = function(dayNum, btnEl) {
+  origSwitchTab(dayNum, btnEl);
+  filterMapMarkers(dayNum);
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  initMobileMap();
+});
+
+</script>
+
 </head>
 <body>
 
@@ -299,6 +498,22 @@
     <a href="dbv_trip_he.html" class="btn btn-sec">🗺️ תצוגת מפה מלאה (Desktop)</a>
   </div>
 </header>
+
+
+<div class="map-card-wrapper" style="margin-bottom:14px;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card-bg);box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px;">
+    <div style="font-weight:800;font-size:0.88rem;color:var(--primary);display:flex;align-items:center;gap:6px;">
+      <span>🗺️ מפת Google Maps חיה</span>
+      <span id="map-day-indicator" style="font-size:0.75rem;padding:2px 8px;border-radius:4px;background:rgba(2,132,199,0.12);color:var(--primary);font-weight:700;">יום 1</span>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <button type="button" class="btn" id="btn-toggle-tiles" onclick="toggleMapTiles()" style="padding:6px 10px;font-size:0.76rem;min-height:36px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);">🛰️ לוויין</button>
+      <button type="button" class="btn" id="btn-toggle-map-size" onclick="toggleMapHeight()" style="padding:6px 10px;font-size:0.76rem;min-height:36px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);">📐 הגדל מפה</button>
+      <button type="button" class="btn" id="btn-fit-day" onclick="fitDayBounds()" style="padding:6px 10px;font-size:0.76rem;min-height:36px;background:var(--primary);color:#fff;border:none;">🎯 מרכז יום</button>
+    </div>
+  </div>
+  <div id="mobile-map" style="height:280px;width:100%;transition:height 0.25s ease;z-index:1;"></div>
+</div>
 
 <nav class="day-tabs" aria-label="ניווט לפי ימים">
   <button type="button" class="tab-btn active" onclick="switchTab('1', this)">יום 1</button>
@@ -344,7 +559,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 1x מהמזח התחתון כלפי קיר האבן של Forte Mare.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> המשך 25 דק׳ נסיעה סביב מצרי Verige אל Perast</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Forte+Mare+Herceg+Novi+Montenegro" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Forte+Mare+Herceg+Novi+Montenegro', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Forte+Mare+Herceg+Novi+Montenegro" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
     <article class="stop-card" id="card-d1-s2">
@@ -364,7 +580,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 2x ממדרגות מגדל הפעמונים של St. Nicholas שממסגרת את שני האיים יחד.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 15 דק׳ נסיעה אל קוטור (חניה חינם ב-Hostel Pupa המוזמן, 300m מהחומות)</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Perast+Montenegro+Our+Lady+of+the+Rocks" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Perast+Montenegro+Our+Lady+of+the+Rocks', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Perast+Montenegro+Our+Lady+of+the+Rocks" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
     <article class="stop-card" id="card-d1-s3">
@@ -384,7 +601,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 0.5x דרך קשת האבן ההרוסה ("החלון של קוטור") שממסגרת את כנסיית Our Lady of Remedy והפיורד.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> ירידה ישירה לתוך סמטאות העיר העתיקה של קוטור</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=San+Giovanni+Fortress+Kotor" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=San+Giovanni+Fortress+Kotor', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=San+Giovanni+Fortress+Kotor" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
     <article class="stop-card" id="card-d1-s4">
@@ -404,7 +622,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> Night Mode בחשיפה של 2 שניות מהגשר הצפוני (River Gate) לתפיסת השתקפות החומות המוארות במים.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 3 דק׳ הליכה (300m) חזרה ל-Hostel Pupa המוזמן בקוטור</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Kotor+Old+Town+Cathedral+of+Saint+Tryphon" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Kotor+Old+Town+Cathedral+of+Saint+Tryphon', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Kotor+Old+Town+Cathedral+of+Saint+Tryphon" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
   </div>
@@ -446,7 +665,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 0.5x מפיתול #25 שתופסת גם את זיגזג האספלט מתחת וגם את שני אגני המפרץ.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 25 דק׳ נסיעה דרך יער הפארק הלאומי אל פסגת Lovćen</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Kotor+Serpentine+Viewpoint+Horizont" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Kotor+Serpentine+Viewpoint+Horizont', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Kotor+Serpentine+Viewpoint+Horizont" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
     <article class="stop-card" id="card-d2-s2">
@@ -466,7 +686,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 0.5x בשביל האבן הצר שמוביל מהמונומנט אל טבעת התצפית העגולה מעל התהום.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 45 דק׳ ירידה פנורמית דרך Cetinje אל חוף הים האדריאטי ב-Sveti Stefan</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Njegos+Mausoleum+Lovcen+Montenegro" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Njegos+Mausoleum+Lovcen+Montenegro', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Njegos+Mausoleum+Lovcen+Montenegro" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
     <article class="stop-card" id="card-d2-s3">
@@ -486,7 +707,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 2x מהמרפסת הסלעית מעל המפרץ הצפוני של Sveti Stefan מול גגות הרעפים של האי.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 15 דק׳ נסיעה לאורך החוף אל Budva Stari Grad</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Sveti+Stefan+Viewpoint+Milocer+Park" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Sveti+Stefan+Viewpoint+Milocer+Park', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Sveti+Stefan+Viewpoint+Milocer+Park" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
     <article class="stop-card" id="card-d2-s4">
@@ -506,7 +728,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 1x מפסל הבלרינה על הסלעים עם חומות Budva והים ברקע.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 25 דק׳ נסיעה חזרה ללינה בקוטור</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Budva+Old+Town+Citadela+Montenegro" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Budva+Old+Town+Citadela+Montenegro', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Budva+Old+Town+Citadela+Montenegro" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
   </div>
@@ -547,7 +770,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 0.5x מהדק המרכזי שמול הקשת המלאה של המפלים.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 25 דק׳ נסיעה אל כפר המצוק העות׳מאני Počitelj</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Kravica+Waterfall+Bosnia" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Kravica+Waterfall+Bosnia', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Kravica+Waterfall+Bosnia" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
     <article class="stop-card" id="card-d3-s2">
@@ -567,7 +791,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 1x מחלון האבן של המצודה העליונה כלפי מטה על כיפת המסגד, הצריח ועיקול הנהר הירוק.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 25 דק׳ נסיעה אל Blagaj Tekke</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Pocitelj+Fortress+Bosnia" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Pocitelj+Fortress+Bosnia', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Pocitelj+Fortress+Bosnia" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
     <article class="stop-card" id="card-d3-s3">
@@ -587,7 +812,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 0.5x אנכית מהגדה שמנגד שתופסת את בית הדרווישים הלבן, פתח המערה והמצוק העצום מעליו.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 20 דק׳ נסיעה אל מוסטר (חניה חינם ב-Apartments GB המוזמן ב-Maršala Tita 95 ב-15:00)</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Blagaj+Tekke+Bosnia" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Blagaj+Tekke+Bosnia', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Blagaj+Tekke+Bosnia" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
     <article class="stop-card" id="card-d3-s4">
@@ -607,7 +833,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> זווית 1 (שקיעה): מצריח/חצר Koski Mehmed Paša (עדשה 1x). זווית 2 (שעה כחולה): מחוף הסלעים מתחת ל-Lučki Most או מחלוקי הנהר מתחת לקשת.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> לינה ב-Apartments GB המוזמן במוסטר (5 דק׳ הליכה)</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Stari+Most+Mostar+Bosnia" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Stari+Most+Mostar+Bosnia', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Stari+Most+Mostar+Bosnia" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
   </div>
@@ -647,7 +874,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 1x מנקודת התצפית הצפונית שמראה את שורת הפילונים הלבנים באלכסון על המים.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 20 דק׳ נסיעה לאורך חצי האי אל Ston</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Peljesac+Bridge+Viewpoint+Komarna" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Peljesac+Bridge+Viewpoint+Komarna', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Peljesac+Bridge+Viewpoint+Komarna" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
     <article class="stop-card" id="card-d4-s2">
@@ -667,7 +895,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 1x מהמגדל העליון מעל Ston כלפי מטה על בריכות המלח המרובעות והעיירה המחומשת.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 45 דק׳ נסיעה על כביש המצוקים האדריאטי (D8) אל תצפית גשר המיתרים Franjo Tuđman ו-Cavtat</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Walls+of+Ston+Croatia" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Walls+of+Ston+Croatia', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Walls+of+Ston+Croatia" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
     <article class="stop-card" id="card-d4-s3">
@@ -687,7 +916,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 1x ממפרץ התצפית המערבי שממסגרת את מניפת הכבלים הלבנה מעל המים הכחולים.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 25 דק׳ נסיעה אל עיירת החוף Cavtat (הגעה ב-14:20 לשעתיים מלאות של אור שמש לפני השקיעה!)</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Franjo+Tudman+Bridge+Viewpoint+Dubrovnik" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Franjo+Tudman+Bridge+Viewpoint+Dubrovnik', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Franjo+Tudman+Bridge+Viewpoint+Dubrovnik" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
     <article class="stop-card" id="card-d4-s4">
@@ -707,7 +937,8 @@
       <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 1x משביל הסלעים של חצי האי Rat לעבר נמל הסירות של Cavtat בשעה הכחולה.</div>
       <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> לינה ב-Apartments Mira המוזמן ב-Cavtat -> שלישי 08:35: 6 דק׳ לטרמינל DBV -> טיסה 10:35 לדבלין</div>
       <div class="stop-links">
-        <a href="https://www.google.com/maps/search/?api=1&query=Racic+Mausoleum+Cavtat+Croatia" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+        <button type="button" class="link-pill" onclick="focusStopOnMap('https://www.google.com/maps/search/?api=1&query=Racic+Mausoleum+Cavtat+Croatia', this)" style="background:var(--card-bg);cursor:pointer;border:1px solid var(--primary);color:var(--primary);">🗺️ הצג במפה החיה</button>
+        <a href="https://www.google.com/maps/search/?api=1&query=Racic+Mausoleum+Cavtat+Croatia" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
   </div>
