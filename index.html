@@ -3,7 +3,7 @@
 <head>
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 <title>מונטנגרו, בוסניה וסטון — מהדורת שטח לקריאה והעתקה בנייד (30/10 - 03/11)</title>
 <style>
   :root {
@@ -291,8 +291,58 @@
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" onerror="this.onerror=null;this.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';document.head.appendChild(s);"></script>
+
+<style id="mobileZoomStyles">
+  html {
+    font-size: 19px !important;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (max-width: 768px) {
+    html {
+      font-size: 20px !important;
+    }
+  }
+  p, li, td, th, span, div {
+    line-height: 1.62;
+  }
+  .cap-desc, .table-card td, .step-desc, .hero-sub {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+  }
+  #fontSizeControlBar button:hover {
+    filter: brightness(1.2);
+  }
+</style>
+
 </head>
 <body>
+
+<div id="fontSizeControlBar" style="position:fixed;bottom:20px;left:20px;z-index:999999;display:flex;align-items:center;gap:6px;background:#0f172a;border:2px solid #0284c7;padding:8px 14px;border-radius:30px;box-shadow:0 6px 24px rgba(0,0,0,0.5);direction:rtl;font-family:-apple-system,BlinkMacSystemFont,sans-serif;">
+  <span style="font-size:0.85rem;font-weight:800;color:#f8fafc;margin-left:4px;">🔍 גודל טקסט:</span>
+  <button type="button" onclick="changeZoom(-0.15)" style="background:#334155;border:1px solid #475569;color:#fff;padding:6px 12px;border-radius:18px;font-size:0.9rem;font-weight:800;cursor:pointer;">A- הקטן</button>
+  <button type="button" onclick="resetZoom()" style="background:#1e293b;border:1px solid #475569;color:#94a3b8;padding:6px 10px;border-radius:18px;font-size:0.8rem;font-weight:700;cursor:pointer;">איפוס</button>
+  <button type="button" onclick="changeZoom(0.15)" style="background:#0284c7;border:1px solid #38bdf8;color:#fff;padding:6px 14px;border-radius:18px;font-size:1.05rem;font-weight:900;cursor:pointer;">A+ הגדל</button>
+</div>
+
+<script id="mobileZoomScript">
+  let currentTextZoom = parseFloat(localStorage.getItem('user_mobile_zoom_level') || '1.15');
+  function applyTextZoom() {
+    const baseSize = window.innerWidth <= 768 ? 20 : 19;
+    document.documentElement.style.fontSize = (baseSize * currentTextZoom) + 'px';
+    try { localStorage.setItem('user_mobile_zoom_level', currentTextZoom.toFixed(2)); } catch(e) {}
+  }
+  function changeZoom(delta) {
+    currentTextZoom = Math.min(2.2, Math.max(0.85, currentTextZoom + delta));
+    applyTextZoom();
+  }
+  function resetZoom() {
+    currentTextZoom = 1.15;
+    applyTextZoom();
+  }
+  applyTextZoom();
+  window.addEventListener('resize', applyTextZoom);
+</script>
+
 
 <header>
   <h1>🧭 מונטנגרו, בוסניה וסטון — מהדורת שטח לקריאה והעתקה</h1>
