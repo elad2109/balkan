@@ -1713,6 +1713,70 @@ function fallbackCopy(text, onDone) {
   document.body.removeChild(ta);
 }
 
+
+function showToast(msg) {
+  let toast = document.getElementById('app-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'app-toast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#059669;color:#fff;padding:10px 22px;border-radius:24px;font-weight:700;font-size:0.9rem;box-shadow:0 4px 14px rgba(0,0,0,0.3);z-index:99999;transition:opacity 0.2s;pointer-events:none;text-align:center;direction:rtl;';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.opacity = '1';
+  clearTimeout(window._toastTimeout);
+  window._toastTimeout = setTimeout(() => {
+    toast.style.opacity = '0';
+  }, 2200);
+}
+
+function copyTextSafe(text, onDone) {
+  let done = false;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(() => {
+      done = true;
+      if (onDone) onDone();
+      showToast('✅ הועתק בהצלחה ללוח');
+    }).catch(() => {
+      if (!done) doFallbackCopy(text, onDone);
+    });
+  } else {
+    doFallbackCopy(text, onDone);
+  }
+}
+
+function doFallbackCopy(text, onDone) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.top = '0';
+  ta.style.left = '0';
+  ta.style.width = '2em';
+  ta.style.height = '2em';
+  ta.style.padding = '0';
+  ta.style.border = 'none';
+  ta.style.outline = 'none';
+  ta.style.boxShadow = 'none';
+  ta.style.background = 'transparent';
+  ta.setAttribute('readonly', '');
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  ta.setSelectionRange(0, 999999);
+  try {
+    const success = document.execCommand('copy');
+    if (success) {
+      if (onDone) onDone();
+      showToast('✅ הועתק בהצלחה ללוח');
+    } else {
+      showToast('⚠️ אנא העתק ידנית');
+    }
+  } catch (err) {
+    showToast('⚠️ אנא העתק ידנית');
+  }
+  document.body.removeChild(ta);
+}
+
 function copySingleMap(mapName, btnEl) {
   const text = mapName + '\n\n\n';
   copyTextSafe(text, () => {
