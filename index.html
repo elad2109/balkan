@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מונטנגרו, בוסניה וסטון — מהדורת שטח לקריאה והעתקה בנייד (30/10 - 03/11)</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #0f172a;
+    --muted: #475569;
+    --border: #cbd5e1;
+    --primary: #0284c7;
+    --card-bg: #f8fafc;
+    --accent: #d97706;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f172a;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
+      --primary: #38bdf8;
+      --card-bg: #1e293b;
+      --accent: #f59e0b;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 14px;
+    line-height: 1.6;
+  }
+  header {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+  }
+  h1 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 6px;
+  }
+  .sub-header {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .global-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.82rem;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    min-height: 44px;
+  }
+  .btn-sec {
+    background: #334155;
+    color: #fff;
+  }
+  .btn-green {
+    background: #059669;
+    color: #fff;
+  }
+  .day-tabs {
+    display: flex;
+    gap: 6px;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    overflow-x: auto;
+  }
+  .tab-btn {
+    flex: 1;
+    min-width: 75px;
+    padding: 10px 6px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--primary);
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+    min-height: 44px;
+  }
+  .tab-btn.active {
+    background: var(--primary);
+    color: #fff;
+  }
+  .tab-content {
+    display: none;
+    padding-top: 14px;
+  }
+  .tab-content.active {
+    display: block;
+  }
+  .day-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .day-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .day-subtitle {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .logistics-box {
+    background: rgba(2, 132, 199, 0.08);
+    border-inline-start: 4px solid var(--primary);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 0.82rem;
+    margin-bottom: 14px;
+  }
+  .wa-box {
+    background: rgba(5, 150, 105, 0.1);
+    border: 1px dashed #059669;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 16px;
+  }
+  .wa-title {
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: #059669;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .wa-btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .wa-btn {
+    background: #059669;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    min-height: 40px;
+  }
+  .wa-btn-sec {
+    background: transparent;
+    color: #059669;
+    border: 1px solid #059669;
+  }
+  .stop-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .stop-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .stop-name {
+    font-size: 0.98rem;
+    font-weight: 800;
+  }
+  .stop-tier {
+    font-size: 0.72rem;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .tier-must {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  .tier-sec {
+    background: #e0f2fe;
+    color: #0369a1;
+  }
+  .map-copy-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0,0,0,0.04);
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+  .map-name-text {
+    font-family: monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    direction: ltr;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .btn-copy-map {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    min-height: 36px;
+  }
+  .info-row {
+    font-size: 0.82rem;
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+  .info-label {
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .photo-tip {
+    background: rgba(147, 51, 234, 0.08);
+    border-inline-start: 3px solid #9333ea;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    margin-top: 8px;
+  }
+  .transit-tip {
+    background: rgba(16, 185, 129, 0.08);
+    border-inline-start: 3px solid #10b981;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    margin-top: 8px;
+  }
+  .stop-links {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .link-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 4px 8px;
+    border-radius: 6px;
+    min-height: 36px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🧭 מונטנגרו, בוסניה וסטון — מהדורת שטח לקריאה והעתקה</h1>
+  <div class="sub-header">30/10 (נחיתה 11:25) עד 03/11 (המראה 10:35) | לולאת 3 מדינות ברכב שכור | שקיעה 16:40</div>
+  <div class="global-actions">
+    <button type="button" class="btn btn-green" onclick="copyAllDaysWhatsApp()">📱 העתק הכל לווטסאפ (Maps + תקציר)</button>
+    <a href="dbv_trip_he.html" class="btn btn-sec">🗺️ תצוגת מפה מלאה (Desktop)</a>
+  </div>
+</header>
+
+<nav class="day-tabs" aria-label="ניווט לפי ימים">
+  <button type="button" class="tab-btn active" onclick="switchTab('1', this)">יום 1</button>
+  <button type="button" class="tab-btn " onclick="switchTab('2', this)">יום 2</button>
+  <button type="button" class="tab-btn " onclick="switchTab('3', this)">יום 3</button>
+  <button type="button" class="tab-btn " onclick="switchTab('4', this)">יום 4</button>
+</nav>
+
+<div class="tab-content active" id="tab-day-1">
+  <div class="day-card">
+    <div class="day-title">יום 1 (שישי 30/10, 11:25 - 21:00): נחיתה ב-DBV -> מפרץ קוטור -> Perast -> סולם מצודת San Giovanni בשקיעה</div>
+    <div class="day-subtitle">איסוף רכב ב-DBV (11:45) -> מעבר גבול Karasovići -> כביש החוף הפנימי של הפיורד -> Perast -> Kotor</div>
+    <div class="logistics-box">
+      <strong>📋 דגשים ולוגיסטיקה ליום זה:</strong><br>
+      • רכב: איסוף ב-DBV בדלפק Enterprise (יאריס אוטומט, ביטוח מלא). חובה לבקש Green Card למונטנגרו ובוסניה בדלפק.<br>
+      • גבול: מעבר Karasovići (קרואטיה->מונטנגרו). להחזיק דרכונים וכרטיס ירוק מוכנים.<br>
+      • סים: מונטנגרו אינה ב-EU! יש להפעיל eSIM (Revolut/Airalo) או להוריד מפות אופליין ב-Google Maps מראש.<br>
+      • שקיעה: 16:40. יש להתחיל טיפוס במצודת San Giovanni בקוטור עד 15:15.<br>
+      • לינה: Hostel Pupa בקוטור (חניה חינם 300 מטר מחומות העיר העתיקה).
+    </div>
+    <div class="wa-box">
+      <span class="wa-title">📲 העתקה לווטסאפ / פתקים — יום 1</span>
+      <div class="wa-btn-group">
+        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('1', 1, this)">📋 רמה 1: שמות ל-Maps (רווח כפול)</button>
+        <button type="button" class="wa-btn" onclick="copyDayWhatsApp('1', 2, this)">📋 רמה 2: שם + זמנים + עלויות + תקציר</button>
+        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('1', 3, this)">📋 רמה 3: מדריך שטח מלא</button>
+      </div>
+    </div>
+    <article class="stop-card" id="card-d1-s1">
+      <div class="stop-header">
+        <div class="stop-name">#1. Herceg Novi & מצודת הים Forte Mare בכניסה לפיורד</div>
+        <span class="stop-tier tier-sec">● שלד</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Forte Mare Herceg Novi Montenegro</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Forte Mare Herceg Novi Montenegro', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 12:45 - 13:25 (40m) (40 דק׳) | ⚡ ניתן לקצר ל-15 דק׳ אם היה תור בגבול</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> חינם מבחוץ (0€)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> חוץ בלבד: תצפית מהטיילת ומדרגות האבן של העיר העתיקה אל שער המפרץ.</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: שער הכניסה הדרמטי למפרץ בוקה קוטורסקה שבו חומות ביצור ונציאניות ובוסניות יורדות ישר אל המים.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך משדה התעופה DBV (25 דק׳): חוצים את גבול קרואטיה-מונטנגרו ב-Karasovići/Debeli Brijeg ונוסעים לאורך המפרץ החיצוני.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 1x מהמזח התחתון כלפי קיר האבן של Forte Mare.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> המשך 25 דק׳ נסיעה סביב מצרי Verige אל Perast</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Forte+Mare+Herceg+Novi+Montenegro" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+    <article class="stop-card" id="card-d1-s2">
+      <div class="stop-header">
+        <div class="stop-name">#2. Perast Baroque Waterfront & שייט לאי המלאכותי Our Lady of the Rocks</div>
+        <span class="stop-tier tier-must">★ חובה</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Perast Montenegro Our Lady of the Rocks</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Perast Montenegro Our Lady of the Rocks', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 13:50 - 15:00 (70m) (70 דק׳) | 🔥 חובה - לא לוותר (הנוף האייקוני של מונטנגרו)</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> 5€ סירת הלוך-חזור לאי (רחבת האי בחוץ חינם; מדלגים על 2€ לחדר הכלים הפנימי; חניה ~2€)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> [חוץ + שייט קצר (5 דק׳) לרחבת האי המלאכותי]: הליכה על טיילת האבן הבארוקית של Perast ושייט לרחבת האבן הפתוחה של האי (מדלגים על חדר המוזיאון הקטן בפנים).</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: עיירת ארמונות בארוק מאבן לבנה ללא רכבים, שמולה צפים שני איים זעירים בלב קניון הרים שחור בגובה 1,000 מטר.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך בכביש המפרץ: בחציית מצר Verige הצר (רוחב 340 מטר בלבד!) נגלים שני האיים בבת אחת כמו תמונה.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 2x ממדרגות מגדל הפעמונים של St. Nicholas שממסגרת את שני האיים יחד.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 15 דק׳ נסיעה אל קוטור (חניה חינם ב-Hostel Pupa המוזמן, 300m מהחומות)</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Perast+Montenegro+Our+Lady+of+the+Rocks" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+    <article class="stop-card" id="card-d1-s3">
+      <div class="stop-header">
+        <div class="stop-name">#3. טיפוס שקיעה למצודת San Giovanni (סולם קוטור - 1,350 מדרגות / שביל החלון)</div>
+        <span class="stop-tier tier-must">★ חובה</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">San Giovanni Fortress Kotor</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('San Giovanni Fortress Kotor', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 15:20 - 17:15 (115m - שקיעה ב-16:42) (115 דק׳ (עלייה מהירה 40 דק׳ + צילום שקיעה + ירידה)) | 🔥 חובה מוחלטת - שיא הטיול במונטנגרו</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> 15€ בשער המדרגות הרשמי (או 0€ דרך שביל הסרפנטינות החיצוני של Špiljari)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> חוץ (טיפוס מצוק מבוצר): נכנסים פנימה לחומות המצודה ולכנסיית Our Lady of Remedy באמצע ההר.</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: טיפוס אנכי עוצר נשימה שבו גגות הרעפים המשולשים של קוטור והפיורד כולו פרושים מתחת לרגליים ברגע שהאורות נדלקים בשעה הכחולה.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך: מניחים את הרכב בחניה של Hostel Pupa המוזמן (15:05, 300m מהחומות) ונכנסים דרך השער הצפוני (River Gate) אל תחילת המדרגות.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 0.5x דרך קשת האבן ההרוסה ("החלון של קוטור") שממסגרת את כנסיית Our Lady of Remedy והפיורד.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> ירידה ישירה לתוך סמטאות העיר העתיקה של קוטור</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=San+Giovanni+Fortress+Kotor" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+    <article class="stop-card" id="card-d1-s4">
+      <div class="stop-header">
+        <div class="stop-name">#4. Kotor Stari Grad (העיר העתיקה בלילה: Sea Gate, קתדרלת St. Tryphon והחומות המוארות)</div>
+        <span class="stop-tier tier-must">★ חובה</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Kotor Old Town Cathedral of Saint Tryphon</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Kotor Old Town Cathedral of Saint Tryphon', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 17:15 - 20:30 (סיור לילה רגלי) (90 דק׳) | 🔥 חובה - קוטור בלילה מוארת כמו תפאורת קולנוע</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> חינם (0€)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> חוץ בלבד: שיטוט במבוך הכיכרות הוונציאניות והליכה על גשר נהר Škurda מול השתקפות החומות במים.</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: בלילה שרשרת פנסים כתומים מאירה את חומות המצודה לאורך 4.5 ק"מ על קיר הסלע השחור ומשתקפת בנהר Škurda.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך: עוברים מתחת למגדל השעון מ-1602 שלרגליו עמוד הקלון הפירמידלי הוונציאני.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> Night Mode בחשיפה של 2 שניות מהגשר הצפוני (River Gate) לתפיסת השתקפות החומות המוארות במים.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 3 דק׳ הליכה (300m) חזרה ל-Hostel Pupa המוזמן בקוטור</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Kotor+Old+Town+Cathedral+of+Saint+Tryphon" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+  </div>
+</div>
+<div class="tab-content " id="tab-day-2">
+  <div class="day-card">
+    <div class="day-title">יום 2 (שבת 31/10, 08:00 - 20:30): 25 הסרפנטינות של קוטור -> פסגת Lovćen -> Sveti Stefan -> Budva</div>
+    <div class="day-subtitle">עלייה ב-08:00 לפני אוטובוסים ב-Kotor Serpentine -> מאוזוליאום Njegoš (1,657m) -> ירידה לחוף האדריאטי</div>
+    <div class="logistics-box">
+      <strong>📋 דגשים ולוגיסטיקה ליום זה:</strong><br>
+      • בוקר מוקדם (08:00): עלייה ב-25 פיתולי הסרפנטינה של קוטור באור בוקר.<br>
+      • גובה וקור: מאוזוליאום Njegoš בפסגת הר Lovćen (1,657 מ'). קר ורוח חזקה (כ-8°-10°C), חובה מעיל רוח ושכבה חמה.<br>
+      • כרטיסים: כ-5-8€ למאוזוליאום (מזומן), 461 מדרגות במנהרה חצובה בסלע.<br>
+      • חוף: ירידה לחוף צ'טיניה-בודווה וסבטי סטפן באור יום ושקיעה ב-16:40.<br>
+      • לינה: קוטור או בודווה.
+    </div>
+    <div class="wa-box">
+      <span class="wa-title">📲 העתקה לווטסאפ / פתקים — יום 2</span>
+      <div class="wa-btn-group">
+        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('2', 1, this)">📋 רמה 1: שמות ל-Maps (רווח כפול)</button>
+        <button type="button" class="wa-btn" onclick="copyDayWhatsApp('2', 2, this)">📋 רמה 2: שם + זמנים + עלויות + תקציר</button>
+        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('2', 3, this)">📋 רמה 3: מדריך שטח מלא</button>
+      </div>
+    </div>
+    <article class="stop-card" id="card-d2-s1">
+      <div class="stop-header">
+        <div class="stop-name">#5. Kotor Serpentine Road (25 פיתולי המצוק האוסטרו-הונגריים ותצפית הפיורד העליונה)</div>
+        <span class="stop-tier tier-must">★ חובה</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Kotor Serpentine Viewpoint Horizont</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Kotor Serpentine Viewpoint Horizont', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 08:15 - 09:15 (60m) (60 דק׳ (עצירות צילום בפיתולים #16 ו-#25)) | 🔥 חובה - כביש הנוף המרהיב בבלקן</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> חינם (0€)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> חוץ (תצפיות מצוק): עצירה במפרצי האבן של פיתול 16 ופיתול 25 בגובה 900 מטר מעל הפיורד.</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: 25 פיתולי סיכה ממוספרים שנחצבו ב-1884 על קיר אנכי, שמהם כל מפרץ קוטור נראה מלמעלה כמו כנפי פרפר עצומות.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך: יציאה ב-08:00 בבוקר מבטיחה כביש ריק לחלוטין ואור שמש מזרחי שמאיר את קיר ההרים שממול.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 0.5x מפיתול #25 שתופסת גם את זיגזג האספלט מתחת וגם את שני אגני המפרץ.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 25 דק׳ נסיעה דרך יער הפארק הלאומי אל פסגת Lovćen</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Kotor+Serpentine+Viewpoint+Horizont" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+    <article class="stop-card" id="card-d2-s2">
+      <div class="stop-header">
+        <div class="stop-name">#6. מאוזוליאום Njegoš בפסגת הר Lovćen (מנהרת 461 המדרגות ושביל הרכס ב-1,657m)</div>
+        <span class="stop-tier tier-must">★ חובה</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Njegos Mausoleum Lovcen Montenegro</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Njegos Mausoleum Lovcen Montenegro', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 09:40 - 11:00 (80m) (80 דק׳) | 🔥 חובה - אדריכלות מונומנטלית יוגוסלבית בגובה 1,657m</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> 3€ כניסה לפארק + 8€ למאוזוליאום</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> פנים + חוץ (מוצדק ב-100%): צועדים במנהרה החצובה בתוך פסגת ההר אל היכל הגרניט השחור ולמצפה ה-360° מאחור.</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: מקדש גרניט ברוטליסטי-מונומנטלי שעיצב הפסל Ivan Meštrović על שפיץ הר בגובה 1,657 מטר, שממנו רואים ביום בהיר כמעט את כל מונטנגרו.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך: חוצים את עמק הכפר Njeguši המוקף אמפיתיאטרון קרסטי אפור.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 0.5x בשביל האבן הצר שמוביל מהמונומנט אל טבעת התצפית העגולה מעל התהום.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 45 דק׳ ירידה פנורמית דרך Cetinje אל חוף הים האדריאטי ב-Sveti Stefan</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Njegos+Mausoleum+Lovcen+Montenegro" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+    <article class="stop-card" id="card-d2-s3">
+      <div class="stop-header">
+        <div class="stop-name">#7. האי המבוצר Sveti Stefan ופארק המצוקים Miločer (שביל הארזים המלכותי)</div>
+        <span class="stop-tier tier-must">★ חובה</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Sveti Stefan Viewpoint Milocer Park</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Sveti Stefan Viewpoint Milocer Park', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 12:00 - 13:45 (105m) (105 דק׳) | 🔥 חובה - האי האייקוני של הים האדריאטי</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> חינם (0€ - שביל החוף והמצוק פתוחים בחינם)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> חוץ בלבד (האי עצמו סגור): הולכים בשביל המצוקים המוצל מחוף Miločer ומלון וילה המלך אל שתי הלגונות הטורקיז שמקיפות את האי.</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: כפר דייגים מבוצר מהמאה ה-15 של שבט Paštrovići הבנוי בצפיפות על סלע בים ומחובר ליבשה בסוללת חלוקים ורודה בין שני מפרצי טורקיז.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך: בירידה מההרים ב-Brajići עוצרים ל-5 דק׳ במצפה העליון שממנו רואים את כל רצועת החוף של Budva והאי.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 2x מהמרפסת הסלעית מעל המפרץ הצפוני של Sveti Stefan מול גגות הרעפים של האי.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 15 דק׳ נסיעה לאורך החוף אל Budva Stari Grad</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Sveti+Stefan+Viewpoint+Milocer+Park" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+    <article class="stop-card" id="card-d2-s4">
+      <div class="stop-header">
+        <div class="stop-name">#8. Budva Stari Grad, מצודת הים Citadela ושביל המצוק ל-Mogren</div>
+        <span class="stop-tier tier-sec">● שלד</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Budva Old Town Citadela Montenegro</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Budva Old Town Citadela Montenegro', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 14:15 - 16:45 (שקיעה על חצי האי המבוצר) (90 דק׳) | ⚡ חובה קצרה - שווה מאוד באור שקיעה</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> [חוץ בלבד] חינם לחלוטין (0€ להקפת חומות חצי האי ולשביל המצוק Mogren; מדלגים על 3.50€ למצודה הפנימית)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> [חוץ בלבד - 100% מצוק וחומות פתוחות]: מקיפים את חומות חצי האי הוונציאני מבחוץ וצועדים בשביל החצוב במצוק מעל הגלים אל Mogren (מדלגים על הכניסה הפנימית למצודת Citadela ב-3.50€ שרובה חצר קטנה וספרייה סגורה).</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: חצי אי ונציאני מוקף חומה הבולט לתוך הים הפתוח, עם שביל הליכה חצוב מתחת לשכבות סלע אנכיות מקופלות.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך חזרה לקוטור (25 דק׳ דרך מנהרת Vrmac): חוזרים ללילה שני בקוטור.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 1x מפסל הבלרינה על הסלעים עם חומות Budva והים ברקע.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 25 דק׳ נסיעה חזרה ללינה בקוטור</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Budva+Old+Town+Citadela+Montenegro" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+  </div>
+</div>
+<div class="tab-content " id="tab-day-3">
+  <div class="day-card">
+    <div class="day-title">יום 3 (ראשון 01/11, 08:00 - 21:00): חציית גבול לבוסניה (הרצגובינה) -> מפלי Kravica -> Počitelj -> Blagaj -> Mostar</div>
+    <div class="day-subtitle">יציאה מקוטור (08:00) -> מעבר גבול להרצגובינה -> שרשרת האתרים העות׳מאניים של עמק הנרטווה -> שקיעה ולילה במוסטר</div>
+    <div class="logistics-box">
+      <strong>📋 דגשים ולוגיסטיקה ליום זה:</strong><br>
+      • מעבר גבול לבוסניה והרצגובינה: דרכונים + כרטיס ירוק של הרכב. בוסניה אינה ב-EU.<br>
+      • מזומן: כניסה למפלי Kravica (כ-10€) וחניה במזומן אירו או מרק בוסני (KM).<br>
+      • אתרים: פוצ'יטל (כפר אבן מדורג) ומנזר Blagaj Tekke מתחת למצוק אנכי.<br>
+      • מוסטר: חניה חינם ב-Apartments GB וצעידה לגשר העתיק Stari Most ובזאר Kujundžiluk לפני השקיעה (16:40). לינה במוסטר.
+    </div>
+    <div class="wa-box">
+      <span class="wa-title">📲 העתקה לווטסאפ / פתקים — יום 3</span>
+      <div class="wa-btn-group">
+        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('3', 1, this)">📋 רמה 1: שמות ל-Maps (רווח כפול)</button>
+        <button type="button" class="wa-btn" onclick="copyDayWhatsApp('3', 2, this)">📋 רמה 2: שם + זמנים + עלויות + תקציר</button>
+        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('3', 3, this)">📋 רמה 3: מדריך שטח מלא</button>
+      </div>
+    </div>
+    <article class="stop-card" id="card-d3-s1">
+      <div class="stop-header">
+        <div class="stop-name">#9. מפלי Kravica (אמפיתיאטרון הטרוורטין ברוחב 120 מטר על נהר Trebižat)</div>
+        <span class="stop-tier tier-must">★ חובה</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Kravica Waterfall Bosnia</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Kravica Waterfall Bosnia', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 10:30 - 11:45 (75m) (75 דק׳) | 🔥 חובה - באוקטובר/נובמבר הזרימה חזקה והמקום ריק מתיירים</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> 10€ (20 BAM, מקבלים אשראי)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> חוץ (קניון מפלים): יורדים בשביל המדורג אל גשרי העץ ממש למרגלות קשת המפלים.</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: פרסה חצי-עגולה ברוחב 120 מטר ובגובה 25 מטר של עשרות מפלי מים שנופלים מתוך קירות טחב ירוקים לאגם אזמרגד.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך מקוטור: חולפים על פני אגם Bileća הטורקיז והרמה הקרסטית של מזרח הרצגובינה.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 0.5x מהדק המרכזי שמול הקשת המלאה של המפלים.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 25 דק׳ נסיעה אל כפר המצוק העות׳מאני Počitelj</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Kravica+Waterfall+Bosnia" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+    <article class="stop-card" id="card-d3-s2">
+      <div class="stop-header">
+        <div class="stop-name">#10. כפר האבן העות׳מאני המדורג Počitelj ומגדל המצודה Gavrankapetanović</div>
+        <span class="stop-tier tier-must">★ חובה</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Pocitelj Fortress Bosnia</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Pocitelj Fortress Bosnia', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 12:10 - 13:15 (65m) (65 דק׳) | 🔥 חובה - אחד מכפרי האבן הפוטוגניים ביותר בבלקן</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> חינם לחלוטין (0€ גם לחניה וגם למצודה)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> חוץ + טיפוס לראש מגדל המצודה הפתוח (0€): מטפסים במדרגות האבן בין מסגד Šišman Ibrahim Paša, החמאם ומגדל השעון עד למבצר העליון.</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: כפר-מצודה עות׳מאני מהמאה ה-15 הבנוי כולו מאבן גיר אפורה בתוך מכתש סלע תלול מעל עיקול נהר הנרטווה הירוק.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך: הכפר מתגלה בפתאומיות מימין לכביש המהיר לאורך נהר הנרטווה.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 1x מחלון האבן של המצודה העליונה כלפי מטה על כיפת המסגד, הצריח ועיקול הנהר הירוק.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 25 דק׳ נסיעה אל Blagaj Tekke</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Pocitelj+Fortress+Bosnia" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+    <article class="stop-card" id="card-d3-s3">
+      <div class="stop-header">
+        <div class="stop-name">#11. Blagaj Tekke (מנזר הדרווישים מ-1520 מתחת למצוק אנכי בגובה 200m ומוצא נהר ה-Buna)</div>
+        <span class="stop-tier tier-sec">● שלד</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Blagaj Tekke Bosnia</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Blagaj Tekke Bosnia', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 13:40 - 14:40 (60m) (60 דק׳) | 🔥 חובה - גיאולוגיה ואדריכלות בלתי נתפסות</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> חינם מהגשר ומהמצפה מעבר לנהר (0€; כניסה לחדרים בפנים 5€ - הוואו הוא מבחוץ)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> חוץ בלבד (100% מהוואו הוא מהגדה שמנגד): חצה את גשר הולכי הרגל אל שביל הסלע שממול המערה.</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: נהר שלם בצבע טורקיז-קרח פורץ בבת אחת מתוך מערה תת-קרקעית בתחתית מצוק סלע אנכי בגובה 200 מטר, וצמוד לפתח המערה תלוי מנזר עות׳מאני לבן.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך: עוברים ליד מצודת Stjepan Grad התלויה על ראש הצוק מעל Blagaj.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 0.5x אנכית מהגדה שמנגד שתופסת את בית הדרווישים הלבן, פתח המערה והמצוק העצום מעליו.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 20 דק׳ נסיעה אל מוסטר (חניה חינם ב-Apartments GB המוזמן ב-Maršala Tita 95 ב-15:00)</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Blagaj+Tekke+Bosnia" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+    <article class="stop-card" id="card-d3-s4">
+      <div class="stop-header">
+        <div class="stop-name">#12. Mostar: הגשר העתיק (Stari Most), צריח Koski Mehmed Paša, הגשר העקום ובזאר Kujundžiluk בשקיעה</div>
+        <span class="stop-tier tier-must">★ חובה</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Stari Most Mostar Bosnia</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Stari Most Mostar Bosnia', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 15:10 - 20:30 (שקיעה 16:40 + סיור לילה) (3 שעות (אחה״צ + שקיעה + לילה)) | 🔥 חובה מוחלטת - הלב של בוסניה והרצגובינה</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> חינם לגשר ולעיר העתיקה (7€ לעלייה לחצר/צריח מסגד Koski Mehmed לתצפית הפנורמית)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> חוץ + עלייה לצריח Koski Mehmed Paša: חוצים את Stari Most, יורדים לחוף החלוקים מתחת לקשת, וצופים בשקיעה מחצר/צריח המסגד.</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: קשת אבן לבנה מרחפת בגובה 24 מטר מעל קניון נהר הנרטווה בצבע אזמרגד, מוקפת מגדלי שמירה מימי הביניים (Tara ו-Helebija) וגגות לוחות אבן.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך: משאירים את הרכב בחניה החינמית של Apartments GB המוזמן (Maršala Tita 95, 350m מהמרכז) וצועדים ברגל לגשר העתיק; שים לב לבנייני הברוטליזם והחזיתות מנוקבות הכדורים בדרך.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> זווית 1 (שקיעה): מצריח/חצר Koski Mehmed Paša (עדשה 1x). זווית 2 (שעה כחולה): מחוף הסלעים מתחת ל-Lučki Most או מחלוקי הנהר מתחת לקשת.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> לינה ב-Apartments GB המוזמן במוסטר (5 דק׳ הליכה)</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Stari+Most+Mostar+Bosnia" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+  </div>
+</div>
+<div class="tab-content " id="tab-day-4">
+  <div class="day-card">
+    <div class="day-title">יום 4 (שני 02/11) + בוקר שלישי (03/11): גשר Pelješac החדש -> חומות Ston ובריכות המלח -> מצוקי Pelješac -> Cavtat & טיסה</div>
+    <div class="day-subtitle">יציאה ממוסטר (08:15) -> חזרה לקרואטיה (EU) -> גשר הכבלים Pelješac -> טיפוס חומות Ston -> לינה ב-Cavtat צמוד לשדה DBV</div>
+    <div class="logistics-box">
+      <strong>📋 דגשים ולוגיסטיקה ליום זה:</strong><br>
+      • גשר Pelješac החדש: תצפית Komarna וחציית הגשר אל חצי האי פליישץ ללא מעבר גבול בוסני נוסף.<br>
+      • חומות סטון: חומת האבן הארוכה באירופה ובריכות המלח העתיקות (Solana).<br>
+      • שקיעה ולינה ב-Cavtat: הקפת חצי האי ראט ומאוזוליאום משטרוביץ' (דירת Apartments Mira, 6 דק' משדה התעופה DBV לקראת טיסת בוקר שלישי 10:35).
+    </div>
+    <div class="wa-box">
+      <span class="wa-title">📲 העתקה לווטסאפ / פתקים — יום 4</span>
+      <div class="wa-btn-group">
+        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('4', 1, this)">📋 רמה 1: שמות ל-Maps (רווח כפול)</button>
+        <button type="button" class="wa-btn" onclick="copyDayWhatsApp('4', 2, this)">📋 רמה 2: שם + זמנים + עלויות + תקציר</button>
+        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('4', 3, this)">📋 רמה 3: מדריך שטח מלא</button>
+      </div>
+    </div>
+    <article class="stop-card" id="card-d4-s1">
+      <div class="stop-header">
+        <div class="stop-name">#13. Pelješac Bridge (גשר המיתרים ההנדסי החדש מעל מפרץ Mali Ston - תצפית Komarna)</div>
+        <span class="stop-tier tier-sec">● שלד</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Peljesac Bridge Viewpoint Komarna</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Peljesac Bridge Viewpoint Komarna', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 09:45 - 10:15 (30m) (30 דק׳) | ⚡ על הדרך - נוסעים עליו בכל מקרה אל Ston</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> חינם לחלוטין (0€ אגרת מעבר)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> חוץ: עצירה במצפה המוסדר בקצה הגשר וחצייה שלו ברכב.</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: גשר מיתרים מודרני לבן באורך 2.4 ק"מ שתכנן האדריכל הסלובני Marjan Pipenbaher כדי לחבר את דרום קרואטיה מעל הים.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך ממוסטר: חוצים את הגבול חזרה לקרואטיה (איחוד אירופי - הסים של Vodafone IE חוזר ל-0€ אוטומטית!) דרך עמק הדלתא של נהר הנרטווה.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 1x מנקודת התצפית הצפונית שמראה את שורת הפילונים הלבנים באלכסון על המים.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 20 דק׳ נסיעה לאורך חצי האי אל Ston</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Peljesac+Bridge+Viewpoint+Komarna" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+    <article class="stop-card" id="card-d4-s2">
+      <div class="stop-header">
+        <div class="stop-name">#14. Walls of Ston & Solana Ston (חומת האבן הארוכה באירופה מעל בריכות המלח הגיאומטריות)</div>
+        <span class="stop-tier tier-must">★ חובה</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Walls of Ston Croatia</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Walls of Ston Croatia', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 10:40 - 12:45 (125m) (125 דק׳ (הליכה מלאה על החומה מ-Ston ל-Mali Ston)) | 🔥 חובה מוחלטת - "החומה הסינית של אירופה"</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> 10€ עלייה לחומה (חניה חינם ליד מבצר Veliki Kaštio)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> חוץ (הליכה על החומה המבוצרת): מטפסים על החומה מ-Ston מעל אוכף ההר עד Mali Ston וחוזרים בשביל התחתון לצד בריכות המלח.</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: חומה מבוצרת מהמאה ה-14 שמטפסת בקו אנכי על גב ההר וממנה נשקפת רשת שחמט גיאומטרית של 58 בריכות מלח בנות 2,000 שנה.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך: חולפים על פני חוות גידול הצדפות במים השקטים של מפרץ Mali Ston.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 1x מהמגדל העליון מעל Ston כלפי מטה על בריכות המלח המרובעות והעיירה המחומשת.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 45 דק׳ נסיעה על כביש המצוקים האדריאטי (D8) אל תצפית גשר המיתרים Franjo Tuđman ו-Cavtat</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Walls+of+Ston+Croatia" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+    <article class="stop-card" id="card-d4-s3">
+      <div class="stop-header">
+        <div class="stop-name">#15. תצפית גשר המיתרים Franjo Tuđman & פיורד נהר ה-Ombla (כביש המצוק האדריאטי D8)</div>
+        <span class="stop-tier tier-sec">● שלד</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Franjo Tudman Bridge Viewpoint Dubrovnik</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Franjo Tudman Bridge Viewpoint Dubrovnik', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> 13:30 - 13:55 (25m תצפית הנדסית על הדרך ללא בזבוז שעת אור בגן בוטני) (25 דק׳) | 🔥 תצפית הנדסית עוצמתית ב-0€ ישר על כביש D8 שחוסכת שעת אור יקרה לפני השקיעה ב-16:38</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> [חוץ בלבד] חינם לחלוטין (0€ — מדלגים על 10€ ושעת הליכה בגן העצים של Trsteno כדי להגיע ל-Cavtat באור שמש מלא)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> [חוץ בלבד - 100% הנדסת גשרים ופיורד]: עצירה במפרץ התצפית המערבי של גשר המיתרים Franjo Tuđman (גובה 141 מטר) מעל שפך נהר ה-Ombla הקארסטי.</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: פילון בטון אסימטרי בגובה 141 מטר שמחזיק מפתח כבלים של 518 מטר מעל פיורד מים עמוקים של נהר ה-Ombla היוצא מתוך מערה הררית, מול האיים האלפיטיים.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> על הדרך: עוקפים את דוברובניק מלמעלה על כביש המצוק הפנורמי D8 בלי להיכנס לפקקי העיר.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 1x ממפרץ התצפית המערבי שממסגרת את מניפת הכבלים הלבנה מעל המים הכחולים.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> 25 דק׳ נסיעה אל עיירת החוף Cavtat (הגעה ב-14:20 לשעתיים מלאות של אור שמש לפני השקיעה!)</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Franjo+Tudman+Bridge+Viewpoint+Dubrovnik" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+    <article class="stop-card" id="card-d4-s4">
+      <div class="stop-header">
+        <div class="stop-name">#16. Cavtat: הקפת חצי האי הסלעי Rat, המאוזוליאום הלבן של Meštrović [חוץ] והחזרת רכב ב-DBV בשלישי 08:45</div>
+        <span class="stop-tier tier-must">★ חובה</span>
+      </div>
+      <div class="map-copy-bar">
+        <span class="map-name-text">Racic Mausoleum Cavtat Croatia</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Racic Mausoleum Cavtat Croatia', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div class="info-row"><span class="info-label">⏳ זמנים ומשך שהייה:</span> שני 14:20 - 20:30 (שקיעה 16:38) + שלישי 08:30 נסיעה של 8 דק׳ ל-DBV (טיסה 10:35) (135 דק׳ באור יום ושקיעה + לינת לילה אחרון) | 🔥 חובה לוגיסטית ונופית - 8 דק׳ מהטרמינל בלי גבולות בבוקר!</div>
+      <div class="info-row"><span class="info-label">🎟️ עלות והזמנה מראש:</span> [חוץ בלבד] חינם לחלוטין (0€ להקפת חצי האי ולתצפית המאוזוליאום מבחוץ — מדלגים על 4€ לחדר הפנימי הזעיר)</div>
+      <div class="info-row"><span class="info-label">🏛️ פנים מול חוץ:</span> [חוץ בלבד ב-0€]: הקפה רגלית של 2.5 ק"מ על מצוקי הסלע והאורנים של חצי האי Rat ועלייה לרחבת התצפית החיצונית של המאוזוליאום המתומן הלבן של Meštrović בשקיעה.</div>
+      <div class="info-row"><span class="info-label">🔍 מה רואים ולמה זה וואו:</span> למה זה וואו: סגירת מעגל אדריכלית מושלמת — אחרי מאוזוליאום הגרניט השחור של Meštrović על הר Lovćen, פוגשים ב-Cavtat את המאוזוליאום המתומן מאבן לבנה מהאי Brač שבנה Meštrović ב-1921 בראש חצי האי מול השקיעה.</div>
+      <div class="info-row"><span class="info-label">🗺️ על הדרך:</span> ערב שני: ישנים ב-Apartments Mira המוזמן (Ulica Stjepana Radića 16, Cavtat). בוקר שלישי 03/11: מתעוררים ברוגע ב-08:00, מתדלקים בתחנת INA צמוד לשדה ומחזירים את הרכב בדלפק Enterprise בטרמינל DBV ב-08:45 (6 דק׳ נסיעה) לקראת ההמראה ב-10:35 לדבלין.</div>
+      <div class="photo-tip">📸 <strong>זווית צילום מומלצת:</strong> עדשה 1x משביל הסלעים של חצי האי Rat לעבר נמל הסירות של Cavtat בשעה הכחולה.</div>
+      <div class="transit-tip">🚗 <strong>נסיעה/מעבר:</strong> לינה ב-Apartments Mira המוזמן ב-Cavtat -> שלישי 08:35: 6 דק׳ לטרמינל DBV -> טיסה 10:35 לדבלין</div>
+      <div class="stop-links">
+        <a href="https://www.google.com/maps/search/?api=1&query=Racic+Mausoleum+Cavtat+Croatia" target="_blank" class="link-pill" rel="noopener">📍 פתח ב-Google Maps</a>
+      </div>
+    </article>
+  </div>
+</div>
+
+<script>
+const ITINERARY_DATA = {"days": [{"day": "1", "title": "יום 1 (שישי 30/10, 11:25 - 21:00): נחיתה ב-DBV -> מפרץ קוטור -> Perast -> סולם מצודת San Giovanni בשקיעה", "title_en": "Day 1 (Fri 30/10, 11:25 - 21:00): Land at DBV -> Bay of Kotor -> Perast -> San Giovanni Fortress Climb at Sunset", "subtitle": "איסוף רכב ב-DBV (11:45) -> מעבר גבול Karasovići -> כביש החוף הפנימי של הפיורד -> Perast -> Kotor", "subtitle_en": "Car pickup at DBV (11:45) -> Karasovići Border -> Inner Fjord Coastal Road -> Perast -> Kotor", "color": "#059669", "stops": [{"id": "d1-s1", "num": 1, "isTier1": false, "tier": "Tier 2 Spine | 16/20 (A:4 B:4 C:4 D:4)", "name": "Herceg Novi & מצודת הים Forte Mare בכניסה לפיורד", "name_en": "Herceg Novi & Forte Mare Sea Fortress at Fjord Entrance", "map_name": "Forte Mare Herceg Novi Montenegro", "lat": 42.4503, "lng": 18.5366, "time": "12:45 - 13:25 (40m)", "time_en": "12:45 - 13:25 (40m)", "cost_he": "חינם מבחוץ (0€)", "cost_en": "Free exterior (€0)", "dur_he": "40 דק׳", "dur_en": "40 mins", "skip_he": "⚡ ניתן לקצר ל-15 דק׳ אם היה תור בגבול", "skip_en": "⚡ Can shorten to 15m if border had a queue", "isMust": false, "in_he": "חוץ בלבד: תצפית מהטיילת ומדרגות האבן של העיר העתיקה אל שער המפרץ.", "in_en": "Outside Only: Walk the seaside bastion steps overlooking the outer bay.", "wow_he": "למה זה וואו: שער הכניסה הדרמטי למפרץ בוקה קוטורסקה שבו חומות ביצור ונציאניות ובוסניות יורדות ישר אל המים.", "wow_en": "Why It Is WOW: The dramatic fortified gateway into Boka Kotorska Bay where stepped Venetian stone bastions drop straight into the Adriatic.", "enroute_he": "על הדרך משדה התעופה DBV (25 דק׳): חוצים את גבול קרואטיה-מונטנגרו ב-Karasovići/Debeli Brijeg ונוסעים לאורך המפרץ החיצוני.", "enroute_en": "En-Route from DBV Airport (25m): Cross the Croatia-Montenegro border at Karasovići and hug the outer fjord shoreline.", "wx_he": "☀️ 19°C נעים: עצירת התרעננות קצרה מול המים.", "wx_en": "☀️ 19°C mild: Quick coastal leg-stretch overlooking the bay.", "photo_tip": "עדשה 1x מהמזח התחתון כלפי קיר האבן של Forte Mare.", "photo_tip_en": "1x lens from the lower pier looking up at Forte Mare’s stone wall.", "move": "המשך 25 דק׳ נסיעה סביב מצרי Verige אל Perast", "move_en": "25m scenic drive around the Verige Strait to Perast"}, {"id": "d1-s2", "num": 2, "isTier1": true, "tier": "Tier 1 Anchor | 19/20 (A:5 B:5 C:5 D:4)", "name": "Perast Baroque Waterfront & שייט לאי המלאכותי Our Lady of the Rocks", "name_en": "Perast Baroque Waterfront & Boat to Our Lady of the Rocks Island", "map_name": "Perast Montenegro Our Lady of the Rocks", "lat": 42.4864, "lng": 18.6983, "time": "13:50 - 15:00 (70m)", "time_en": "13:50 - 15:00 (70m)", "cost_he": "5€ סירת הלוך-חזור לאי (רחבת האי בחוץ חינם; מדלגים על 2€ לחדר הכלים הפנימי; חניה ~2€)", "cost_en": "€5 return boat to island (island platform free; skip €2 inner artifact room; €2 parking)", "dur_he": "70 דק׳", "dur_en": "70 mins", "skip_he": "🔥 חובה - לא לוותר (הנוף האייקוני של מונטנגרו)", "skip_en": "🔥 MUST-SEE - Do not skip (Iconic Montenegro fjord view)", "isMust": true, "in_he": "[חוץ + שייט קצר (5 דק׳) לרחבת האי המלאכותי]: הליכה על טיילת האבן הבארוקית של Perast ושייט לרחבת האבן הפתוחה של האי (מדלגים על חדר המוזיאון הקטן בפנים).", "in_en": "[Outside + 5-min Boat to Open Island Platform]: Stroll Perast’s traffic-free Venetian palazzi waterfront and take the €5 boat to the island deck (skip the tiny indoor artifact room).", "wow_he": "למה זה וואו: עיירת ארמונות בארוק מאבן לבנה ללא רכבים, שמולה צפים שני איים זעירים בלב קניון הרים שחור בגובה 1,000 מטר.", "wow_en": "Why It Is WOW: A car-free Venetian stone town of 16 baroque palazzi and 19 bell towers facing twin islets floating inside a 1,000m dark limestone canyon.", "enroute_he": "על הדרך בכביש המפרץ: בחציית מצר Verige הצר (רוחב 340 מטר בלבד!) נגלים שני האיים בבת אחת כמו תמונה.", "enroute_en": "En-Route along the fjord: Rounding the 340m-narrow Verige Strait suddenly reveals the twin islands framed by vertical mountains.", "wx_he": "☀️ 19°C: מים שקטים כמו מראה בתוך הפיורד הסגור.", "wx_en": "☀️ 19°C: Mirror-calm water inside the sheltered inner fjord.", "photo_tip": "עדשה 2x ממדרגות מגדל הפעמונים של St. Nicholas שממסגרת את שני האיים יחד.", "photo_tip_en": "2x telephoto from St. Nicholas bell tower steps framing both islands against the dark mountain wall.", "move": "15 דק׳ נסיעה אל קוטור (חניה חינם ב-Hostel Pupa המוזמן, 300m מהחומות)", "move_en": "15m drive to Kotor (free parking at booked Hostel Pupa, 300m from walls)"}, {"id": "d1-s3", "num": 3, "isTier1": true, "tier": "Tier 1 Anchor | 20/20 (A:5 B:5 C:5 D:5)", "name": "טיפוס שקיעה למצודת San Giovanni (סולם קוטור - 1,350 מדרגות / שביל החלון)", "name_en": "Sunset Climb up San Giovanni Fortress (Kotor Ladder - 1,350 Steps)", "map_name": "San Giovanni Fortress Kotor", "lat": 42.4239, "lng": 18.7753, "time": "15:20 - 17:15 (115m - שקיעה ב-16:42)", "time_en": "15:20 - 17:15 (115m - Sunset at 16:42)", "cost_he": "15€ בשער המדרגות הרשמי (או 0€ דרך שביל הסרפנטינות החיצוני של Špiljari)", "cost_en": "€15 at main step gate (or €0 via outer Špiljari switchback trail)", "dur_he": "115 דק׳ (עלייה מהירה 40 דק׳ + צילום שקיעה + ירידה)", "dur_en": "115 mins (40m fast ascent + sunset framing + descent)", "skip_he": "🔥 חובה מוחלטת - שיא הטיול במונטנגרו", "skip_en": "🔥 ABSOLUTE MUST-SEE - Crown jewel of Montenegro", "isMust": true, "in_he": "חוץ (טיפוס מצוק מבוצר): נכנסים פנימה לחומות המצודה ולכנסיית Our Lady of Remedy באמצע ההר.", "in_en": "Outside Fortress Climb: Ascend the zigzagging Venetian ramparts past the cliffside church to the 280m eagle-nest castle.", "wow_he": "למה זה וואו: טיפוס אנכי עוצר נשימה שבו גגות הרעפים המשולשים של קוטור והפיורד כולו פרושים מתחת לרגליים ברגע שהאורות נדלקים בשעה הכחולה.", "wow_en": "Why It Is WOW: A vertical stone zigzag above Kotor’s triangular red-roofed walled town and deep fjord glowing gold and cobalt at Blue Hour.", "enroute_he": "על הדרך: מניחים את הרכב בחניה של Hostel Pupa המוזמן (15:05, 300m מהחומות) ונכנסים דרך השער הצפוני (River Gate) אל תחילת המדרגות.", "enroute_en": "En-Route: Park at your booked Hostel Pupa (15:05, 300m from walls) and walk 3 mins through the River Gate to the trailhead.", "wx_he": "🌅 17°C בשקיעה: בצל המצוק נעים מאוד לטיפוס מהיר; קח פנס טלפון לירידה ב-17:00.", "wx_en": "🌅 17°C at sunset: Shaded cliff keeps the climb cool; use phone flashlight for the last 15 mins of descent.", "photo_tip": "עדשה 0.5x דרך קשת האבן ההרוסה (\"החלון של קוטור\") שממסגרת את כנסיית Our Lady of Remedy והפיורד.", "photo_tip_en": "0.5x ultra-wide through the ruined stone arch framing the church spire and fjord below.", "move": "ירידה ישירה לתוך סמטאות העיר העתיקה של קוטור", "move_en": "Descend directly into Kotor Old Town alleys"}, {"id": "d1-s4", "num": 4, "isTier1": true, "tier": "Tier 1 Anchor | 18/20 (A:5 B:4 C:5 D:4)", "name": "Kotor Stari Grad (העיר העתיקה בלילה: Sea Gate, קתדרלת St. Tryphon והחומות המוארות)", "name_en": "Kotor Stari Grad Night Walk (Sea Gate, St. Tryphon Cathedral & Illuminated Ramparts)", "map_name": "Kotor Old Town Cathedral of Saint Tryphon", "lat": 42.4247, "lng": 18.7712, "time": "17:15 - 20:30 (סיור לילה רגלי)", "time_en": "17:15 - 20:30 (Night architectural walk)", "cost_he": "חינם (0€)", "cost_en": "Free (€0)", "dur_he": "90 דק׳", "dur_en": "90 mins", "skip_he": "🔥 חובה - קוטור בלילה מוארת כמו תפאורת קולנוע", "skip_en": "🔥 MUST-SEE - Illuminated cliff walls reflected in the moat", "isMust": true, "in_he": "חוץ בלבד: שיטוט במבוך הכיכרות הוונציאניות והליכה על גשר נהר Škurda מול השתקפות החומות במים.", "in_en": "Outside Only: Explore the labyrinth of polished stone squares and the northern moat reflection.", "wow_he": "למה זה וואו: בלילה שרשרת פנסים כתומים מאירה את חומות המצודה לאורך 4.5 ק\"מ על קיר הסלע השחור ומשתקפת בנהר Škurda.", "wow_en": "Why It Is WOW: At night a continuous ribbon of golden floodlights traces the 4.5km fortress walls up the black mountain, mirroring in the northern moat.", "enroute_he": "על הדרך: עוברים מתחת למגדל השעון מ-1602 שלרגליו עמוד הקלון הפירמידלי הוונציאני.", "enroute_en": "En-Route: Pass the 1602 Clock Tower and its medieval Venetian stone pillory pyramid.", "wx_he": "🌙 15°C בלילה: סמטאות אבן מוגנות מרוח.", "wx_en": "🌙 15°C night: Sheltered stone alleys with zero wind.", "photo_tip": "Night Mode בחשיפה של 2 שניות מהגשר הצפוני (River Gate) לתפיסת השתקפות החומות המוארות במים.", "photo_tip_en": "2-second Night Mode shot from the northern River Gate bridge capturing the golden wall reflection in the moat.", "move": "3 דק׳ הליכה (300m) חזרה ל-Hostel Pupa המוזמן בקוטור", "move_en": "3m walk (300m) back to booked Hostel Pupa in Kotor"}]}, {"day": "2", "title": "יום 2 (שבת 31/10, 08:00 - 20:30): 25 הסרפנטינות של קוטור -> פסגת Lovćen -> Sveti Stefan -> Budva", "title_en": "Day 2 (Sat 31/10, 08:00 - 20:30): 25 Kotor Serpentine Hairpins -> Lovćen Summit -> Sveti Stefan -> Budva", "subtitle": "עלייה ב-08:00 לפני אוטובוסים ב-Kotor Serpentine -> מאוזוליאום Njegoš (1,657m) -> ירידה לחוף האדריאטי", "subtitle_en": "Ascend Kotor Serpentine at 08:00 before tour buses -> Njegoš Mausoleum (1,657m) -> Adriatic Coast", "color": "#d97706", "stops": [{"id": "d2-s1", "num": 5, "isTier1": true, "tier": "Tier 1 Anchor | 20/20 (A:5 B:5 C:5 D:5)", "name": "Kotor Serpentine Road (25 פיתולי המצוק האוסטרו-הונגריים ותצפית הפיורד העליונה)", "name_en": "Kotor Serpentine Road (25 Austro-Hungarian Cliff Hairpins & Panorama)", "map_name": "Kotor Serpentine Viewpoint Horizont", "lat": 42.4055, "lng": 18.7642, "time": "08:15 - 09:15 (60m)", "time_en": "08:15 - 09:15 (60m)", "cost_he": "חינם (0€)", "cost_en": "Free (€0)", "dur_he": "60 דק׳ (עצירות צילום בפיתולים #16 ו-#25)", "dur_en": "60 mins (photo stops at Hairpins #16 & #25)", "skip_he": "🔥 חובה - כביש הנוף המרהיב בבלקן", "skip_en": "🔥 MUST-SEE - Most dramatic mountain road in the Balkans", "isMust": true, "in_he": "חוץ (תצפיות מצוק): עצירה במפרצי האבן של פיתול 16 ופיתול 25 בגובה 900 מטר מעל הפיורד.", "in_en": "Outside Cliff Pullouts: Stop at the stone viewpoints at Hairpin #16 and Hairpin #25, 900m directly above the bay.", "wow_he": "למה זה וואו: 25 פיתולי סיכה ממוספרים שנחצבו ב-1884 על קיר אנכי, שמהם כל מפרץ קוטור נראה מלמעלה כמו כנפי פרפר עצומות.", "wow_en": "Why It Is WOW: 25 numbered hairpin turns carved into a sheer cliff in 1884, revealing the entire butterfly-shaped Bay of Kotor 900m straight below.", "enroute_he": "על הדרך: יציאה ב-08:00 בבוקר מבטיחה כביש ריק לחלוטין ואור שמש מזרחי שמאיר את קיר ההרים שממול.", "enroute_en": "En-Route: Leaving at 08:00 guarantees zero tour buses on the narrow lane and crisp morning light across the fjord.", "wx_he": "☀️ 14°C בגובה 900m: ראות בוקר צלולה לפני התפתחות ענני צהריים.", "wx_en": "☀️ 14°C at 900m: Crystal-clear morning visibility before midday haze.", "photo_tip": "עדשה 0.5x מפיתול #25 שתופסת גם את זיגזג האספלט מתחת וגם את שני אגני המפרץ.", "photo_tip_en": "0.5x ultra-wide at Hairpin #25 capturing the stacked asphalt switchbacks and both bay basins.", "move": "25 דק׳ נסיעה דרך יער הפארק הלאומי אל פסגת Lovćen", "move_en": "25m drive through the national park to Lovćen summit"}, {"id": "d2-s2", "num": 6, "isTier1": true, "tier": "Tier 1 Anchor | 19/20 (A:5 B:5 C:5 D:4)", "name": "מאוזוליאום Njegoš בפסגת הר Lovćen (מנהרת 461 המדרגות ושביל הרכס ב-1,657m)", "name_en": "Njegoš Mausoleum at Mount Lovćen Summit (461-Step Tunnel & 1,657m Ridge)", "map_name": "Njegos Mausoleum Lovcen Montenegro", "lat": 42.3979, "lng": 18.8376, "time": "09:40 - 11:00 (80m)", "time_en": "09:40 - 11:00 (80m)", "cost_he": "3€ כניסה לפארק + 8€ למאוזוליאום", "cost_en": "€3 National Park fee + €8 Mausoleum ticket", "dur_he": "80 דק׳", "dur_en": "80 mins", "skip_he": "🔥 חובה - אדריכלות מונומנטלית יוגוסלבית בגובה 1,657m", "skip_en": "🔥 MUST-SEE - Monumental granite architecture on a 1,657m razor ridge", "isMust": true, "in_he": "פנים + חוץ (מוצדק ב-100%): צועדים במנהרה החצובה בתוך פסגת ההר אל היכל הגרניט השחור ולמצפה ה-360° מאחור.", "in_en": "Inside + Outside (100% Worth €11): Climb the 461 steps through the mountain-core tunnel to the black granite monument and 360° circular viewpoint.", "wow_he": "למה זה וואו: מקדש גרניט ברוטליסטי-מונומנטלי שעיצב הפסל Ivan Meštrović על שפיץ הר בגובה 1,657 מטר, שממנו רואים ביום בהיר כמעט את כל מונטנגרו.", "wow_en": "Why It Is WOW: Sculptor Ivan Meštrović’s monumental black-granite temple perched on a knife-edge 1,657m peak overlooking a sea of limestone mountains.", "enroute_he": "על הדרך: חוצים את עמק הכפר Njeguši המוקף אמפיתיאטרון קרסטי אפור.", "enroute_en": "En-Route: Drive across the high karst bowl of Njeguši village.", "wx_he": "🧥 10°-12°C בפסגה: ללבוש שכבת פליז ומעיל רוח.", "wx_en": "🧥 10°-12°C at summit: Wear your fleece and windbreaker.", "photo_tip": "עדשה 0.5x בשביל האבן הצר שמוביל מהמונומנט אל טבעת התצפית העגולה מעל התהום.", "photo_tip_en": "0.5x ultra-wide along the narrow stone causeway leading to the circular cliff-edge rotunda.", "move": "45 דק׳ ירידה פנורמית דרך Cetinje אל חוף הים האדריאטי ב-Sveti Stefan", "move_en": "45m panoramic descent via Cetinje to the Adriatic coast at Sveti Stefan"}, {"id": "d2-s3", "num": 7, "isTier1": true, "tier": "Tier 1 Anchor | 19/20 (A:5 B:5 C:5 D:4)", "name": "האי המבוצר Sveti Stefan ופארק המצוקים Miločer (שביל הארזים המלכותי)", "name_en": "Sveti Stefan Fortified Island & Miločer Royal Cliff Park Walk", "map_name": "Sveti Stefan Viewpoint Milocer Park", "lat": 42.2564, "lng": 18.8931, "time": "12:00 - 13:45 (105m)", "time_en": "12:00 - 13:45 (105m)", "cost_he": "חינם (0€ - שביל החוף והמצוק פתוחים בחינם)", "cost_en": "Free (€0 - public coastal cliff path through Miločer Park)", "dur_he": "105 דק׳", "dur_en": "105 mins", "skip_he": "🔥 חובה - האי האייקוני של הים האדריאטי", "skip_en": "🔥 MUST-SEE - The signature fortified islet of the Adriatic", "isMust": true, "in_he": "חוץ בלבד (האי עצמו סגור): הולכים בשביל המצוקים המוצל מחוף Miločer ומלון וילה המלך אל שתי הלגונות הטורקיז שמקיפות את האי.", "in_en": "Outside Coastal Walk: Walk the scenic pine-cliff trail from Miločer Bay around the pink-pebble isthmus framing the 15th-century fortified island.", "wow_he": "למה זה וואו: כפר דייגים מבוצר מהמאה ה-15 של שבט Paštrovići הבנוי בצפיפות על סלע בים ומחובר ליבשה בסוללת חלוקים ורודה בין שני מפרצי טורקיז.", "wow_en": "Why It Is WOW: A 15th-century fortified stone village packed onto a rocky sea outcrop linked to the mainland by a narrow tombolo between turquoise bays.", "enroute_he": "על הדרך: בירידה מההרים ב-Brajići עוצרים ל-5 דק׳ במצפה העליון שממנו רואים את כל רצועת החוף של Budva והאי.", "enroute_en": "En-Route: Stop 5 mins at the high Brajići mountain pullout where the entire Budva Riviera opens below.", "wx_he": "☀️ 20°C חמים בחוף: ירידה של 650 מטר בטופוגרפיה מעלה את הטמפרטורה ב-8 מעלות.", "wx_en": "☀️ 20°C warm coastal sun: 8°C warmer than the mountain peak.", "photo_tip": "עדשה 2x מהמרפסת הסלעית מעל המפרץ הצפוני של Sveti Stefan מול גגות הרעפים של האי.", "photo_tip_en": "2x lens from the rocky promontory north of the isthmus framing the terracotta island roofs.", "move": "15 דק׳ נסיעה לאורך החוף אל Budva Stari Grad", "move_en": "15m coastal drive to Budva Old Town"}, {"id": "d2-s4", "num": 8, "isTier1": false, "tier": "Tier 2 Spine | 17/20 (A:4 B:4 C:5 D:4)", "name": "Budva Stari Grad, מצודת הים Citadela ושביל המצוק ל-Mogren", "name_en": "Budva Old Town Walled Peninsula, Citadela & Mogren Cliff Path", "map_name": "Budva Old Town Citadela Montenegro", "lat": 42.2779, "lng": 18.8383, "time": "14:15 - 16:45 (שקיעה על חצי האי המבוצר)", "time_en": "14:15 - 16:45 (Golden Hour on the walled peninsula)", "cost_he": "[חוץ בלבד] חינם לחלוטין (0€ להקפת חומות חצי האי ולשביל המצוק Mogren; מדלגים על 3.50€ למצודה הפנימית)", "cost_en": "[Outside Only] 100% Free (€0 for walled peninsula & Mogren cliff walk; skip €3.50 inner Citadela)", "dur_he": "90 דק׳", "dur_en": "90 mins", "skip_he": "⚡ חובה קצרה - שווה מאוד באור שקיעה", "skip_en": "⚡ Worthwhile Golden Hour stop before returning to Kotor", "isMust": false, "in_he": "[חוץ בלבד - 100% מצוק וחומות פתוחות]: מקיפים את חומות חצי האי הוונציאני מבחוץ וצועדים בשביל החצוב במצוק מעל הגלים אל Mogren (מדלגים על הכניסה הפנימית למצודת Citadela ב-3.50€ שרובה חצר קטנה וספרייה סגורה).", "in_en": "[Outside Only - 100% Open Cliff & Ramparts]: Walk around the Venetian walled peninsula and along the cliff-carved coastal path to Mogren (skip the €3.50 inner Citadela courtyard).", "wow_he": "למה זה וואו: חצי אי ונציאני מוקף חומה הבולט לתוך הים הפתוח, עם שביל הליכה חצוב מתחת לשכבות סלע אנכיות מקופלות.", "wow_en": "Why It Is WOW: A walled Venetian peninsula jutting into the open sea paired with a coastal walkway carved under folded vertical rock strata.", "enroute_he": "על הדרך חזרה לקוטור (25 דק׳ דרך מנהרת Vrmac): חוזרים ללילה שני בקוטור.", "enroute_en": "En-Route back to Kotor (25m via Vrmac Tunnel): Return to your Kotor base for Night 2.", "wx_he": "🌅 18°C בשקיעה (16:42): אור כתום ישיר על חומות האבן של חצי האי.", "wx_en": "🌅 18°C at 16:42 sunset: Warm western light hitting the seaward bastions.", "photo_tip": "עדשה 1x מפסל הבלרינה על הסלעים עם חומות Budva והים ברקע.", "photo_tip_en": "1x lens from the coastal rocks framing the Ballerina statue against Budva’s seaward walls.", "move": "25 דק׳ נסיעה חזרה ללינה בקוטור", "move_en": "25m drive through Vrmac Tunnel back to Kotor"}]}, {"day": "3", "title": "יום 3 (ראשון 01/11, 08:00 - 21:00): חציית גבול לבוסניה (הרצגובינה) -> מפלי Kravica -> Počitelj -> Blagaj -> Mostar", "title_en": "Day 3 (Sun 01/11, 08:00 - 21:00): Drive into Bosnia & Herzegovina -> Kravica Falls -> Počitelj -> Blagaj -> Mostar", "subtitle": "יציאה מקוטור (08:00) -> מעבר גבול להרצגובינה -> שרשרת האתרים העות׳מאניים של עמק הנרטווה -> שקיעה ולילה במוסטר", "subtitle_en": "Depart Kotor (08:00) -> Herzegovina Border -> Neretva Valley Ottoman Spine -> Sunset & Night in Mostar", "color": "#0284c7", "stops": [{"id": "d3-s1", "num": 9, "isTier1": true, "tier": "Tier 1 Anchor | 19/20 (A:5 B:5 C:4 D:5)", "name": "מפלי Kravica (אמפיתיאטרון הטרוורטין ברוחב 120 מטר על נהר Trebižat)", "name_en": "Kravica Waterfalls (120m-Wide Travertine Amphitheater on the Trebižat River)", "map_name": "Kravica Waterfall Bosnia", "lat": 43.1558, "lng": 17.6081, "time": "10:30 - 11:45 (75m)", "time_en": "10:30 - 11:45 (75m)", "cost_he": "10€ (20 BAM, מקבלים אשראי)", "cost_en": "€10 (20 BAM, contactless card accepted)", "dur_he": "75 דק׳", "dur_en": "75 mins", "skip_he": "🔥 חובה - באוקטובר/נובמבר הזרימה חזקה והמקום ריק מתיירים", "skip_en": "🔥 MUST-SEE - Strong autumn water flow and zero summer crowds", "isMust": true, "in_he": "חוץ (קניון מפלים): יורדים בשביל המדורג אל גשרי העץ ממש למרגלות קשת המפלים.", "in_en": "Outside Canyon Walk: Descend the stepped path to the wooden boardwalks right at the base of the emerald falls.", "wow_he": "למה זה וואו: פרסה חצי-עגולה ברוחב 120 מטר ובגובה 25 מטר של עשרות מפלי מים שנופלים מתוך קירות טחב ירוקים לאגם אזמרגד.", "wow_en": "Why It Is WOW: A 120m-wide horseshoe amphitheater of 25m cascading waterfalls plunging over mossy tufa cliffs into an emerald pool.", "enroute_he": "על הדרך מקוטור: חולפים על פני אגם Bileća הטורקיז והרמה הקרסטית של מזרח הרצגובינה.", "enroute_en": "En-Route from Kotor: Drive past turquoise Lake Bileća across the dramatic limestone plateau of eastern Herzegovina.", "wx_he": "☀️ 18°C: רסס מים קליל ליד הגשר התחתון.", "wx_en": "☀️ 18°C: Light waterfall mist near the lower wooden bridge.", "photo_tip": "עדשה 0.5x מהדק המרכזי שמול הקשת המלאה של המפלים.", "photo_tip_en": "0.5x ultra-wide from the central wooden platform capturing the full semicircular curtain of water.", "move": "25 דק׳ נסיעה אל כפר המצוק העות׳מאני Počitelj", "move_en": "25m drive to the Ottoman cliff village of Počitelj"}, {"id": "d3-s2", "num": 10, "isTier1": true, "tier": "Tier 1 Anchor | 19/20 (A:5 B:5 C:5 D:4)", "name": "כפר האבן העות׳מאני המדורג Počitelj ומגדל המצודה Gavrankapetanović", "name_en": "Počitelj Stepped Ottoman Stone Cliff Village & Fortress Keep", "map_name": "Pocitelj Fortress Bosnia", "lat": 43.1339, "lng": 17.7317, "time": "12:10 - 13:15 (65m)", "time_en": "12:10 - 13:15 (65m)", "cost_he": "חינם לחלוטין (0€ גם לחניה וגם למצודה)", "cost_en": "100% Free (€0 parking and €0 fortress climb)", "dur_he": "65 דק׳", "dur_en": "65 mins", "skip_he": "🔥 חובה - אחד מכפרי האבן הפוטוגניים ביותר בבלקן", "skip_en": "🔥 MUST-SEE - One of the most photogenic stone amphitheaters in the Balkans", "isMust": true, "in_he": "חוץ + טיפוס לראש מגדל המצודה הפתוח (0€): מטפסים במדרגות האבן בין מסגד Šišman Ibrahim Paša, החמאם ומגדל השעון עד למבצר העליון.", "in_en": "Outside + Open Fortress Tower (€0): Climb the cobbled stairs past the 1563 domed mosque and clock tower into the hexagonal hilltop keep.", "wow_he": "למה זה וואו: כפר-מצודה עות׳מאני מהמאה ה-15 הבנוי כולו מאבן גיר אפורה בתוך מכתש סלע תלול מעל עיקול נהר הנרטווה הירוק.", "wow_en": "Why It Is WOW: A 15th-century fortified Ottoman stone amphitheater of domes, minarets, and watchtowers clinging to a steep karst crater above the emerald Neretva River.", "enroute_he": "על הדרך: הכפר מתגלה בפתאומיות מימין לכביש המהיר לאורך נהר הנרטווה.", "enroute_en": "En-Route: The fortified stone cone suddenly rises directly above the emerald river bend.", "wx_he": "☀️ 19°C שמשי: טיפוס של 15 דק׳ למצודה העליונה.", "wx_en": "☀️ 19°C sunny: Quick 15-min stone stair climb to the top bastion.", "photo_tip": "עדשה 1x מחלון האבן של המצודה העליונה כלפי מטה על כיפת המסגד, הצריח ועיקול הנהר הירוק.", "photo_tip_en": "1x lens through the upper fortress embrasure framing the mosque dome, minaret, and green river bend below.", "move": "25 דק׳ נסיעה אל Blagaj Tekke", "move_en": "25m drive north to Blagaj Tekke"}, {"id": "d3-s3", "num": 11, "isTier1": false, "tier": "Tier 2 Spine | 18/20 (A:5 B:5 C:4 D:4)", "name": "Blagaj Tekke (מנזר הדרווישים מ-1520 מתחת למצוק אנכי בגובה 200m ומוצא נהר ה-Buna)", "name_en": "Blagaj Tekke (1520 Dervish Monastery under a 200m Vertical Cliff & Buna Cave Spring)", "map_name": "Blagaj Tekke Bosnia", "lat": 43.2571, "lng": 17.9035, "time": "13:40 - 14:40 (60m)", "time_en": "13:40 - 14:40 (60m)", "cost_he": "חינם מהגשר ומהמצפה מעבר לנהר (0€; כניסה לחדרים בפנים 5€ - הוואו הוא מבחוץ)", "cost_en": "Free (€0) from the river bridge & cliff viewpoint across the water (skip €5 interior)", "dur_he": "60 דק׳", "dur_en": "60 mins", "skip_he": "🔥 חובה - גיאולוגיה ואדריכלות בלתי נתפסות", "skip_en": "🔥 MUST-SEE - Surreal cliff-cave architecture", "isMust": true, "in_he": "חוץ בלבד (100% מהוואו הוא מהגדה שמנגד): חצה את גשר הולכי הרגל אל שביל הסלע שממול המערה.", "in_en": "Outside Only: Cross the footbridge to the rocky ledge directly facing the cave mouth and timber-framed monastery.", "wow_he": "למה זה וואו: נהר שלם בצבע טורקיז-קרח פורץ בבת אחת מתוך מערה תת-קרקעית בתחתית מצוק סלע אנכי בגובה 200 מטר, וצמוד לפתח המערה תלוי מנזר עות׳מאני לבן.", "wow_en": "Why It Is WOW: An entire ice-blue river erupts straight out of a dark cavern at the base of a sheer 200m vertical limestone wall beside a whitewashed 1520 Ottoman tekke.", "enroute_he": "על הדרך: עוברים ליד מצודת Stjepan Grad התלויה על ראש הצוק מעל Blagaj.", "enroute_en": "En-Route: Look up at medieval Herceg Stjepan fortress perched atop the 200m cliff directly above the spring.", "wx_he": "☀️ 19°C: קריר ונעים ליד המים הקפואים (8°C) שיוצאים מהמערה.", "wx_en": "☀️ 19°C: Cool microclimate beside the 8°C underground karst spring.", "photo_tip": "עדשה 0.5x אנכית מהגדה שמנגד שתופסת את בית הדרווישים הלבן, פתח המערה והמצוק העצום מעליו.", "photo_tip_en": "Vertical 0.5x ultra-wide from the opposite bank capturing the white Tekke, turquoise cave mouth, and towering 200m cliff.", "move": "20 דק׳ נסיעה אל מוסטר (חניה חינם ב-Apartments GB המוזמן ב-Maršala Tita 95 ב-15:00)", "move_en": "20m drive to Mostar (free parking at booked Apartments GB, Maršala Tita 95 by 15:00)"}, {"id": "d3-s4", "num": 12, "isTier1": true, "tier": "Tier 1 Anchor | 20/20 (A:5 B:5 C:5 D:5)", "name": "Mostar: הגשר העתיק (Stari Most), צריח Koski Mehmed Paša, הגשר העקום ובזאר Kujundžiluk בשקיעה", "name_en": "Mostar: Stari Most Arch, Koski Mehmed Paša Minaret View, Crooked Bridge & Copper Bazaar at Sunset", "map_name": "Stari Most Mostar Bosnia", "lat": 43.3372, "lng": 17.815, "time": "15:10 - 20:30 (שקיעה 16:40 + סיור לילה)", "time_en": "15:10 - 20:30 (Sunset at 16:40 + Night illumination)", "cost_he": "חינם לגשר ולעיר העתיקה (7€ לעלייה לחצר/צריח מסגד Koski Mehmed לתצפית הפנורמית)", "cost_en": "Free for Stari Most & Old Town (€7 for Koski Mehmed Pasha courtyard/minaret panorama)", "dur_he": "3 שעות (אחה״צ + שקיעה + לילה)", "dur_en": "3 hours (Golden Hour + Blue Hour + Night)", "skip_he": "🔥 חובה מוחלטת - הלב של בוסניה והרצגובינה", "skip_en": "🔥 ABSOLUTE MUST-SEE - Architectural crown jewel of Bosnia", "isMust": true, "in_he": "חוץ + עלייה לצריח Koski Mehmed Paša: חוצים את Stari Most, יורדים לחוף החלוקים מתחת לקשת, וצופים בשקיעה מחצר/צריח המסגד.", "in_en": "Outside + Minaret Climb: Cross the polished stone hump of Stari Most, descend to the river shingle below the arch, and climb Koski Mehmed Pasha minaret before sunset.", "wow_he": "למה זה וואו: קשת אבן לבנה מרחפת בגובה 24 מטר מעל קניון נהר הנרטווה בצבע אזמרגד, מוקפת מגדלי שמירה מימי הביניים (Tara ו-Helebija) וגגות לוחות אבן.", "wow_en": "Why It Is WOW: A soaring 24m-high Ottoman stone arch spanning the emerald Neretva canyon, flanked by medieval stone towers and slate-roofed bazaars.", "enroute_he": "על הדרך: משאירים את הרכב בחניה החינמית של Apartments GB המוזמן (Maršala Tita 95, 350m מהמרכז) וצועדים ברגל לגשר העתיק; שים לב לבנייני הברוטליזם והחזיתות מנוקבות הכדורים בדרך.", "enroute_en": "En-Route: Park at your booked Apartments GB (Maršala Tita 95, 350m from center) and walk to Stari Most.", "wx_he": "🌅 17°C בשקיעה (16:40): בשעה הכחולה הגשר מואר בזרקורים לבנים מול השמיים הכחולים.", "wx_en": "🌅 17°C at 16:40 sunset: At Blue Hour the white limestone arch glows against the twilight sky.", "photo_tip": "זווית 1 (שקיעה): מצריח/חצר Koski Mehmed Paša (עדשה 1x). זווית 2 (שעה כחולה): מחוף הסלעים מתחת ל-Lučki Most או מחלוקי הנהר מתחת לקשת.", "photo_tip_en": "Angle 1 (Sunset): 1x from Koski Mehmed Pasha courtyard/minaret. Angle 2 (Blue Hour): From the river gravel bank looking up through the illuminated arch.", "move": "לינה ב-Apartments GB המוזמן במוסטר (5 דק׳ הליכה)", "move_en": "Sleep at booked Apartments GB in Mostar (5m walk)"}]}, {"day": "4", "title": "יום 4 (שני 02/11) + בוקר שלישי (03/11): גשר Pelješac החדש -> חומות Ston ובריכות המלח -> מצוקי Pelješac -> Cavtat & טיסה", "title_en": "Day 4 (Mon 02/11) + Tue Morning (03/11): Pelješac Bridge -> Walls of Ston & Salt Pans -> Cavtat Sunset & Flight", "subtitle": "יציאה ממוסטר (08:15) -> חזרה לקרואטיה (EU) -> גשר הכבלים Pelješac -> טיפוס חומות Ston -> לינה ב-Cavtat צמוד לשדה DBV", "subtitle_en": "Depart Mostar (08:15) -> Re-enter Croatia (EU) -> Pelješac Cable-Stayed Bridge -> Walls of Ston Climb -> Sleep in Cavtat (8m from DBV)", "color": "#db2777", "stops": [{"id": "d4-s1", "num": 13, "isTier1": false, "tier": "Tier 2 Spine | 17/20 (A:4 B:5 C:4 D:4)", "name": "Pelješac Bridge (גשר המיתרים ההנדסי החדש מעל מפרץ Mali Ston - תצפית Komarna)", "name_en": "Pelješac Cable-Stayed Bridge Viewpoint (2.4km Architectural Span)", "map_name": "Peljesac Bridge Viewpoint Komarna", "lat": 42.9317, "lng": 17.5364, "time": "09:45 - 10:15 (30m)", "time_en": "09:45 - 10:15 (30m)", "cost_he": "חינם לחלוטין (0€ אגרת מעבר)", "cost_en": "100% Free (€0 bridge toll)", "dur_he": "30 דק׳", "dur_en": "30 mins", "skip_he": "⚡ על הדרך - נוסעים עליו בכל מקרה אל Ston", "skip_en": "⚡ Directly on route to Ston", "isMust": false, "in_he": "חוץ: עצירה במצפה המוסדר בקצה הגשר וחצייה שלו ברכב.", "in_en": "Outside Viewpoint + Drive: Stop at the designated rest area viewpoint and drive across the 2.4km span.", "wow_he": "למה זה וואו: גשר מיתרים מודרני לבן באורך 2.4 ק\"מ שתכנן האדריכל הסלובני Marjan Pipenbaher כדי לחבר את דרום קרואטיה מעל הים.", "wow_en": "Why It Is WOW: Marjan Pipenbaher’s sleek 2.4km six-pylon cable-stayed bridge floating across the turquoise Mali Ston channel.", "enroute_he": "על הדרך ממוסטר: חוצים את הגבול חזרה לקרואטיה (איחוד אירופי - הסים של Vodafone IE חוזר ל-0€ אוטומטית!) דרך עמק הדלתא של נהר הנרטווה.", "enroute_en": "En-Route from Mostar: Cross back into EU Croatia (Vodafone IE roaming is €0 again!) through the geometric mandarin marshes of the Neretva Delta.", "wx_he": "☀️ 19°C: ראות חופית פתוחה לאורך המפרץ.", "wx_en": "☀️ 19°C: Clear coastal views across the channel.", "photo_tip": "עדשה 1x מנקודת התצפית הצפונית שמראה את שורת הפילונים הלבנים באלכסון על המים.", "photo_tip_en": "1x lens from the northern pullout showing the diagonal rhythm of the six white pylons.", "move": "20 דק׳ נסיעה לאורך חצי האי אל Ston", "move_en": "20m drive along the peninsula to Ston"}, {"id": "d4-s2", "num": 14, "isTier1": true, "tier": "Tier 1 Anchor | 20/20 (A:5 B:5 C:5 D:5)", "name": "Walls of Ston & Solana Ston (חומת האבן הארוכה באירופה מעל בריכות המלח הגיאומטריות)", "name_en": "Walls of Ston Climb & Ancient Geometric Salt Pans (Solana Ston)", "map_name": "Walls of Ston Croatia", "lat": 42.8388, "lng": 17.6964, "time": "10:40 - 12:45 (125m)", "time_en": "10:40 - 12:45 (125m)", "cost_he": "10€ עלייה לחומה (חניה חינם ליד מבצר Veliki Kaštio)", "cost_en": "€10 Wall ticket (free parking by Veliki Kaštio)", "dur_he": "125 דק׳ (הליכה מלאה על החומה מ-Ston ל-Mali Ston)", "dur_en": "125 mins (full ridge walk from Ston over the mountain to Mali Ston)", "skip_he": "🔥 חובה מוחלטת - \"החומה הסינית של אירופה\"", "skip_en": "🔥 ABSOLUTE MUST-SEE - The Great Wall of Europe", "isMust": true, "in_he": "חוץ (הליכה על החומה המבוצרת): מטפסים על החומה מ-Ston מעל אוכף ההר עד Mali Ston וחוזרים בשביל התחתון לצד בריכות המלח.", "in_en": "Outside Rampart Hike: Walk the stone ramparts right up the mountain ridge to Mali Ston and return along the flat valley road past the Roman salt pans.", "wow_he": "למה זה וואו: חומה מבוצרת מהמאה ה-14 שמטפסת בקו אנכי על גב ההר וממנה נשקפת רשת שחמט גיאומטרית של 58 בריכות מלח בנות 2,000 שנה.", "wow_en": "Why It Is WOW: A 14th-century stone rampart zigzagging straight over a mountain spine, looking down on a geometric checkerboard of 2,000-year-old salt evaporation pools.", "enroute_he": "על הדרך: חולפים על פני חוות גידול הצדפות במים השקטים של מפרץ Mali Ston.", "enroute_en": "En-Route: Pass the floating oyster grids dotting the glassy Mali Ston bay.", "wx_he": "☀️ 19°C: חשוף לשמש - קח בקבוק מים לטיפוס על החומה.", "wx_en": "☀️ 19°C: Unshaded stone ridge—carry water for the 40-min wall traverse.", "photo_tip": "עדשה 1x מהמגדל העליון מעל Ston כלפי מטה על בריכות המלח המרובעות והעיירה המחומשת.", "photo_tip_en": "1x lens from the highest ridge tower looking straight down at the rectangular salt pans and pentagonal town.", "move": "45 דק׳ נסיעה על כביש המצוקים האדריאטי (D8) אל תצפית גשר המיתרים Franjo Tuđman ו-Cavtat", "move_en": "45m drive along the dramatic D8 Adriatic coastal cliff highway to Franjo Tuđman Bridge Overlook & Cavtat"}, {"id": "d4-s3", "num": 15, "isTier1": false, "tier": "Tier 2 Spine | 18/20 (G:4 E:4 V:5 T:3 L:2)", "name": "תצפית גשר המיתרים Franjo Tuđman & פיורד נהר ה-Ombla (כביש המצוק האדריאטי D8)", "name_en": "Franjo Tuđman Cable-Stayed Bridge Overlook & Ombla River Fjord (Adriatic Highway D8)", "map_name": "Franjo Tudman Bridge Viewpoint Dubrovnik", "lat": 42.6685, "lng": 18.0789, "time": "13:30 - 13:55 (25m תצפית הנדסית על הדרך ללא בזבוז שעת אור בגן בוטני)", "time_en": "13:30 - 13:55 (25m structural bridge & fjord overlook directly on D8)", "cost_he": "[חוץ בלבד] חינם לחלוטין (0€ — מדלגים על 10€ ושעת הליכה בגן העצים של Trsteno כדי להגיע ל-Cavtat באור שמש מלא)", "cost_en": "[Outside Only] 100% Free (€0 — skip the €10 Trsteno botanical garden so you reach Cavtat in full afternoon sun)", "dur_he": "25 דק׳", "dur_en": "25 mins", "skip_he": "🔥 תצפית הנדסית עוצמתית ב-0€ ישר על כביש D8 שחוסכת שעת אור יקרה לפני השקיעה ב-16:38", "skip_en": "🔥 Dramatic cable-stayed bridge & karst fjord overlook at €0 right on highway D8", "isMust": true, "in_he": "[חוץ בלבד - 100% הנדסת גשרים ופיורד]: עצירה במפרץ התצפית המערבי של גשר המיתרים Franjo Tuđman (גובה 141 מטר) מעל שפך נהר ה-Ombla הקארסטי.", "in_en": "[Outside Only - 100% Bridge Engineering & Fjord]: Pull into the western vista bay of the 141m-high Franjo Tuđman cable-stayed bridge spanning the karst Ombla River fjord.", "wow_he": "למה זה וואו: פילון בטון אסימטרי בגובה 141 מטר שמחזיק מפתח כבלים של 518 מטר מעל פיורד מים עמוקים של נהר ה-Ombla היוצא מתוך מערה הררית, מול האיים האלפיטיים.", "wow_en": "Why It Is WOW: A soaring 141m A-frame concrete pylon suspending a 518m cable-stayed deck across the deep emerald canyon of the Ombla karst river mouth.", "enroute_he": "על הדרך: עוקפים את דוברובניק מלמעלה על כביש המצוק הפנורמי D8 בלי להיכנס לפקקי העיר.", "enroute_en": "En-Route: Bypass Dubrovnik high above the coast along the panoramic D8 cliff highway.", "wx_he": "☀️ 20°C באור צהריים בהיר.", "wx_en": "☀️ 20°C crisp afternoon sun.", "photo_tip": "עדשה 1x ממפרץ התצפית המערבי שממסגרת את מניפת הכבלים הלבנה מעל המים הכחולים.", "photo_tip_en": "1x lens from the western pullout framing the white cable fan above the deep blue channel.", "move": "25 דק׳ נסיעה אל עיירת החוף Cavtat (הגעה ב-14:20 לשעתיים מלאות של אור שמש לפני השקיעה!)", "move_en": "25m drive past Dubrovnik to Cavtat peninsula (arrive 14:20 for 2+ hours of sunlight before sunset!)"}, {"id": "d4-s4", "num": 16, "isTier1": true, "tier": "Tier 1 Anchor | 18/20 (A:5 B:4 C:5 D:4)", "name": "Cavtat: הקפת חצי האי הסלעי Rat, המאוזוליאום הלבן של Meštrović [חוץ] והחזרת רכב ב-DBV בשלישי 08:45", "name_en": "Cavtat: Rat Peninsula Coastal Loop, Meštrović White Stone Mausoleum [Exterior] & Tue 08:45 DBV Car Return", "map_name": "Racic Mausoleum Cavtat Croatia", "lat": 42.5818, "lng": 18.2153, "time": "שני 14:20 - 20:30 (שקיעה 16:38) + שלישי 08:30 נסיעה של 8 דק׳ ל-DBV (טיסה 10:35)", "time_en": "Mon 14:20 - 20:30 (Sunset 16:38) + Tue 08:30 8-min drive to DBV terminal (10:35 flight)", "cost_he": "[חוץ בלבד] חינם לחלוטין (0€ להקפת חצי האי ולתצפית המאוזוליאום מבחוץ — מדלגים על 4€ לחדר הפנימי הזעיר)", "cost_en": "[Outside Only] 100% Free (€0 for the 2.5km peninsula coastal trail & hilltop mausoleum exterior)", "dur_he": "135 דק׳ באור יום ושקיעה + לינת לילה אחרון", "dur_en": "135 mins in daylight & sunset + final night stay", "skip_he": "🔥 חובה לוגיסטית ונופית - 8 דק׳ מהטרמינל בלי גבולות בבוקר!", "skip_en": "🔥 MUST-SEE & Stress-Free Finale - 8 mins from DBV terminal!", "isMust": true, "in_he": "[חוץ בלבד ב-0€]: הקפה רגלית של 2.5 ק\"מ על מצוקי הסלע והאורנים של חצי האי Rat ועלייה לרחבת התצפית החיצונית של המאוזוליאום המתומן הלבן של Meštrović בשקיעה.", "in_en": "[Outside Only at €0]: Walk the 2.5km rocky seaside pine loop around the Rat peninsula and climb to the hilltop terrace surrounding Ivan Meštrović’s octagonal white stone mausoleum at sunset.", "wow_he": "למה זה וואו: סגירת מעגל אדריכלית מושלמת — אחרי מאוזוליאום הגרניט השחור של Meštrović על הר Lovćen, פוגשים ב-Cavtat את המאוזוליאום המתומן מאבן לבנה מהאי Brač שבנה Meštrović ב-1921 בראש חצי האי מול השקיעה.", "wow_en": "Why It Is WOW: A poetic architectural bookend—after Meštrović’s black granite monument on Mount Lovćen, you finish at his 1921 white Brač-limestone octagonal mausoleum crowning Cavtat’s sea peninsula at sunset.", "enroute_he": "ערב שני: ישנים ב-Apartments Mira המוזמן (Ulica Stjepana Radića 16, Cavtat). בוקר שלישי 03/11: מתעוררים ברוגע ב-08:00, מתדלקים בתחנת INA צמוד לשדה ומחזירים את הרכב בדלפק Enterprise בטרמינל DBV ב-08:45 (6 דק׳ נסיעה) לקראת ההמראה ב-10:35 לדבלין.", "enroute_en": "Monday Night: Sleep at booked Apartments Mira (Ulica Stjepana Radića 16, Cavtat). Tuesday Morning 03/11: Wake up at 08:00, refuel at the airport INA station, and drop the car at Enterprise DBV at 08:45 (6m drive) for your 10:35 flight to Dublin.", "wx_he": "🌅 19°C בשקיעה (16:40): מפרץ Cavtat פונה מערבה כך שהשמש שוקעת ישירות בים.", "wx_en": "🌅 19°C at 16:40 sunset: West-facing bay catches direct sunset over the Adriatic.", "photo_tip": "עדשה 1x משביל הסלעים של חצי האי Rat לעבר נמל הסירות של Cavtat בשעה הכחולה.", "photo_tip_en": "1x lens from the western Rat peninsula rocks looking back across Cavtat harbor at Blue Hour.", "move": "לינה ב-Apartments Mira המוזמן ב-Cavtat -> שלישי 08:35: 6 דק׳ לטרמינל DBV -> טיסה 10:35 לדבלין", "move_en": "Sleep at booked Apartments Mira in Cavtat -> Tue 08:35: 6m drive to DBV terminal -> 10:35 flight to Dublin"}]}]};
+
+function switchTab(dayNum, btnEl) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btnEl.classList.add('active');
+  const target = document.getElementById('tab-day-' + dayNum);
+  if (target) target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function copyTextSafe(text, onDone) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(onDone).catch(() => fallbackCopy(text, onDone));
+  } else {
+    fallbackCopy(text, onDone);
+  }
+}
+
+function fallbackCopy(text, onDone) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+    if (onDone) onDone();
+  } catch (e) {
+    alert('לא ניתן להעתיק אוטומטית');
+  }
+  document.body.removeChild(ta);
+}
+
+function copySingleMap(mapName, btnEl) {
+  const text = mapName + '\n\n\n';
+  copyTextSafe(text, () => {
+    const orig = btnEl.textContent;
+    btnEl.textContent = '✅ הועתק!';
+    setTimeout(() => { btnEl.textContent = orig; }, 1500);
+  });
+}
+
+function buildWhatsAppDay(dayObj, level) {
+  if (level === 1) {
+    return dayObj.stops.map(s => s.map_name).join('\n\n\n');
+  }
+  let lines = [];
+  lines.push('🌊 *' + dayObj.title + '*');
+  lines.push('📍 ' + dayObj.subtitle);
+  lines.push('');
+  dayObj.stops.forEach(s => {
+    lines.push('━━━━━━━━━━━━━━━━━━');
+    lines.push(s.map_name);
+    lines.push('');
+    lines.push('');
+    lines.push('#' + s.num + '. [' + s.time + '] ' + s.name);
+    lines.push('🎟️ עלות: ' + s.cost_he + ' | ⏳ שהייה: ' + s.dur_he);
+    lines.push('🏛️ פנים/חוץ: ' + s.in_he);
+    lines.push('🔍 למה זה וואו: ' + s.wow_he);
+    if (level === 3) {
+      lines.push('📝 על הדרך: ' + s.enroute_he);
+      lines.push('📸 זווית צילום: ' + s.photo_tip);
+      lines.push('🚗 נסיעה: ' + s.move);
+    }
+    lines.push('');
+  });
+  return lines.join('\n');
+}
+
+function copyDayWhatsApp(dayNum, level, btnEl) {
+  const dayObj = ITINERARY_DATA.days.find(d => d.day === String(dayNum));
+  if (!dayObj) return;
+  const text = buildWhatsAppDay(dayObj, level);
+  copyTextSafe(text, () => {
+    const orig = btnEl.textContent;
+    btnEl.textContent = '✅ הועתק ללוח!';
+    setTimeout(() => { btnEl.textContent = orig; }, 2000);
+  });
+}
+
+function copyAllDaysWhatsApp() {
+  const allText = ITINERARY_DATA.days.map(d => buildWhatsAppDay(d, 2)).join('\n\n==============================\n\n');
+  copyTextSafe(allText, () => {
+    alert('כל 4 ימי המסלול הועתקו ללוח בפורמט ווטסאפ (שמות באנגלית ל-Maps + שתי שורות רווח + תקציר מלא)!');
+  });
+}
+</script>
+</body>
+</html>

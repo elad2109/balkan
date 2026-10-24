@@ -1,0 +1,2851 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מונטנגרו (קוטור), בוסניה (מוסטר) וסטון דרך דוברובניק (30/10 11:25 - 03/11 10:35)</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" onerror="this.onerror=null;this.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';document.head.appendChild(s);"></script>
+<style>
+  :root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --header-bg: #ffffff;
+    --card: #ffffff;
+    --card-hover: #f1f5f9;
+    --text: #0f172a;
+    --muted: #475569;
+    --border: #cbd5e1;
+    --primary: #1d4ed8;
+    --primary-text: #ffffff;
+    --accent: #0369a1;
+    --photo-bg: #f3e8ff;
+    --photo-text: #581c87;
+    --story-bg: #ecfdf5;
+    --story-text: #065f46;
+    --badge-t1-bg: #fef3c7;
+    --badge-t1-text: #92400e;
+    --badge-t2-bg: #e0f2fe;
+    --badge-t2-text: #075985;
+    --day1: #059669;
+    --day2: #d97706;
+    --day3: #0284c7;
+    --day4: #db2777;
+  }
+  body.night-mode, :root[data-theme="dark"] body {
+    --bg: #0f172a;
+    --surface: #111827;
+    --header-bg: #020617;
+    --card: #1e293b;
+    --card-hover: #334155;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --border: #334155;
+    --primary: #2563eb;
+    --primary-text: #ffffff;
+    --accent: #38bdf8;
+    --photo-bg: #2e1065;
+    --photo-text: #e9d5ff;
+    --story-bg: rgba(16, 185, 129, 0.16);
+    --story-text: #a7f3d0;
+    --badge-t1-bg: #78350f;
+    --badge-t1-text: #fef3c7;
+    --badge-t2-bg: #0c4a6e;
+    --badge-t2-text: #e0f2fe;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+  header {
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    z-index: 1000;
+  }
+  .header-title h1 {
+    font-size: 1.08rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .header-title p {
+    font-size: 0.79rem;
+    color: var(--muted);
+  }
+  .header-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .btn {
+    position: relative;
+    background: var(--primary);
+    color: var(--primary-text);
+    border: 1px solid transparent;
+    padding: 7px 12px;
+    min-height: 44px;
+    min-width: 44px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .btn:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .btn-secondary {
+    background: var(--card);
+    color: var(--text);
+    border-color: var(--border);
+  }
+  .btn-secondary[aria-pressed="true"] {
+    background: var(--primary);
+    color: var(--primary-text);
+    border-color: var(--primary);
+  }
+  .lang-switch-group {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--card);
+  }
+  .lang-switch-group .btn {
+    border-radius: 0;
+    border: none;
+    padding: 6px 10px;
+  }
+  .main-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+  .sidebar {
+    width: 58%;
+    max-width: 900px;
+    overflow-y: auto;
+    padding: 14px 16px;
+    border-inline-end: 1px solid var(--border);
+  }
+  .map-pane {
+    flex: 1;
+    position: relative;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+  }
+  .map-mode-bar {
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+  }
+  #map {
+    width: 100%;
+    height: 100%;
+    min-height: 420px;
+    flex: 1;
+  }
+  #svg-fallback {
+    display: none;
+    width: 100%;
+    flex: 1;
+    padding: 12px;
+    background: var(--bg);
+    overflow: auto;
+  }
+  .audio-studio-card {
+    background: var(--card);
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+  .audio-studio-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .audio-studio-top h2 {
+    font-size: 0.95rem;
+    color: var(--accent);
+    font-weight: 800;
+  }
+  .audio-mode-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .audio-track-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .audio-track-box h3 {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .audio-track-box p {
+    font-size: 0.76rem;
+    color: var(--muted);
+  }
+  .audio-controls-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 4px;
+  }
+  .caption-live-box {
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: 0.82rem;
+    color: var(--text);
+    display: none;
+  }
+  .caption-live-box.visible {
+    display: block;
+  }
+  .day-tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .day-tab {
+    position: relative;
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 7px 11px;
+    min-height: 44px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  .day-tab[aria-pressed="true"] {
+    background: var(--primary);
+    color: var(--primary-text);
+    border-color: var(--primary);
+  }
+  .logistics-banner {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-inline-start: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    font-size: 0.8rem;
+  }
+  .logistics-banner h2 {
+    font-size: 0.9rem;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .story-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .story-mini-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 0.77rem;
+  }
+  .story-mini-card strong {
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .day-section {
+    margin-bottom: 18px;
+  }
+  .day-header {
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .stop-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  }
+  .stop-card:hover {
+    background: var(--card-hover);
+  }
+  .stop-card.speaking-active {
+    border-color: #f59e0b !important;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.55), 0 8px 24px rgba(245, 158, 11, 0.22);
+    background: rgba(245, 158, 11, 0.10) !important;
+    transform: translateY(-1px);
+    transition: all 0.25s ease;
+  }
+  .now-playing-pill {
+    display: none;
+    align-items: center;
+    gap: 4px;
+    background: #f59e0b;
+    color: #0f172a;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .stop-card.speaking-active .now-playing-pill {
+    display: inline-flex;
+  }
+  @keyframes pulseSpeakingPin {
+    0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.9), 0 0 0 4px #ffffff; transform: scale(1.18); }
+    70% { box-shadow: 0 0 0 16px rgba(245, 158, 11, 0), 0 0 0 4px #ffffff; transform: scale(1.26); }
+    100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0), 0 0 0 4px #ffffff; transform: scale(1.18); }
+  }
+  .pin-speaking-active {
+    animation: pulseSpeakingPin 1.4s infinite !important;
+    background: #f59e0b !important;
+    color: #0f172a !important;
+    border: 3px solid #ffffff !important;
+    z-index: 9999 !important;
+  }
+  .jump-stop-chip {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .jump-stop-chip:hover {
+    border-color: var(--accent);
+  }
+  .jump-stop-chip[aria-pressed="true"] {
+    background: #f59e0b;
+    color: #0f172a;
+    border-color: #f59e0b;
+    font-weight: 800;
+  }
+  .stop-card.tier-1 {
+    border-inline-start: 4px solid #f59e0b;
+  }
+  .stop-card.tier-2 {
+    border-inline-start: 4px solid #0284c7;
+  }
+  .stop-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .stop-title-btn {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-weight: 800;
+    font-size: 0.89rem;
+    cursor: pointer;
+    text-align: start;
+    padding: 4px 0;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .stop-actions-right {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .btn-stop-speak {
+    position: relative;
+    background: var(--surface);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 8px;
+    min-height: 44px;
+    min-width: 44px;
+    font-size: 0.73rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .btn-stop-speak[aria-pressed="true"] {
+    background: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+  }
+  .badge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+  .badge-t1 {
+    background: var(--badge-t1-bg);
+    color: var(--badge-t1-text);
+  }
+  .badge-t2 {
+    background: var(--badge-t2-bg);
+    color: var(--badge-t2-text);
+  }
+  .wow-line {
+    background: var(--story-bg);
+    color: var(--story-text);
+    font-size: 0.77rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+  }
+  .photo-line {
+    background: var(--photo-bg);
+    color: var(--photo-text);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+  }
+  .move-line {
+    font-size: 0.78rem;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .ext-links {
+    display: inline-flex;
+    gap: 10px;
+  }
+  .ext-links a {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.76rem;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .graveyard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    margin-top: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+  }
+  .graveyard-table th, .graveyard-table td {
+    border: 1px solid var(--border);
+    padding: 7px 9px;
+    text-align: start;
+  }
+  .graveyard-table th {
+    background: var(--card-hover);
+    font-weight: 800;
+  }
+  audio {
+    width: 100%;
+    height: 36px;
+    margin-top: 4px;
+  }
+  @media (max-width: 900px) {
+    .main-container { flex-direction: column; }
+    .sidebar { width: 100%; max-width: 100%; height: 58%; border-inline-end: none; border-bottom: 1px solid var(--border); }
+    .map-pane { height: 42%; }
+  }
+</style>
+<!-- ELADB_UNIVERSAL_THEME_CSS_START -->
+<style>
+  :root[data-theme="dark"] {
+    --bg: #0b1120 !important;
+    --background: #0b1120 !important;
+    --surface: #111827 !important;
+    --header-bg: #111827 !important;
+    --card: #111827 !important;
+    --card-hover: #1e293b !important;
+    --text: #f8fafc !important;
+    --muted: #cbd5e1 !important;
+    --border: #334155 !important;
+    --primary: #2563eb !important;
+    --accent: #60a5fa !important;
+    color-scheme: dark;
+  }
+  :root[data-theme="light"] {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --header-bg: #ffffff;
+    --card: #ffffff;
+    --card-hover: #f1f5f9;
+    --text: #0f172a;
+    --muted: #475569;
+    --border: #cbd5e1;
+    --primary: #1d4ed8;
+    --accent: #0369a1;
+    color-scheme: light;
+  }
+</style>
+<!-- ELADB_UNIVERSAL_THEME_CSS_END -->
+<!-- ELADB_AUTO_DARK_SURFACES_START -->
+<style>
+  :root[data-theme="dark"] [style*="background: #eff6ff"],
+  :root[data-theme="dark"] [style*="background:#eff6ff"],
+  :root[data-theme="dark"] [style*="background-color: #eff6ff"],
+  :root[data-theme="dark"] [style*="background-color:#eff6ff"],
+  :root[data-theme="dark"] [style*="background: #ecfdf5"],
+  :root[data-theme="dark"] [style*="background:#ecfdf5"],
+  :root[data-theme="dark"] [style*="background-color: #ecfdf5"],
+  :root[data-theme="dark"] [style*="background-color:#ecfdf5"] {
+    background: #111827 !important; color: #f8fafc !important; border-color: #334155 !important;
+  }
+  :root[data-theme="dark"] [style*="background: #f3e8ff"],
+  :root[data-theme="dark"] [style*="background:#f3e8ff"],
+  :root[data-theme="dark"] [style*="background-color: #f3e8ff"],
+  :root[data-theme="dark"] [style*="background-color:#f3e8ff"] {
+    background: rgba(168, 85, 247, 0.18) !important; color: #d8b4fe !important; border-color: rgba(192, 132, 252, 0.4) !important;
+  }
+  :root[data-theme="dark"] [style*="color: #137333"],
+  :root[data-theme="dark"] [style*="color:#137333"],
+  :root[data-theme="dark"] [style*="color: #065f46"] {
+    color: #86efac !important;
+  }
+  :root[data-theme="dark"] [style*="color: #6a1b9a"],
+  :root[data-theme="dark"] [style*="color:#6a1b9a"],
+  :root[data-theme="dark"] [style*="color: #6b21a8"] {
+    color: #d8b4fe !important;
+  }
+  :root[data-theme="dark"] [style*="color: #795548"],
+  :root[data-theme="dark"] [style*="color: #92400e"] {
+    color: #fcd34d !important;
+  }
+</style>
+<!-- ELADB_AUTO_DARK_SURFACES_END -->
+</head>
+<body class="night-mode">
+  <div class="eladb-golink-topbar" dir="ltr" style="max-width:1200px;margin:8px auto 0;padding:0 16px;display:flex;justify-content:flex-end;"><!-- ELADB_GOLINK_BADGE_START --><a href="http://go/dbv-trip-he" target="_blank" rel="noopener" class="eladb-golink-badge" data-golink-badge="go/dbv-trip-he" title="Shortlink: http://go/dbv-trip-he (Click to copy or open)" onclick="if(navigator.clipboard){navigator.clipboard.writeText('http://go/dbv-trip-he');}" style="display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:4px 11px;border-radius:999px;background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe;font-family:monospace;font-size:12.5px;font-weight:700;text-decoration:none;white-space:nowrap;box-sizing:border-box;">🔗 go/dbv-trip-he</a><!-- ELADB_GOLINK_BADGE_END --></div>
+
+<body class="night-mode">
+<header>
+  <div class="header-title">
+    <h1 id="hdr-title" data-he="מונטנגרו (קוטור), בוסניה (מוסטר) וסטון דרך דוברובניק (30/10 11:25 - 03/11 10:35)" data-en="Montenegro (Bay of Kotor), Bosnia (Mostar) &amp; Ston via DBV (30/10 11:25 - 03/11 10:35)">מונטנגרו (קוטור), בוסניה (מוסטר) וסטון דרך דוברובניק (30/10 11:25 - 03/11 10:35)</h1>
+    <p id="hdr-sub" data-he="טיסות Ryanair מאומתות: הלוך שישי 30/10 (07:10-&gt;11:25) | חזור שלישי 03/11 (10:35-&gt;13:00) | לולאת 3 מדינות ברכב שכור (דילוג על העיר דוברובניק)" data-en="Verified Ryanair Flights: Out Fri 30/10 (07:10-&gt;11:25) | Back Tue 03/11 (10:35-&gt;13:00) | 3-Country Road Loop (Skipping Dubrovnik City)">טיסות Ryanair מאומתות: הלוך שישי 30/10 (07:10-&gt;11:25) | חזור שלישי 03/11 (10:35-&gt;13:00) | לולאת 3 מדינות ברכב שכור (דילוג על העיר דוברובניק)</p>
+  </div>
+  <div class="header-actions">
+    <a href="dbv_trip_text_he.html" class="btn" style="background:#059669;color:#fff;font-weight:800;" data-he="📱 מהדורת שטח לנייד" data-en="📱 Mobile Text Edition">📱 מהדורת שטח לנייד</a>
+    <button type="button" class="btn btn-secondary" onclick="copyAllDaysWhatsApp()" data-he="📋 העתק הכל ל-Maps" data-en="📋 Copy All to Maps">📋 העתק הכל ל-Maps</button>
+    <a href="travel_and_offices_hub.html" class="btn btn-secondary" data-he="✈️ חזרה לפורטל הטיולים" data-en="✈️ Back to Travel Hub">✈️ חזרה לפורטל הטיולים</a>
+    <div class="lang-switch-group" role="group" aria-label="Language Switcher">
+      <button type="button" id="langBtnHe" class="btn btn-secondary" aria-pressed="true" onclick="setLanguage('he')">🇮🇱 עברית (L)</button>
+      <button type="button" id="langBtnEn" class="btn btn-secondary" aria-pressed="false" onclick="setLanguage('en')">🇬🇧 English (L)</button>
+    </div>
+    <button type="button" id="btn-theme" class="btn btn-secondary" aria-pressed="true" onclick="toggleTheme()">☀️ מצב יום (D)</button>
+    <button type="button" id="btn-map-leaflet" class="btn btn-secondary" aria-pressed="true" onclick="switchMapDisplay('leaflet')" data-he="🗺️ מפת Leaflet חיה" data-en="🗺️ Live Leaflet Map">🗺️ מפת Leaflet חיה</button>
+    <button type="button" id="btn-map-svg" class="btn btn-secondary" aria-pressed="false" onclick="switchMapDisplay('svg')" data-he="📐 מפת וקטור Offline" data-en="📐 Offline Vector Map">📐 מפת וקטור Offline</button>
+  </div>
+</header>
+
+<div class="main-container">
+  <main class="sidebar" id="itinerary-sidebar">
+
+    <!-- AUDIO NARRATOR & OFFLINE MP3 STUDIO -->
+    <section class="audio-studio-card" aria-label="מדריך קולי להאזנה ולהורדה לטיסה">
+      <div class="audio-studio-top">
+        <h2 data-he="🎧 אולפן קריינות דו-לשוני, שליטה במהירות והורדת MP3 למטוס (עברית / English)" data-en="🎧 Bilingual Audio Tour, Speed Control &amp; Offline In-Flight MP3 Downloads (EN / HE)">🎧 אולפן קריינות דו-לשוני, שליטה במהירות והורדת MP3 למטוס (עברית / English)</h2>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          <button type="button" id="btn-tts-short" class="btn" aria-pressed="false" onclick="startLiveNarrator('short')" data-he="▶️ קריין חי: מדריך מעשי לכל 16 התחנות (18.8 דק׳)" data-en="▶️ Live Voice: Practical 16-Stop Guide (16.1m)">▶️ קריין חי: מדריך מעשי לכל 16 התחנות (18.8 דק׳)</button>
+          <button type="button" id="btn-tts-flight" class="btn btn-secondary" aria-pressed="false" onclick="startLiveNarrator('flight')" data-he="✈️ קריין חי: מהדורת טיסה וסיפורים (32.8 דק׳)" data-en="✈️ Live Voice: Full In-Flight Storytelling (27.5m)">✈️ קריין חי: מהדורת טיסה וסיפורים (32.8 דק׳)</button>
+          <button type="button" id="btn-tts-stop" class="btn btn-secondary" onclick="stopLiveNarrator()" data-he="⏹️ עצור" data-en="⏹️ Stop">⏹️ עצור</button>
+          <button type="button" id="btn-cc-toggle" class="btn btn-secondary" aria-pressed="true" onclick="toggleCaptions()" data-he="💬 כתוביות: פעיל" data-en="💬 CC: ON">💬 כתוביות: פעיל</button>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px;padding:6px 10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;" role="group" aria-label="Audio Playback Speed">
+        <strong style="font-size:0.78rem;color:var(--accent);" data-he="⏩ מהירות ניגון וקריינות (עברית + English):" data-en="⏩ Playback &amp; Voice Speed (EN + HE):">⏩ מהירות ניגון וקריינות (עברית + English):</strong>
+        <button type="button" class="btn btn-secondary speed-btn" data-speed="1" aria-pressed="true" onclick="setAudioSpeed(1)">1x</button>
+        <button type="button" class="btn btn-secondary speed-btn" data-speed="1.25" aria-pressed="false" onclick="setAudioSpeed(1.25)">1.25x</button>
+        <button type="button" class="btn btn-secondary speed-btn" data-speed="1.5" aria-pressed="false" onclick="setAudioSpeed(1.5)">1.5x</button>
+        <button type="button" class="btn btn-secondary speed-btn" data-speed="1.75" aria-pressed="false" onclick="setAudioSpeed(1.75)">1.75x</button>
+        <button type="button" class="btn btn-secondary speed-btn" data-speed="2" aria-pressed="false" onclick="setAudioSpeed(2)">2x 🚀</button>
+        <span id="speed-status-badge" style="font-size:0.75rem;color:var(--muted);margin-inline-start:auto;" data-he="חל על שני נגני ה-MP3 ועל הקריינות החיה בכל התחנות" data-en="Applies to both MP3 players &amp; live stop narration in both languages">חל על שני נגני ה-MP3 ועל הקריינות החיה בכל התחנות</span>
+      </div>
+
+      <div id="audio-stop-jump-bar" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:8px;padding:6px 10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;" role="group" aria-label="סנכרון וקפיצה לתחנה באודיו ובמפה">
+        <strong style="font-size:0.75rem;color:var(--accent);margin-inline-end:4px;" data-he="📍 סנכרון חי למפה ולתחנה (לחץ לקפיצה באודיו):" data-en="📍 Live Audio-to-Map Sync (Click to jump to stop):">📍 סנכרון חי למפה ולתחנה (לחץ לקפיצה באודיו):</strong>
+        <button type="button" class="jump-stop-chip" id="jump-chip-intro" aria-pressed="false" onclick="jumpAudioToStop(0)" data-he="פתיחה" data-en="Intro">פתיחה</button>
+        <span id="jump-chips-container" style="display:inline-flex;flex-wrap:wrap;gap:4px;"></span>
+      </div>
+      <div id="live-caption-box" class="caption-live-box visible" aria-live="polite" aria-atomic="true">
+        <span id="live-caption-text" data-he="לחץ על 'קריין חי' למעלה, בחר מהירות (1x עד 2x), או לחץ על 🔊 בכל אחת מ-16 התחנות למטה להאזנה נקודתית, או הורד קובץ MP3 רגיל (1x) או מואץ מראש (2x) למטוס." data-en="Click 'Live Voice' above, choose speed (1x to 2x), click 🔊 on any of the 16 stops below, or download 1x or pre-accelerated 2x offline MP3s for your flight.">לחץ על 'קריין חי' למעלה, בחר מהירות (1x עד 2x), או לחץ על 🔊 בכל אחת מ-16 התחנות למטה להאזנה נקודתית, או הורד קובץ MP3 רגיל (1x) או מואץ מראש (2x) למטוס.</span>
+      </div>
+
+      <div class="audio-grid">
+        <div class="audio-track-box">
+          <h3 data-he="⚡ גרסה 1: מדריך מעשי ממוקד תחנה-תחנה (18.8 דק׳ ב-1x | 9.4 דק׳ ב-2x)" data-en="⚡ Track 1: Practical Stop-by-Stop Guide (16.1m at 1x | 8.1m at 2x)">⚡ גרסה 1: מדריך מעשי ממוקד תחנה-תחנה (18.8 דק׳ ב-1x | 9.4 דק׳ ב-2x)</h3>
+          <p data-he="עובר ברצף על כללי הזהב וכל 16 התחנות: עלות, פנים מול חוץ, כמה זמן להקדיש, על מה לדלג בבלת״ם, זוויות צילום והגעה." data-en="Covers all golden rules and all 16 stops: cost, Inside-vs-Outside verdict, recommended duration, skip-if-delayed priority, smartphone angles &amp; transit.">עובר ברצף על כללי הזהב וכל 16 התחנות: עלות, פנים מול חוץ, כמה זמן להקדיש, על מה לדלג בבלת״ם, זוויות צילום והגעה.</p>
+          <audio id="audio-player-short" controls preload="metadata" src="audio/dbv_trip_short_he.mp3"></audio>
+          <div class="audio-controls-row">
+            <a id="dl-short-he" class="btn btn-secondary" href="audio/dbv_trip_short_he.mp3" download="dbv_trip_short_he.mp3">⬇️ MP3 מעשי עברית 1x (18.8m, 8.6MB)</a>
+            <a id="dl-short-he-2x" class="btn" href="audio/dbv_trip_short_he_2x.mp3" download="dbv_trip_short_he_2x.mp3">⚡ הורדה עברית x2 (9.4m, 2.1MB)</a>
+          </div>
+          <div class="audio-controls-row">
+            <a id="dl-short-en" class="btn btn-secondary" href="audio/dbv_trip_short_en.mp3" download="dbv_trip_short_en.mp3">⬇️ MP3 Practical EN 1x (16.1m, 7.4MB)</a>
+            <a id="dl-short-en-2x" class="btn" href="audio/dbv_trip_short_en_2x.mp3" download="dbv_trip_short_en_2x.mp3">⚡ Download EN x2 (8.1m, 1.8MB)</a>
+          </div>
+        </div>
+
+        <div class="audio-track-box">
+          <h3 data-he="✈️ גרסה 2: מהדורת טיסה וסיפורים פיקנטיים (32.8 דק׳ ב-1x | 16.4 דק׳ ב-2x)" data-en="✈️ Track 2: In-Flight Storytelling &amp; Deep-Dive (27.5m at 1x | 13.7m at 2x)">✈️ גרסה 2: מהדורת טיסה וסיפורים פיקנטיים (32.8 דק׳ ב-1x | 16.4 דק׳ ב-2x)</h3>
+          <p data-he="מותאם להאזנה בעיניים עצומות בטיסה: רקע היסטורי וסיפורים פיקנטיים, פירוט מה רואים על הדרך, ועבור כל 16 התחנות: עלות, פנים מול חוץ, משך שהייה, עדיפות בבלת״ם וזוויות צילום." data-en="Designed for listening on the plane with eyes closed: spicy historical stories, en-route sights, plus cost, Inside-vs-Outside verdict, duration, priority &amp; photo angles for all 16 stops.">מותאם להאזנה בעיניים עצומות בטיסה: רקע היסטורי וסיפורים פיקנטיים, פירוט מה רואים על הדרך, ועבור כל 16 התחנות: עלות, פנים מול חוץ, משך שהייה, עדיפות בבלת״ם וזוויות צילום.</p>
+          <audio id="audio-player-flight" controls preload="metadata" src="audio/dbv_trip_flight_he.mp3"></audio>
+          <div class="audio-controls-row">
+            <a id="dl-flight-he" class="btn btn-secondary" href="audio/dbv_trip_flight_he.mp3" download="dbv_trip_flight_he.mp3">⬇️ MP3 טיסה עברית 1x (32.8m, 15.0MB)</a>
+            <a id="dl-flight-he-2x" class="btn" href="audio/dbv_trip_flight_he_2x.mp3" download="dbv_trip_flight_he_2x.mp3">⚡ הורדה טיסה עברית x2 (16.4m, 3.8MB)</a>
+          </div>
+          <div class="audio-controls-row">
+            <a id="dl-flight-en" class="btn btn-secondary" href="audio/dbv_trip_flight_en.mp3" download="dbv_trip_flight_en.mp3">⬇️ MP3 Flight EN 1x (27.5m, 12.6MB)</a>
+            <a id="dl-flight-en-2x" class="btn" href="audio/dbv_trip_flight_en_2x.mp3" download="dbv_trip_flight_en_2x.mp3">⚡ Download Flight EN x2 (13.7m, 3.1MB)</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CITY BACKGROUND & SPICY STORIES -->
+    <section class="logistics-banner" aria-label="רקע היסטורי וסיפורים פיקנטיים">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+        <h2 data-he="🏛️ רקע על הפיורד והבלקן ו-4 סיפורים פיקנטיים שמשנים את איך שמסתכלים על קוטור ומוסטר" data-en="🏛️ Balkan Fjord Background &amp; 4 Spicy Historical Stories Behind Kotor &amp; Mostar">🏛️ רקע על הפיורד והבלקן ו-4 סיפורים פיקנטיים שמשנים את איך שמסתכלים על קוטור ומוסטר</h2>
+        <button type="button" class="btn-stop-speak" onclick="speakCustomBlock('intro')" data-he="🔊 האזן לרקע ולסיפורים" data-en="🔊 Listen to City Stories">🔊 האזן לרקע ולסיפורים</button>
+      </div>
+      <div class="story-cards-grid">
+        <div class="story-mini-card">
+          <strong data-he="1. האי המלאכותי ב-Perast שנבנה מ-100 ספינות טבועות וסלעים (1452)" data-en="1. The Man-Made Island of Perast Built from Sunken Ships &amp; Rocks (1452)">1. האי המלאכותי ב-Perast שנבנה מ-100 ספינות טבועות וסלעים (1452)</strong>
+          <span data-he="האי Our Lady of the Rocks מול Perast אינו אי טבעי כלל: ב-1452 שני מלחים ונציאנים מצאו איקונה על שונית זעירה, ובמשך 570 שנה תושבי העיירה הטביעו סביב השונית מעל 100 ספינות פיראטים שלל והשליכו סלעים מהסירות בחגיגת ה-Fašinada השנתית עד שיצרו אי מלאכותי בלב הפיורד." data-en="Our Lady of the Rocks off Perast is 100% man-made: after two sailors found an icon on a tiny reef in 1452, locals spent 570 years sinking over 100 captured ships filled with stones around the rock during the annual Fašinada ceremony.">האי Our Lady of the Rocks מול Perast אינו אי טבעי כלל: ב-1452 שני מלחים ונציאנים מצאו איקונה על שונית זעירה, ובמשך 570 שנה תושבי העיירה הטביעו סביב השונית מעל 100 ספינות פיראטים שלל והשליכו סלעים מהסירות בחגיגת ה-Fašinada השנתית עד שיצרו אי מלאכותי בלב הפיורד.</span>
+        </div>
+        <div class="story-mini-card">
+          <strong data-he="2. סולם המצודה של קוטור וצבא נפוליאון מול הצי הרוסי (1,350 מדרגות)" data-en="2. Kotor’s 1,350-Step Fortress Ladder &amp; Napoleon vs. the Russian Fleet">2. סולם המצודה של קוטור וצבא נפוליאון מול הצי הרוסי (1,350 מדרגות)</strong>
+          <span data-he="חומות מצודת San Giovanni מטפסות בזווית כמעט אנכית לאורך 4.5 ק&quot;מ על קיר הגיר מעל קוטור. ב-1813 מונטנגרים ואנגלים גררו תותחי צי כבדים בחבלים לראש ההר מעל המצודה והפגיזו את חיל המצב של נפוליאון מלמעלה עד שנכנע." data-en="San Giovanni’s 4.5km ramparts climb vertically up the limestone cliff. In 1813, British sailors and Montenegrins hauled naval cannons by rope to the mountain peaks above the fortress, bombarding Napoleon’s garrison from above until they surrendered.">חומות מצודת San Giovanni מטפסות בזווית כמעט אנכית לאורך 4.5 ק&quot;מ על קיר הגיר מעל קוטור. ב-1813 מונטנגרים ואנגלים גררו תותחי צי כבדים בחבלים לראש ההר מעל המצודה והפגיזו את חיל המצב של נפוליאון מלמעלה עד שנכנע.</span>
+        </div>
+        <div class="story-mini-card">
+          <strong data-he="3. גשר מוסטר (Stari Most): איום העריפה של סולימאן המפואר (1566)" data-en="3. Mostar’s Stari Most: Sultan Suleiman’s Beheading Threat (1566)">3. גשר מוסטר (Stari Most): איום העריפה של סולימאן המפואר (1566)</strong>
+          <span data-he="כאשר הסולטן סולימאן המפואר ציווה על האדריכל Mimar Hayruddin לבנות קשת אבן בודדת ברוחב 29 מטר מעל נהר הנרטווה ב-1566, הוא הודיע לו שאם הקשת תקרוס בפירוק הפיגומים ראשו ייערף. היירודין כבר חפר לעצמו קבר מראש, אך הקשת עמדה 427 שנה ברציפות." data-en="When Sultan Suleiman ordered architect Mimar Hayruddin in 1566 to span the Neretva with a single 29m stone arch, he warned that Hayruddin would be beheaded if the bridge collapsed when the scaffolding came down; the arch stood for 427 years.">כאשר הסולטן סולימאן המפואר ציווה על האדריכל Mimar Hayruddin לבנות קשת אבן בודדת ברוחב 29 מטר מעל נהר הנרטווה ב-1566, הוא הודיע לו שאם הקשת תקרוס בפירוק הפיגומים ראשו ייערף. היירודין כבר חפר לעצמו קבר מראש, אך הקשת עמדה 427 שנה ברציפות.</span>
+        </div>
+        <div class="story-mini-card">
+          <strong data-he="4. מלחמת המלח של רגוזא וחומת האבן הארוכה באירופה ב-Ston (5.5 ק&quot;מ)" data-en="4. Ragusa’s White Gold &amp; Europe’s Longest Stone Wall at Ston (5.5km)">4. מלחמת המלח של רגוזא וחומת האבן הארוכה באירופה ב-Ston (5.5 ק&quot;מ)</strong>
+          <span data-he="בימי הביניים מלח היה &quot;הזהב הלבן&quot; שמימן את שליש מתקציב רפובליקת דוברובניק (Ragusa). כדי להגן על בריכות המלח הגיאומטריות של Ston, הרפובליקה בנתה חומה מבוצרת באורך 5.5 ק&quot;מ עם 40 מגדלים שמטפסת ישר על רכס ההר." data-en="In the Middle Ages, salt was white gold generating a third of the Republic of Ragusa’s revenue. To guard Ston’s geometric salt pans, Ragusa built a 5.5km fortified stone wall with 40 towers climbing straight over the mountain ridge.">בימי הביניים מלח היה &quot;הזהב הלבן&quot; שמימן את שליש מתקציב רפובליקת דוברובניק (Ragusa). כדי להגן על בריכות המלח הגיאומטריות של Ston, הרפובליקה בנתה חומה מבוצרת באורך 5.5 ק&quot;מ עם 40 מגדלים שמטפסת ישר על רכס ההר.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOGISTICS & TRANSIT -->
+    <section class="logistics-banner" aria-label="לוגיסטיקה ותחבורה">
+      <h2 data-he="🚗 לוגיסטיקה, רכב מוזמן (Toyota Yaris אוטומט ב-Enterprise דרך Auto Europe ב-68.56€), מעבר גבול ואפס כבישי אגרה" data-en="🚗 Rental Car (Toyota Yaris Auto at Enterprise via Auto Europe €68.56), Cross-Border Green Card &amp; Zero Tolls">🚗 לוגיסטיקה, רכב מוזמן (Toyota Yaris אוטומט ב-Enterprise דרך Auto Europe ב-68.56€), מעבר גבול ואפס כבישי אגרה</h2>
+      <p data-he="🚗 רכב וביטוח מוזמנים בטרמינל DBV (30/10 12:00 עד 03/11 09:00): Toyota Yaris אוטומט (EDAR) בדלפק Enterprise בתוך טרמינל DBV (טלפון דלפק: +385 99 469 6331) דרך Auto Europe, שולם מראש 68.56€ (£57.73) כולל ביטוח Full Damage &amp; Theft Protection מלא ל-4 ימים (שמשות, צמיגים, גג, מרכב תחתון וגרירה; ביטול חינם ב-0€ עד 48 שעות לפני האיסוף ב-28/10 12:00). בדלפק Enterprise בשדה חובה להציג כרטיס אשראי פיזי (Credit Card עם קוד PIN לפיקדון של 900€) ולבקש אישור חציית גבול וכרטיס ירוק (Green Card) למונטנגרו (ME) ולבוסניה (BIH) (~60€ משולם בדלפק). צריכת דלק של יאריס אוטומט ל-520 ק״מ היא ~34€ סה״כ (תדלוק זול בבוסניה ב-~1.45€/ליטר)." data-en="🚗 Booked Car &amp; Full Protection at DBV Terminal (30/10 12:00 to 03/11 09:00): Toyota Yaris Automatic (EDAR) at the Enterprise in-terminal desk (Desk Tel: +385 99 469 6331) via Auto Europe, prepaid €68.56 (£57.73) including Full Damage &amp; Theft Protection (glass, tires, roof, underbody &amp; towing; €0 free cancellation up to 48h before pickup on 28/10 12:00). At the Enterprise desk, present a physical Credit Card with PIN (€900 deposit hold) and request the Montenegro (ME) + Bosnia (BIH) Cross-Border Green Card (~€60 at desk). Total fuel for ~520km is ~€34 (refuel cheaply in Bosnia at ~€1.45/L).">🚗 <strong>רכב וביטוח מוזמנים בטרמינל DBV (<code>30/10 12:00</code> עד <code>03/11 09:00</code>):</strong> דגם <strong>Toyota Yaris אוטומט (EDAR)</strong> בדלפק <code>Enterprise</code> בתוך טרמינל DBV (טל׳ דלפק: <code>+385 99 469 6331</code>) דרך <code>Auto Europe</code>, <strong>שולם מראש <code>68.56€</code> (<code>£57.73</code>)</strong> כולל ביטוח <code>Full Damage &amp; Theft Protection</code> ל-4 ימים (שמשות, צמיגים, גג, מרכב תחתון וגרירה; ביטול חינם ב-<code>0€</code> עד <code>28/10 12:00</code>). בדלפק Enterprise הצג <strong>כרטיס אשראי פיזי (<code>Credit Card</code>)</strong> ובקש <strong>אישור מעבר גבול וכרטיס ירוק (<code>Green Card</code>) למונטנגרו ולבוסניה (<code>~60€</code> בדלפק)</strong>. דלק לכל ה-520 ק״מ: <code>~34€</code> (תדלק בזול בבוסניה ב-<code>~1.45€/L</code>).</p><p data-he="🛣️ כבישי אגרה ותגים בבלקן (0€ במסלול ולא צריך Vignette או תג): באף אחת מ-3 המדינות (קרואטיה, מונטנגרו, בוסניה) אין מדבקת Vignette ואין צורך בתג אלקטרוני. כל המסלול שלך פטור מאגרה (0€): כביש החוף D8 וגשר המיתרים החדש Pelješac Bridge בקרואטיה הם חינם (0€); כביש מפרץ קוטור ומנהרת Vrmac במונטנגרו חינם (0€; מעבורת Kamenari-Lepetane אופציונלית ב-5€); ובבוסניה הכבישים ל-Kravica, Počitelj, Blagaj ומוסטר חינם (אם עולים ל-5 דק׳ על סוף אוטוסטרדת A1 ליד Zvirovići משלמים 0.60€ באשראי/אירו במחסום)." data-en="🛣️ Balkan Tolls &amp; Vignettes (€0 on Your Route, Zero Tags Needed): None of the 3 countries (Croatia, Montenegro, Bosnia) use vignettes or require electronic tags. Your entire route is toll-free (€0): Croatia’s D8 highway and Pelješac Bridge are €0; Montenegro’s Bay of Kotor road and Vrmac Tunnel are €0 (optional Kamenari ferry is €5); and Bosnia’s roads to Kravica, Počitelj, Blagaj, and Mostar are €0 (if using the short A1 motorway exit near Zvirovići, it is €0.60 by contactless card at the booth).">🛣️ <strong>כבישי אגרה ותגים בבלקן (<code>0€</code> במסלול ולא צריך Vignette או תג):</strong> באף אחת מ-3 המדינות אין מדבקת <code>Vignette</code> ואין צורך בתג. <strong>גשר <code>Pelješac</code> וכביש <code>D8</code> בקרואטיה חינם (<code>0€</code>)</strong>, <strong>מנהרת <code>Vrmac</code> וכביש הפיורד במונטנגרו חינם (<code>0€</code>)</strong>, והכבישים בבוסניה חינם (או <code>0.60€</code> באשראי אם יורדים במחלף <code>Zvirovići</code> ליד <code>Kravica</code>).</p><p data-he="📱 אזהרת סים ונדידה קריטית (Non-EU): קרואטיה (HR) היא איחוד אירופי (0€ ב-Vodafone IE), אבל מונטנגרו ובוסניה אינן ב-EU. כבה נדידת נתונים על קו אישי או השתמש ב-Revolut/Airalo eSIM לבלקן (~5€ ל-3GB) + הורד מפות Offline ב-Google Maps." data-en="📱 Critical Non-EU Roaming Warning: Croatia (HR) is EU Zone 1 (€0), but Montenegro &amp; Bosnia are NON-EU. Disable personal SIM roaming or activate a €5 Balkan eSIM (Revolut/Airalo) and download offline Google Maps in advance.">📱 <strong>אזהרת סים ונדידה קריטית (Non-EU):</strong> קרואטיה (<code>HR</code>) היא איחוד אירופי (<code>0€</code> ב-Vodafone IE), אבל <strong>מונטנגרו ובוסניה אינן ב-EU</strong>. כבה נדידת נתונים על קו אישי או הפעל <code>eSIM</code> של Revolut/Airalo (~5€) + הורד מפות Offline ב-Google Maps.</p><p data-he="💶 אשראי/קונטקטלס מול מזומן (איפה חובה מזומן?): דלק, סופרמרקטים, חומות Ston (10€), מפלי Kravica (10€) ו-Apartments Mira ב-Cavtat עובדים ב-100% באשראי/קונטקטלס. לעומת זאת, ב-4 נקודות חובה מזומן באירו (Cash Only): (1) סירת Perast לאי (5€), (2) פארק ומאוזוליאום Lovćen (3€+8€ = 11€), (3) סולם מצודת קוטור (15€ בשער הרשמי, או 0€ משביל Špiljari) ומסגד Koski Mehmed במוסטר (7€), ו-(4) שים לב שגם Hostel Pupa בקוטור (~49€ + 2€ מס עירוני) וגם Apartments GB במוסטר (25€) מוגדרים ב-Booking.com כ-Cash Only בצ׳ק-אין (אלא אם חויבת מראש אונליין ב-Booking) — בדוק באישור ההזמנה והבא מזומן באירו בהתאם (30€-40€ לאתרים, או ~110€ אם שתי הלינות משולמות במקום)." data-en="💶 Contactless/Card vs. Cash-Only Breakdown: Fuel, supermarkets, Walls of Ston (€10), Kravica Falls (€10), and Apartments Mira in Cavtat accept 100% contactless/cards. However, 4 items are strictly CASH ONLY in Euros: (1) Perast island boat (€5), (2) Lovćen Park &amp; Mausoleum (€3+€8 = €11), (3) Kotor Fortress gate (€15, or €0 via Špiljari trail) &amp; Mostar Koski Mehmed minaret (€7), and (4) Note that both Hostel Pupa in Kotor (~€49 + €2 tourist tax) and Apartments GB in Mostar (€25) list 'Cash Only at check-in' on Booking.com unless prepaid online — check your confirmation and carry €35-€40 cash for sites (or ~€110 if paying those 2 stays on arrival).">💶 <strong>אשראי/קונטקטלס מול מזומן (איפה חובה מזומן?):</strong> דלק, סופרמרקטים, חומות <code>Ston</code> (<code>10€</code>), מפלי <code>Kravica</code> (<code>10€</code>) ו-<code>Apartments Mira</code> עובדים ב-<strong>100% קונטקטלס/אשראי</strong>. לעומת זאת, <strong>חובה מזומן באירו (<code>Cash Only</code>)</strong> ב: (1) סירת <code>Perast</code> לאי (<code>5€</code>), (2) פארק ומאוזוליאום <code>Lovćen</code> (<code>11€</code> סה״כ), (3) סולם קוטור (<code>15€</code>, או <code>0€</code> משביל <code>Špiljari</code>) וצריח <code>Koski Mehmed</code> במוסטר (<code>7€</code>), ו-(4) <strong>שים לב:</strong> גם <code>Hostel Pupa</code> בקוטור (<code>~49€</code> + <code>2€</code> מס עירוני) וגם <code>Apartments GB</code> במוסטר (<code>25€</code>) מוגדרים ב-Booking כ-<strong><code>Cash Only</code> בצ׳ק-אין</strong> (אלא אם Booking גבה מראש אונליין) — הבא <code>35€-40€</code> במזומן לאתרים (או <code>~110€</code> אם שתי הלינות משולמות במקום).</p>
+    </section>
+
+    <!-- WEATHER & SUNSET -->
+    <section class="logistics-banner" aria-label="תחזית מזג אוויר ושקיעה">
+      <h2 data-he="🌦️ תחזית מזג אוויר (30/10-03/11), שעות שקיעה (שעון חורף ~16:40) וכלל פנים-מול-חוץ" data-en="🌦️ Weather Forecast (30/10-03/11), Winter Sunset (~16:40) &amp; Inside-vs-Outside Verdict">🌦️ תחזית מזג אוויר (30/10-03/11), שעות שקיעה (שעון חורף ~16:40) וכלל פנים-מול-חוץ</h2>
+      <!-- LIVE_NIGHTLY_WEATHER_START -->
+      <p id="live-nightly-weather-box" style="margin-top:6px;padding:8px 10px;border-radius:6px;background:rgba(245,158,11,0.14);border-inline-start:4px solid #f59e0b;" data-he="🔄 תחזית רב-מודלית לקוטור, מוסטר וסטון (30/10-03/11): טמפרטורות יום נעימות להליכה וטיפוס של 17°-20°C בחוף קוטור וסטון, ו-10°-12°C בפסגת הר Lovćen (גובה 1,657m). מומלץ מעיל גשם/רוח קל ושכבת פליז לפסגת לובצ׳ן." data-en="🔄 Multi-Model Forecast for Kotor, Mostar &amp; Ston (30/10-03/11): Mild 17°-20°C coastal walking weather in Kotor/Mostar/Ston, dropping to 10°-12°C at Lovćen summit (1,657m). Pack a windproof rain shell and fleece layer for the mountain pass.">🔄 <strong>תחזית רב-מודלית לקוטור, מוסטר וסטון (30/10-03/11):</strong> טמפרטורות יום של <code>17°-20°C</code> בחוף קוטור, מוסטר וסטון, ו-<code>10°-12°C</code> בפסגת הר <code>Lovćen</code> (גובה 1,657m). מומלץ מעיל רוח/גשם קל ושכבת פליז לפסגה.</p>
+      <!-- LIVE_NIGHTLY_WEATHER_END --><p data-he="🌅 שעון חורף (החל מ-25/10): השקיעה היא ב-16:42 והשעה הכחולה (Blue Hour) ב-16:45-17:15! לכן כל הטיפוסים והתצפיות הגבוהות (סולם קוטור ביום 1, תצפית סווטי סטפן ביום 2, גשר מוסטר ביום 3, וחומות סטון ביום 4) מתוזמנים בדיוק לחלון 15:00-17:00." data-en="🌅 Winter Time Rule (from Oct 25): Sunset is at 16:42 and Blue Hour is 16:45-17:15! All high viewpoints (Kotor Ladder on Day 1, Sveti Stefan on Day 2, Stari Most on Day 3, and Ston Walls on Day 4) are timed for the 15:00-17:00 Golden Hour window.">🌅 <strong>שעון חורף (החל מ-25/10):</strong> השקיעה היא ב-<code>16:42</code> והשעה הכחולה ב-<code>16:45-17:15</code>. כל נקודות השיא ממוקמות בדיוק בחלון האור הזה.</p>
+    </section>
+
+    <nav class="day-tabs" aria-label="סינון לפי ימים">
+      <button type="button" class="day-tab" data-day="all" aria-pressed="true" onclick="filterDay('all')" data-he="כל 4 הימים (16 תחנות)" data-en="All 4 Days (16 Stops)">כל 4 הימים (16 תחנות)</button>
+      <button type="button" class="day-tab" data-day="1" aria-pressed="false" onclick="filterDay('1')" data-he="יום ו׳ 30/10: מפרץ קוטור + Perast + סולם המצודה" data-en="Fri 30/10: Kotor Bay + Perast + Fortress Ladder">יום ו׳ 30/10: מפרץ קוטור + Perast + סולם המצודה</button>
+      <button type="button" class="day-tab" data-day="2" aria-pressed="false" onclick="filterDay('2')" data-he="יום ש׳ 31/10: סרפנטינות Lovćen + סווטי סטפן + Budva" data-en="Sat 31/10: Lovćen Hairpins + Sveti Stefan + Budva">יום ש׳ 31/10: סרפנטינות Lovćen + סווטי סטפן + Budva</button>
+      <button type="button" class="day-tab" data-day="3" aria-pressed="false" onclick="filterDay('3')" data-he="יום א׳ 01/11: בוסניה - מפלי Kravica + Počitelj + Blagaj + מוסטר" data-en="Sun 01/11: Bosnia - Kravica + Počitelj + Blagaj + Mostar">יום א׳ 01/11: בוסניה - מפלי Kravica + Počitelj + Blagaj + מוסטר</button>
+      <button type="button" class="day-tab" data-day="4" aria-pressed="false" onclick="filterDay('4')" data-he="יום ב׳-ג׳ 02-03/11: גשר Pelješac + חומות Ston + Cavtat" data-en="Mon-Tue 02-03/11: Pelješac Bridge + Ston Walls + Cavtat">יום ב׳-ג׳ 02-03/11: גשר Pelješac + חומות Ston + Cavtat</button>
+    </nav>
+
+    <div id="itinerary-content" aria-live="polite" aria-atomic="true"></div>
+
+    <section class="logistics-banner" aria-label="הוסטל ולינת הבסיס" style="border-inline-start: 4px solid #10b981;">
+      <h2 data-he="✅ כל 4 הלילות מוזמנים ומאושרים ב-Booking.com (סה״כ US$128 / ~113.50€ · חניה חינם וביטול חינם בכל 3 המקומות)" data-en="✅ All 4 Nights Booked &amp; Confirmed on Booking.com (Total US$128 / ~€113.50 · Free Parking &amp; Free Cancellation at All 3 Stays)">✅ כל 4 הלילות מוזמנים ומאושרים ב-Booking.com (סה״כ US$128 / ~113.50€ · חניה חינם וביטול חינם בכל 3 המקומות)</h2>
+      <p data-he="🛏️ לילות 1+2 (שישי–ראשון 30/10–01/11, 2 לילות בקוטור, מונטנגרו) — מוזמן ומאושר (US$55 / ~48.64€): Hostel Pupa (דירוג 8.9 מתוך 2,571 ביקורות). מיקום: Pelianovo / Riva bb, 300 מטר בלבד משער הים (Sea Gate) ומתחילת סולם המצודה (0€ מוניות ו-0 זמן נשרף). כולל חניה חינם וביטול חינם." data-en="🛏️ Nights 1+2 (Fri–Sun 30/10–01/11, 2 Nights in Kotor, Montenegro) — Confirmed (US$55 / ~€48.64): Hostel Pupa (8.9/10 across 2,571 reviews). Location: 300m from Sea Gate &amp; Kotor Ladder trailhead (€0 taxis, 0 burned time). Free parking &amp; free cancellation.">🛏️ <strong>לילות 1+2 (שישי–ראשון <code>30/10–01/11</code>, 2 לילות בקוטור, מונטנגרו) — <span style="color:#10b981;">מוזמן ומאושר (<code>US$55</code> / <code>~48.64€</code>)</span>:</strong> <strong>Hostel Pupa</strong> (ציון <code>8.9</code> מתוך <code>2,571</code> ביקורות, <code>300m</code> משער הים ומתחילת סולם קוטור, חניה חינם וביטול חינם) · <a href="https://www.google.com/maps/search/?api=1&amp;query=Hostel+Pupa+Kotor+Montenegro" target="_blank" rel="noopener">📍 ניווט ב-Google Maps</a> · <a href="https://www.booking.com/hotel/me/hostel-pupa.html?checkin=2026-10-30&amp;checkout=2026-11-01&amp;group_adults=1&amp;no_rooms=1&amp;selected_currency=EUR" target="_blank" rel="noopener">🔗 עמוד ההזמנה ב-Booking</a></p>
+      <p data-he="🛏️ לילה 3 (ראשון–שני 01/11–02/11, לילה במוסטר, בוסניה) — מוזמן ומאושר (US$28 / ~25€): Apartments GB (דירוג 9.4 מתוך 418 ביקורות). כתובת: Maršala Tita 95, Mostar (350 מטר מהמרכז ודקות הליכה מהגשר העתיק Stari Most). כולל חניה פרטית חינם וביטול חינם." data-en="🛏️ Night 3 (Sun–Mon 01/11–02/11, 1 Night in Mostar, Bosnia) — Confirmed (US$28 / ~€25): Apartments GB (9.4/10 across 418 reviews). Address: Maršala Tita 95, Mostar (350m from center, easy walk to Stari Most). Free private parking &amp; free cancellation.">🛏️ <strong>לילה 3 (ראשון–שני <code>01/11–02/11</code>, לילה במוסטר, בוסניה) — <span style="color:#10b981;">מוזמן ומאושר (<code>US$28</code> / <code>~25€</code>)</span>:</strong> <strong>Apartments GB</strong> (ציון <code>9.4</code> מתוך <code>418</code> ביקורות, כתובת: <code>Maršala Tita 95</code>, <code>350m</code> מהמרכז, חניה פרטית חינם וביטול חינם) · <a href="https://www.google.com/maps/search/?api=1&amp;query=Apartments+GB+Mostar+Bosnia" target="_blank" rel="noopener">📍 ניווט ב-Google Maps</a> · <a href="https://www.booking.com/hotel/ba/apartments-gb.html?checkin=2026-11-01&amp;checkout=2026-11-02&amp;group_adults=1&amp;no_rooms=1&amp;selected_currency=EUR" target="_blank" rel="noopener">🔗 עמוד ההזמנה ב-Booking</a></p>
+      <p data-he="🛏️ לילה 4 (שני–שלישי 02/11–03/11, לילה ב-Cavtat צמוד לשדה DBV, קרואטיה) — מוזמן ומאושר (US$45 / ~40€): Apartments Mira (דירוג 8.8 מתוך 230 ביקורות). כתובת: Ulica Stjepana Radića 16, 20210 Cavtat (סטודיו 30 מ״ר פרטי עם מרפסת, מטבח מלא, חניה חינם וביטול חינם; 6 דק׳ נסיעה מדלפק החזרת הרכב של Enterprise בטרמינל DBV ללא שום מעבר גבול בבוקר הטיסה)." data-en="🛏️ Night 4 (Mon–Tue 02/11–03/11, 1 Night in Cavtat near DBV Airport, Croatia) — Confirmed (US$45 / ~€40): Apartments Mira (8.8/10 across 230 reviews). Address: Ulica Stjepana Radića 16, 20210 Cavtat (30m² private studio with balcony, kitchen, free parking &amp; free cancellation; 6m drive to Enterprise car return at DBV terminal with zero morning border crossings).">🛏️ <strong>לילה 4 (שני–שלישי <code>02/11–03/11</code>, לילה ב-<code>Cavtat</code> צמוד לשדה <code>DBV</code>, קרואטיה) — <span style="color:#10b981;">מוזמן ומאושר (<code>US$45</code> / <code>~40€</code>)</span>:</strong> <strong>Apartments Mira</strong> (ציון <code>8.8</code> מתוך <code>230</code> ביקורות, כתובת: <code>Ulica Stjepana Radića 16, Cavtat</code>, סטודיו <code>30 מ״ר</code> + מרפסת + מטבח פרטי + חניה חינם, <code>6 דק׳</code> מטרמינל <code>DBV</code> ללא גבולות בבוקר) · <a href="https://www.google.com/maps/search/?api=1&amp;query=Apartments+Mira+Ulica+Stjepana+Radica+16+Cavtat" target="_blank" rel="noopener">📍 ניווט ב-Google Maps</a> · <a href="https://www.booking.com/hotel/hr/apartmani-mira-cavtat.html?checkin=2026-11-02&amp;checkout=2026-11-03&amp;group_adults=1&amp;no_rooms=1&amp;selected_currency=EUR" target="_blank" rel="noopener">🔗 עמוד ההזמנה ב-Booking</a></p>
+    </section>
+
+    <section aria-label="אתרים וכפרים שנחתכו">
+      <h2 style="font-size:0.92rem;color:var(--accent);margin-top:10px;" data-he="✂️ Tier 3 - בית הקברות לאתרים שנחתכו (Skipped / Cut List)" data-en="✂️ Tier 3 - Skipped / Cut Graveyard (Why We Cut These)">✂️ Tier 3 - בית הקברות לאתרים שנחתכו (Skipped / Cut List)</h2>
+      <table class="graveyard-table">
+        <thead>
+          <tr>
+            <th data-he="אתר / כפר שנחתך" data-en="Cut Site / Village">אתר / כפר שנחתך</th>
+            <th data-he="ציון (/20)" data-en="Score (/20)">ציון (/20)</th>
+            <th data-he="סיבת החיתוך ההנדסית (10-Second Audit)" data-en="Engineering Cut Reason (10-Second Audit)">סיבת החיתוך ההנדסית (10-Second Audit)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Dubrovnik Old Town</strong></td>
+            <td>N/A (Already Visited)</td>
+            <td data-he="כבר ביקרת בדוברובניק; חיסכון של 45€ על חומות העיר וחניונים יקרים לטובת כניסה מיידית לפיורד קוטור." data-en="Already visited; skipping saves €45 wall tickets and overpriced parking for immediate entry into Kotor Fjord.">כבר ביקרת בדוברובניק; חיסכון של 45€ על חומות העיר וחניונים יקרים לטובת כניסה מיידית לפיורד קוטור.</td>
+          </tr>
+          <tr>
+            <td><strong>Blue Cave Boat Tour (Lustica)</strong></td>
+            <td>10/20 (A:3, B:2, C:2, D:3)</td>
+            <td data-he="מלכודת סירות של 3 שעות בים סתווי קריר שגוזלת את חלון האור של סולם קוטור." data-en="3-hour tourist speedboat trap in cool autumn waters that steals the Golden Hour window on Kotor’s fortress ladder.">מלכודת סירות של 3 שעות בים סתווי קריר שגוזלת את חלון האור של סולם קוטור.</td>
+          </tr>
+          <tr>
+            <td><strong>Sarajevo Day Detour</strong></td>
+            <td>13/20 (A:4, B:4, C:1, D:4)</td>
+            <td data-he="תוספת של 5 שעות נהיגה הלוך-חזור בהרים מעבר למוסטר; מוסטר + Počitelj + Blagaj נותנים 100% מהאדריכלות העות׳מאנית בחצי מהמרחק." data-en="Adds 5 hours of mountain driving beyond Mostar; Mostar + Počitelj + Blagaj deliver peak Ottoman architecture in half the distance.">תוספת של 5 שעות נהיגה הלוך-חזור בהרים מעבר למוסטר; מוסטר + Počitelj + Blagaj נותנים 100% מהאדריכלות העות׳מאנית בחצי מהמרחק.</td>
+          </tr>
+          <tr>
+            <td><strong>Cetinje Indoor Museums</strong></td>
+            <td>11/20 (A:2, B:3, C:3, D:3)</td>
+            <td data-he="מוזיאונים היסטוריים סגורים; פסגת המאוזוליאום ב-Lovćen וסרפנטינות קוטור מספקים דרמה חזותית גבוהה פי 3." data-en="Slow indoor history museums; the Lovćen summit mausoleum and 25 Kotor hairpins offer 3x the visual drama.">מוזיאונים היסטוריים סגורים; פסגת המאוזוליאום ב-Lovćen וסרפנטינות קוטור מספקים דרמה חזותית גבוהה פי 3.</td>
+          </tr>
+          <tr>
+            <td><strong>Budva Citadela Interior (€3.50)</strong></td>
+            <td>11/20 (G:2, E:2, V:3, T:2, L:2)</td>
+            <td data-he="הפנים הוא חצר קטנה וספרייה סגורה; 100% מהוואו בבודווה נמצא בהקפת חומות חצי האי מבחוץ ובשביל המצוק החינמי ל-Mogren (0€)." data-en="The paid interior is a small courtyard and closed library; 100% of the visual impact is outside along the walled peninsula and free Mogren cliff trail (€0).">הפנים הוא חצר קטנה וספרייה סגורה; 100% מהוואו בבודווה נמצא בהקפת חומות חצי האי מבחוץ ובשביל המצוק החינמי ל-Mogren (0€).</td>
+          </tr>
+          <tr>
+            <td><strong>Trsteno Arboretum (€10) &amp; Račić Mausoleum Interior (€4)</strong></td>
+            <td>11/20 (G:2, E:3, V:2, T:2, L:2)</td>
+            <td data-he="ארבורטום Trsteno ב-10€ הוא גן עצים בוטני שגוזל שעת אור יקרה בשעון חורף (שקיעה 16:38) לפני Cavtat, ופנים מאוזוליאום Račić ב-4€ הוא חדר מתומן בודד בקוטר 3 מטר (את המבנה הלבן של Meštrović ואת שביל הסלעים רואים ב-100% מבחוץ ב-0€)." data-en="Trsteno Arboretum (€10) is a botanical garden that steals 1 hour of scarce November daylight before the 16:38 sunset in Cavtat, and Račić Mausoleum interior (€4) is a single 3m room (100% of Meštrović’s white stone architecture and coastal loop is free outside).">ארבורטום Trsteno ב-10€ הוא גן עצים בוטני שגוזל שעת אור יקרה בשעון חורף (שקיעה 16:38) לפני Cavtat, ופנים מאוזוליאום Račić ב-4€ הוא חדר מתומן בודד בקוטר 3 מטר (את המבנה הלבן של Meštrović ואת שביל הסלעים רואים ב-100% מבחוץ ב-0€).</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <aside class="map-pane" aria-label="מפת המסלול">
+    <div class="map-mode-bar">
+      <span data-he="מקרא סיכות: ★ צהוב/כתום = Tier 1 Anchor (מקסימום 3 ביום) | ● עיגול = Tier 2 Spine ליניארי" data-en="Pin Legend: ★ Gold Star = Tier 1 Crown Anchor (Max 3/day) | ● Circle = Tier 2 Linear Spine"><strong>מקרא סיכות:</strong> ★ צהוב/כתום = Tier 1 Anchor (מקסימום 3 ביום) | ● עיגול = Tier 2 Spine ליניארי</span>
+      <span id="active-filter-label" data-he="מציג: כל 4 הימים" data-en="Showing: All 4 Days">מציג: כל 4 הימים</span>
+    </div>
+    <div id="map"></div>
+    <div id="svg-fallback"></div>
+  </aside>
+</div>
+
+<!-- ELADB_SPEECH_VOICE_GUARD_START -->
+<script>
+(function() {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+  var NON_STANDARD_VOICE_REGEX_ = /albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|junior|organ|pipe|princess|ralph|trinoids|vicki|whisper|zarvox|fred|espeak|novelty|rocko|shelley|grandma|grandpa|eddy|flo|reed|sandy|kathy|eloquence|jester|superstar|wobble/i;
+  window.pickStandardSpeechVoice = function(targetLang) {
+    var voices = window.speechSynthesis.getVoices() || [];
+    var wantHe = String(targetLang || '').toLowerCase().indexOf('he') === 0 || String(targetLang || '').toLowerCase().indexOf('iw') === 0;
+    var bestVoice = null;
+    var bestScore = -1;
+    for (var i = 0; i < voices.length; i++) {
+      var v = voices[i];
+      if (!v) continue;
+      var name = String(v.name || '');
+      var lang = String(v.lang || '').toLowerCase().replace('_', '-');
+      if (NON_STANDARD_VOICE_REGEX_.test(name)) continue;
+      if (wantHe) {
+        if (lang.indexOf('he') !== 0 && lang.indexOf('iw') !== 0 && !/hebrew|עברית|carmit/i.test(name)) continue;
+        var scoreHe = 20 + (v.localService === false ? 25 : 0);
+        if (/google|natural|neural|online|carmit|אסף|asaf/i.test(name)) scoreHe += 80;
+        if (scoreHe > bestScore) { bestScore = scoreHe; bestVoice = v; }
+      } else {
+        if (lang.indexOf('en') !== 0) continue;
+        var scoreEn = 10 + (lang === 'en-us' ? 30 : 20) + (v.localService === false ? 15 : 0);
+        if (/google us english/i.test(name)) scoreEn += 100;
+        else if (/google uk english female/i.test(name)) scoreEn += 90;
+        else if (/google uk english male/i.test(name)) scoreEn += 85;
+        else if (/natural|neural|online|premium|enhanced|siri/i.test(name)) scoreEn += 80;
+        else if (/\b(samantha|ava|allison|alex|victoria|karen|daniel|serena|zira|david|jenny|aria|guy|moira)\b/i.test(name)) scoreEn += 70;
+        else if (v.default) scoreEn += 40;
+        if (scoreEn > bestScore) { bestScore = scoreEn; bestVoice = v; }
+      }
+    }
+    return bestVoice;
+  };
+})();
+</script>
+<!-- ELADB_SPEECH_VOICE_GUARD_END -->
+
+<script>
+let currentLang = 'he';
+let captionsEnabled = true;
+
+const CITY_INTRO_NARRATION = {
+  "he": "ברוכים הבאים למדריך האדריכלות והנופים של מונטנגרו, בוסניה וחצי האי פליישץ דרך דוברובניק. כלל לוגיסטי ראשון: מיד בנחיתה בשדה התעופה של דוברובניק אוספים את הרכב השכור עם כרטיס מעבר גבול ירוק למונטנגרו ולבוסניה, ומדלגים על העיר דוברובניק שבה כבר ביקרת ישר אל פיורד קוטור. כלל סים ונדידה: קרואטיה היא איחוד אירופי, אבל מונטנגרו ובוסניה אינן באיחוד האירופי, לכן חובה להפעיל אי-סים של רבולוט או אייראלו ולהוריד מפות אופליין מראש. כלל שעון חורף: השקיעה היא בארבע וארבעים אחרי הצהריים, ולכן כל הטיפוסים הגדולים שלנו מתוזמנים לשעה שלוש אחר הצהריים.",
+  "en": "Welcome to your architectural and landscape road guide for Montenegro, Bosnia, and the Pelješac Peninsula via Dubrovnik Airport. Rule number one: pick up your rental car right at Dubrovnik Airport with the Cross-Border Green Card for Montenegro and Bosnia, bypassing Dubrovnik city straight into the Bay of Kotor. Rule number two: Croatia is in the EU roaming zone, but Montenegro and Bosnia are non-EU, so use a Revolut or Airalo Balkan eSIM and offline Google Maps. Rule number three: winter sunset is at 4:42 PM, so every high-altitude fortress climb is timed for 3:00 PM."
+};
+
+const ITINERARY_DATA = {
+  "days": [
+    {
+      "day": "1",
+      "title": "יום 1 (שישי 30/10, 11:25 - 21:00): נחיתה ב-DBV -> מפרץ קוטור -> Perast -> סולם מצודת San Giovanni בשקיעה",
+      "title_en": "Day 1 (Fri 30/10, 11:25 - 21:00): Land at DBV -> Bay of Kotor -> Perast -> San Giovanni Fortress Climb at Sunset",
+      "subtitle": "איסוף רכב ב-DBV (11:45) -> מעבר גבול Karasovići -> כביש החוף הפנימי של הפיורד -> Perast -> Kotor",
+      "subtitle_en": "Car pickup at DBV (11:45) -> Karasovići Border -> Inner Fjord Coastal Road -> Perast -> Kotor",
+      "color": "#059669",
+      "stops": [
+        {
+          "id": "d1-s1",
+          "num": 1,
+          "isTier1": false,
+          "tier": "Tier 2 Spine | 16/20 (A:4 B:4 C:4 D:4)",
+          "name": "Herceg Novi & מצודת הים Forte Mare בכניסה לפיורד",
+          "name_en": "Herceg Novi & Forte Mare Sea Fortress at Fjord Entrance",
+          "map_name": "Forte Mare Herceg Novi Montenegro",
+          "lat": 42.4503,
+          "lng": 18.5366,
+          "time": "12:45 - 13:25 (40m)",
+          "time_en": "12:45 - 13:25 (40m)",
+          "cost_he": "חינם מבחוץ (0€)",
+          "cost_en": "Free exterior (€0)",
+          "dur_he": "40 דק׳",
+          "dur_en": "40 mins",
+          "skip_he": "⚡ ניתן לקצר ל-15 דק׳ אם היה תור בגבול",
+          "skip_en": "⚡ Can shorten to 15m if border had a queue",
+          "isMust": false,
+          "in_he": "חוץ בלבד: תצפית מהטיילת ומדרגות האבן של העיר העתיקה אל שער המפרץ.",
+          "in_en": "Outside Only: Walk the seaside bastion steps overlooking the outer bay.",
+          "wow_he": "למה זה וואו: שער הכניסה הדרמטי למפרץ בוקה קוטורסקה שבו חומות ביצור ונציאניות ובוסניות יורדות ישר אל המים.",
+          "wow_en": "Why It Is WOW: The dramatic fortified gateway into Boka Kotorska Bay where stepped Venetian stone bastions drop straight into the Adriatic.",
+          "enroute_he": "על הדרך משדה התעופה DBV (25 דק׳): חוצים את גבול קרואטיה-מונטנגרו ב-Karasovići/Debeli Brijeg ונוסעים לאורך המפרץ החיצוני.",
+          "enroute_en": "En-Route from DBV Airport (25m): Cross the Croatia-Montenegro border at Karasovići and hug the outer fjord shoreline.",
+          "wx_he": "☀️ 19°C נעים: עצירת התרעננות קצרה מול המים.",
+          "wx_en": "☀️ 19°C mild: Quick coastal leg-stretch overlooking the bay.",
+          "photo_tip": "עדשה 1x מהמזח התחתון כלפי קיר האבן של Forte Mare.",
+          "photo_tip_en": "1x lens from the lower pier looking up at Forte Mare’s stone wall.",
+          "move": "המשך 25 דק׳ נסיעה סביב מצרי Verige אל Perast",
+          "move_en": "25m scenic drive around the Verige Strait to Perast"
+        },
+        {
+          "id": "d1-s2",
+          "num": 2,
+          "isTier1": true,
+          "tier": "Tier 1 Anchor | 19/20 (A:5 B:5 C:5 D:4)",
+          "name": "Perast Baroque Waterfront & שייט לאי המלאכותי Our Lady of the Rocks",
+          "name_en": "Perast Baroque Waterfront & Boat to Our Lady of the Rocks Island",
+          "map_name": "Perast Montenegro Our Lady of the Rocks",
+          "lat": 42.4864,
+          "lng": 18.6983,
+          "time": "13:50 - 15:00 (70m)",
+          "time_en": "13:50 - 15:00 (70m)",
+          "cost_he": "5€ סירת הלוך-חזור לאי (רחבת האי בחוץ חינם; מדלגים על 2€ לחדר הכלים הפנימי; חניה ~2€)",
+          "cost_en": "€5 return boat to island (island platform free; skip €2 inner artifact room; €2 parking)",
+          "dur_he": "70 דק׳",
+          "dur_en": "70 mins",
+          "skip_he": "🔥 חובה - לא לוותר (הנוף האייקוני של מונטנגרו)",
+          "skip_en": "🔥 MUST-SEE - Do not skip (Iconic Montenegro fjord view)",
+          "isMust": true,
+          "in_he": "[חוץ + שייט קצר (5 דק׳) לרחבת האי המלאכותי]: הליכה על טיילת האבן הבארוקית של Perast ושייט לרחבת האבן הפתוחה של האי (מדלגים על חדר המוזיאון הקטן בפנים).",
+          "in_en": "[Outside + 5-min Boat to Open Island Platform]: Stroll Perast’s traffic-free Venetian palazzi waterfront and take the €5 boat to the island deck (skip the tiny indoor artifact room).",
+          "wow_he": "למה זה וואו: עיירת ארמונות בארוק מאבן לבנה ללא רכבים, שמולה צפים שני איים זעירים בלב קניון הרים שחור בגובה 1,000 מטר.",
+          "wow_en": "Why It Is WOW: A car-free Venetian stone town of 16 baroque palazzi and 19 bell towers facing twin islets floating inside a 1,000m dark limestone canyon.",
+          "enroute_he": "על הדרך בכביש המפרץ: בחציית מצר Verige הצר (רוחב 340 מטר בלבד!) נגלים שני האיים בבת אחת כמו תמונה.",
+          "enroute_en": "En-Route along the fjord: Rounding the 340m-narrow Verige Strait suddenly reveals the twin islands framed by vertical mountains.",
+          "wx_he": "☀️ 19°C: מים שקטים כמו מראה בתוך הפיורד הסגור.",
+          "wx_en": "☀️ 19°C: Mirror-calm water inside the sheltered inner fjord.",
+          "photo_tip": "עדשה 2x ממדרגות מגדל הפעמונים של St. Nicholas שממסגרת את שני האיים יחד.",
+          "photo_tip_en": "2x telephoto from St. Nicholas bell tower steps framing both islands against the dark mountain wall.",
+          "move": "15 דק׳ נסיעה אל קוטור (חניה חינם ב-Hostel Pupa המוזמן, 300m מהחומות)",
+          "move_en": "15m drive to Kotor (free parking at booked Hostel Pupa, 300m from walls)"
+        },
+        {
+          "id": "d1-s3",
+          "num": 3,
+          "isTier1": true,
+          "tier": "Tier 1 Anchor | 20/20 (A:5 B:5 C:5 D:5)",
+          "name": "טיפוס שקיעה למצודת San Giovanni (סולם קוטור - 1,350 מדרגות / שביל החלון)",
+          "name_en": "Sunset Climb up San Giovanni Fortress (Kotor Ladder - 1,350 Steps)",
+          "map_name": "San Giovanni Fortress Kotor",
+          "lat": 42.4239,
+          "lng": 18.7753,
+          "time": "15:20 - 17:15 (115m - שקיעה ב-16:42)",
+          "time_en": "15:20 - 17:15 (115m - Sunset at 16:42)",
+          "cost_he": "15€ בשער המדרגות הרשמי (או 0€ דרך שביל הסרפנטינות החיצוני של Špiljari)",
+          "cost_en": "€15 at main step gate (or €0 via outer Špiljari switchback trail)",
+          "dur_he": "115 דק׳ (עלייה מהירה 40 דק׳ + צילום שקיעה + ירידה)",
+          "dur_en": "115 mins (40m fast ascent + sunset framing + descent)",
+          "skip_he": "🔥 חובה מוחלטת - שיא הטיול במונטנגרו",
+          "skip_en": "🔥 ABSOLUTE MUST-SEE - Crown jewel of Montenegro",
+          "isMust": true,
+          "in_he": "חוץ (טיפוס מצוק מבוצר): נכנסים פנימה לחומות המצודה ולכנסיית Our Lady of Remedy באמצע ההר.",
+          "in_en": "Outside Fortress Climb: Ascend the zigzagging Venetian ramparts past the cliffside church to the 280m eagle-nest castle.",
+          "wow_he": "למה זה וואו: טיפוס אנכי עוצר נשימה שבו גגות הרעפים המשולשים של קוטור והפיורד כולו פרושים מתחת לרגליים ברגע שהאורות נדלקים בשעה הכחולה.",
+          "wow_en": "Why It Is WOW: A vertical stone zigzag above Kotor’s triangular red-roofed walled town and deep fjord glowing gold and cobalt at Blue Hour.",
+          "enroute_he": "על הדרך: מניחים את הרכב בחניה של Hostel Pupa המוזמן (15:05, 300m מהחומות) ונכנסים דרך השער הצפוני (River Gate) אל תחילת המדרגות.",
+          "enroute_en": "En-Route: Park at your booked Hostel Pupa (15:05, 300m from walls) and walk 3 mins through the River Gate to the trailhead.",
+          "wx_he": "🌅 17°C בשקיעה: בצל המצוק נעים מאוד לטיפוס מהיר; קח פנס טלפון לירידה ב-17:00.",
+          "wx_en": "🌅 17°C at sunset: Shaded cliff keeps the climb cool; use phone flashlight for the last 15 mins of descent.",
+          "photo_tip": "עדשה 0.5x דרך קשת האבן ההרוסה (\"החלון של קוטור\") שממסגרת את כנסיית Our Lady of Remedy והפיורד.",
+          "photo_tip_en": "0.5x ultra-wide through the ruined stone arch framing the church spire and fjord below.",
+          "move": "ירידה ישירה לתוך סמטאות העיר העתיקה של קוטור",
+          "move_en": "Descend directly into Kotor Old Town alleys"
+        },
+        {
+          "id": "d1-s4",
+          "num": 4,
+          "isTier1": true,
+          "tier": "Tier 1 Anchor | 18/20 (A:5 B:4 C:5 D:4)",
+          "name": "Kotor Stari Grad (העיר העתיקה בלילה: Sea Gate, קתדרלת St. Tryphon והחומות המוארות)",
+          "name_en": "Kotor Stari Grad Night Walk (Sea Gate, St. Tryphon Cathedral & Illuminated Ramparts)",
+          "map_name": "Kotor Old Town Cathedral of Saint Tryphon",
+          "lat": 42.4247,
+          "lng": 18.7712,
+          "time": "17:15 - 20:30 (סיור לילה רגלי)",
+          "time_en": "17:15 - 20:30 (Night architectural walk)",
+          "cost_he": "חינם (0€)",
+          "cost_en": "Free (€0)",
+          "dur_he": "90 דק׳",
+          "dur_en": "90 mins",
+          "skip_he": "🔥 חובה - קוטור בלילה מוארת כמו תפאורת קולנוע",
+          "skip_en": "🔥 MUST-SEE - Illuminated cliff walls reflected in the moat",
+          "isMust": true,
+          "in_he": "חוץ בלבד: שיטוט במבוך הכיכרות הוונציאניות והליכה על גשר נהר Škurda מול השתקפות החומות במים.",
+          "in_en": "Outside Only: Explore the labyrinth of polished stone squares and the northern moat reflection.",
+          "wow_he": "למה זה וואו: בלילה שרשרת פנסים כתומים מאירה את חומות המצודה לאורך 4.5 ק\"מ על קיר הסלע השחור ומשתקפת בנהר Škurda.",
+          "wow_en": "Why It Is WOW: At night a continuous ribbon of golden floodlights traces the 4.5km fortress walls up the black mountain, mirroring in the northern moat.",
+          "enroute_he": "על הדרך: עוברים מתחת למגדל השעון מ-1602 שלרגליו עמוד הקלון הפירמידלי הוונציאני.",
+          "enroute_en": "En-Route: Pass the 1602 Clock Tower and its medieval Venetian stone pillory pyramid.",
+          "wx_he": "🌙 15°C בלילה: סמטאות אבן מוגנות מרוח.",
+          "wx_en": "🌙 15°C night: Sheltered stone alleys with zero wind.",
+          "photo_tip": "Night Mode בחשיפה של 2 שניות מהגשר הצפוני (River Gate) לתפיסת השתקפות החומות המוארות במים.",
+          "photo_tip_en": "2-second Night Mode shot from the northern River Gate bridge capturing the golden wall reflection in the moat.",
+          "move": "3 דק׳ הליכה (300m) חזרה ל-Hostel Pupa המוזמן בקוטור",
+          "move_en": "3m walk (300m) back to booked Hostel Pupa in Kotor"
+        }
+      ]
+    },
+    {
+      "day": "2",
+      "title": "יום 2 (שבת 31/10, 08:00 - 20:30): 25 הסרפנטינות של קוטור -> פסגת Lovćen -> Sveti Stefan -> Budva",
+      "title_en": "Day 2 (Sat 31/10, 08:00 - 20:30): 25 Kotor Serpentine Hairpins -> Lovćen Summit -> Sveti Stefan -> Budva",
+      "subtitle": "עלייה ב-08:00 לפני אוטובוסים ב-Kotor Serpentine -> מאוזוליאום Njegoš (1,657m) -> ירידה לחוף האדריאטי",
+      "subtitle_en": "Ascend Kotor Serpentine at 08:00 before tour buses -> Njegoš Mausoleum (1,657m) -> Adriatic Coast",
+      "color": "#d97706",
+      "stops": [
+        {
+          "id": "d2-s1",
+          "num": 5,
+          "isTier1": true,
+          "tier": "Tier 1 Anchor | 20/20 (A:5 B:5 C:5 D:5)",
+          "name": "Kotor Serpentine Road (25 פיתולי המצוק האוסטרו-הונגריים ותצפית הפיורד העליונה)",
+          "name_en": "Kotor Serpentine Road (25 Austro-Hungarian Cliff Hairpins & Panorama)",
+          "map_name": "Kotor Serpentine Viewpoint Horizont",
+          "lat": 42.4055,
+          "lng": 18.7642,
+          "time": "08:15 - 09:15 (60m)",
+          "time_en": "08:15 - 09:15 (60m)",
+          "cost_he": "חינם (0€)",
+          "cost_en": "Free (€0)",
+          "dur_he": "60 דק׳ (עצירות צילום בפיתולים #16 ו-#25)",
+          "dur_en": "60 mins (photo stops at Hairpins #16 & #25)",
+          "skip_he": "🔥 חובה - כביש הנוף המרהיב בבלקן",
+          "skip_en": "🔥 MUST-SEE - Most dramatic mountain road in the Balkans",
+          "isMust": true,
+          "in_he": "חוץ (תצפיות מצוק): עצירה במפרצי האבן של פיתול 16 ופיתול 25 בגובה 900 מטר מעל הפיורד.",
+          "in_en": "Outside Cliff Pullouts: Stop at the stone viewpoints at Hairpin #16 and Hairpin #25, 900m directly above the bay.",
+          "wow_he": "למה זה וואו: 25 פיתולי סיכה ממוספרים שנחצבו ב-1884 על קיר אנכי, שמהם כל מפרץ קוטור נראה מלמעלה כמו כנפי פרפר עצומות.",
+          "wow_en": "Why It Is WOW: 25 numbered hairpin turns carved into a sheer cliff in 1884, revealing the entire butterfly-shaped Bay of Kotor 900m straight below.",
+          "enroute_he": "על הדרך: יציאה ב-08:00 בבוקר מבטיחה כביש ריק לחלוטין ואור שמש מזרחי שמאיר את קיר ההרים שממול.",
+          "enroute_en": "En-Route: Leaving at 08:00 guarantees zero tour buses on the narrow lane and crisp morning light across the fjord.",
+          "wx_he": "☀️ 14°C בגובה 900m: ראות בוקר צלולה לפני התפתחות ענני צהריים.",
+          "wx_en": "☀️ 14°C at 900m: Crystal-clear morning visibility before midday haze.",
+          "photo_tip": "עדשה 0.5x מפיתול #25 שתופסת גם את זיגזג האספלט מתחת וגם את שני אגני המפרץ.",
+          "photo_tip_en": "0.5x ultra-wide at Hairpin #25 capturing the stacked asphalt switchbacks and both bay basins.",
+          "move": "25 דק׳ נסיעה דרך יער הפארק הלאומי אל פסגת Lovćen",
+          "move_en": "25m drive through the national park to Lovćen summit"
+        },
+        {
+          "id": "d2-s2",
+          "num": 6,
+          "isTier1": true,
+          "tier": "Tier 1 Anchor | 19/20 (A:5 B:5 C:5 D:4)",
+          "name": "מאוזוליאום Njegoš בפסגת הר Lovćen (מנהרת 461 המדרגות ושביל הרכס ב-1,657m)",
+          "name_en": "Njegoš Mausoleum at Mount Lovćen Summit (461-Step Tunnel & 1,657m Ridge)",
+          "map_name": "Njegos Mausoleum Lovcen Montenegro",
+          "lat": 42.3979,
+          "lng": 18.8376,
+          "time": "09:40 - 11:00 (80m)",
+          "time_en": "09:40 - 11:00 (80m)",
+          "cost_he": "3€ כניסה לפארק + 8€ למאוזוליאום",
+          "cost_en": "€3 National Park fee + €8 Mausoleum ticket",
+          "dur_he": "80 דק׳",
+          "dur_en": "80 mins",
+          "skip_he": "🔥 חובה - אדריכלות מונומנטלית יוגוסלבית בגובה 1,657m",
+          "skip_en": "🔥 MUST-SEE - Monumental granite architecture on a 1,657m razor ridge",
+          "isMust": true,
+          "in_he": "פנים + חוץ (מוצדק ב-100%): צועדים במנהרה החצובה בתוך פסגת ההר אל היכל הגרניט השחור ולמצפה ה-360° מאחור.",
+          "in_en": "Inside + Outside (100% Worth €11): Climb the 461 steps through the mountain-core tunnel to the black granite monument and 360° circular viewpoint.",
+          "wow_he": "למה זה וואו: מקדש גרניט ברוטליסטי-מונומנטלי שעיצב הפסל Ivan Meštrović על שפיץ הר בגובה 1,657 מטר, שממנו רואים ביום בהיר כמעט את כל מונטנגרו.",
+          "wow_en": "Why It Is WOW: Sculptor Ivan Meštrović’s monumental black-granite temple perched on a knife-edge 1,657m peak overlooking a sea of limestone mountains.",
+          "enroute_he": "על הדרך: חוצים את עמק הכפר Njeguši המוקף אמפיתיאטרון קרסטי אפור.",
+          "enroute_en": "En-Route: Drive across the high karst bowl of Njeguši village.",
+          "wx_he": "🧥 10°-12°C בפסגה: ללבוש שכבת פליז ומעיל רוח.",
+          "wx_en": "🧥 10°-12°C at summit: Wear your fleece and windbreaker.",
+          "photo_tip": "עדשה 0.5x בשביל האבן הצר שמוביל מהמונומנט אל טבעת התצפית העגולה מעל התהום.",
+          "photo_tip_en": "0.5x ultra-wide along the narrow stone causeway leading to the circular cliff-edge rotunda.",
+          "move": "45 דק׳ ירידה פנורמית דרך Cetinje אל חוף הים האדריאטי ב-Sveti Stefan",
+          "move_en": "45m panoramic descent via Cetinje to the Adriatic coast at Sveti Stefan"
+        },
+        {
+          "id": "d2-s3",
+          "num": 7,
+          "isTier1": true,
+          "tier": "Tier 1 Anchor | 19/20 (A:5 B:5 C:5 D:4)",
+          "name": "האי המבוצר Sveti Stefan ופארק המצוקים Miločer (שביל הארזים המלכותי)",
+          "name_en": "Sveti Stefan Fortified Island & Miločer Royal Cliff Park Walk",
+          "map_name": "Sveti Stefan Viewpoint Milocer Park",
+          "lat": 42.2564,
+          "lng": 18.8931,
+          "time": "12:00 - 13:45 (105m)",
+          "time_en": "12:00 - 13:45 (105m)",
+          "cost_he": "חינם (0€ - שביל החוף והמצוק פתוחים בחינם)",
+          "cost_en": "Free (€0 - public coastal cliff path through Miločer Park)",
+          "dur_he": "105 דק׳",
+          "dur_en": "105 mins",
+          "skip_he": "🔥 חובה - האי האייקוני של הים האדריאטי",
+          "skip_en": "🔥 MUST-SEE - The signature fortified islet of the Adriatic",
+          "isMust": true,
+          "in_he": "חוץ בלבד (האי עצמו סגור): הולכים בשביל המצוקים המוצל מחוף Miločer ומלון וילה המלך אל שתי הלגונות הטורקיז שמקיפות את האי.",
+          "in_en": "Outside Coastal Walk: Walk the scenic pine-cliff trail from Miločer Bay around the pink-pebble isthmus framing the 15th-century fortified island.",
+          "wow_he": "למה זה וואו: כפר דייגים מבוצר מהמאה ה-15 של שבט Paštrovići הבנוי בצפיפות על סלע בים ומחובר ליבשה בסוללת חלוקים ורודה בין שני מפרצי טורקיז.",
+          "wow_en": "Why It Is WOW: A 15th-century fortified stone village packed onto a rocky sea outcrop linked to the mainland by a narrow tombolo between turquoise bays.",
+          "enroute_he": "על הדרך: בירידה מההרים ב-Brajići עוצרים ל-5 דק׳ במצפה העליון שממנו רואים את כל רצועת החוף של Budva והאי.",
+          "enroute_en": "En-Route: Stop 5 mins at the high Brajići mountain pullout where the entire Budva Riviera opens below.",
+          "wx_he": "☀️ 20°C חמים בחוף: ירידה של 650 מטר בטופוגרפיה מעלה את הטמפרטורה ב-8 מעלות.",
+          "wx_en": "☀️ 20°C warm coastal sun: 8°C warmer than the mountain peak.",
+          "photo_tip": "עדשה 2x מהמרפסת הסלעית מעל המפרץ הצפוני של Sveti Stefan מול גגות הרעפים של האי.",
+          "photo_tip_en": "2x lens from the rocky promontory north of the isthmus framing the terracotta island roofs.",
+          "move": "15 דק׳ נסיעה לאורך החוף אל Budva Stari Grad",
+          "move_en": "15m coastal drive to Budva Old Town"
+        },
+        {
+          "id": "d2-s4",
+          "num": 8,
+          "isTier1": false,
+          "tier": "Tier 2 Spine | 17/20 (A:4 B:4 C:5 D:4)",
+          "name": "Budva Stari Grad, מצודת הים Citadela ושביל המצוק ל-Mogren",
+          "name_en": "Budva Old Town Walled Peninsula, Citadela & Mogren Cliff Path",
+          "map_name": "Budva Old Town Citadela Montenegro",
+          "lat": 42.2779,
+          "lng": 18.8383,
+          "time": "14:15 - 16:45 (שקיעה על חצי האי המבוצר)",
+          "time_en": "14:15 - 16:45 (Golden Hour on the walled peninsula)",
+          "cost_he": "[חוץ בלבד] חינם לחלוטין (0€ להקפת חומות חצי האי ולשביל המצוק Mogren; מדלגים על 3.50€ למצודה הפנימית)",
+          "cost_en": "[Outside Only] 100% Free (€0 for walled peninsula & Mogren cliff walk; skip €3.50 inner Citadela)",
+          "dur_he": "90 דק׳",
+          "dur_en": "90 mins",
+          "skip_he": "⚡ חובה קצרה - שווה מאוד באור שקיעה",
+          "skip_en": "⚡ Worthwhile Golden Hour stop before returning to Kotor",
+          "isMust": false,
+          "in_he": "[חוץ בלבד - 100% מצוק וחומות פתוחות]: מקיפים את חומות חצי האי הוונציאני מבחוץ וצועדים בשביל החצוב במצוק מעל הגלים אל Mogren (מדלגים על הכניסה הפנימית למצודת Citadela ב-3.50€ שרובה חצר קטנה וספרייה סגורה).",
+          "in_en": "[Outside Only - 100% Open Cliff & Ramparts]: Walk around the Venetian walled peninsula and along the cliff-carved coastal path to Mogren (skip the €3.50 inner Citadela courtyard).",
+          "wow_he": "למה זה וואו: חצי אי ונציאני מוקף חומה הבולט לתוך הים הפתוח, עם שביל הליכה חצוב מתחת לשכבות סלע אנכיות מקופלות.",
+          "wow_en": "Why It Is WOW: A walled Venetian peninsula jutting into the open sea paired with a coastal walkway carved under folded vertical rock strata.",
+          "enroute_he": "על הדרך חזרה לקוטור (25 דק׳ דרך מנהרת Vrmac): חוזרים ללילה שני בקוטור.",
+          "enroute_en": "En-Route back to Kotor (25m via Vrmac Tunnel): Return to your Kotor base for Night 2.",
+          "wx_he": "🌅 18°C בשקיעה (16:42): אור כתום ישיר על חומות האבן של חצי האי.",
+          "wx_en": "🌅 18°C at 16:42 sunset: Warm western light hitting the seaward bastions.",
+          "photo_tip": "עדשה 1x מפסל הבלרינה על הסלעים עם חומות Budva והים ברקע.",
+          "photo_tip_en": "1x lens from the coastal rocks framing the Ballerina statue against Budva’s seaward walls.",
+          "move": "25 דק׳ נסיעה חזרה ללינה בקוטור",
+          "move_en": "25m drive through Vrmac Tunnel back to Kotor"
+        }
+      ]
+    },
+    {
+      "day": "3",
+      "title": "יום 3 (ראשון 01/11, 08:00 - 21:00): חציית גבול לבוסניה (הרצגובינה) -> מפלי Kravica -> Počitelj -> Blagaj -> Mostar",
+      "title_en": "Day 3 (Sun 01/11, 08:00 - 21:00): Drive into Bosnia & Herzegovina -> Kravica Falls -> Počitelj -> Blagaj -> Mostar",
+      "subtitle": "יציאה מקוטור (08:00) -> מעבר גבול להרצגובינה -> שרשרת האתרים העות׳מאניים של עמק הנרטווה -> שקיעה ולילה במוסטר",
+      "subtitle_en": "Depart Kotor (08:00) -> Herzegovina Border -> Neretva Valley Ottoman Spine -> Sunset & Night in Mostar",
+      "color": "#0284c7",
+      "stops": [
+        {
+          "id": "d3-s1",
+          "num": 9,
+          "isTier1": true,
+          "tier": "Tier 1 Anchor | 19/20 (A:5 B:5 C:4 D:5)",
+          "name": "מפלי Kravica (אמפיתיאטרון הטרוורטין ברוחב 120 מטר על נהר Trebižat)",
+          "name_en": "Kravica Waterfalls (120m-Wide Travertine Amphitheater on the Trebižat River)",
+          "map_name": "Kravica Waterfall Bosnia",
+          "lat": 43.1558,
+          "lng": 17.6081,
+          "time": "10:30 - 11:45 (75m)",
+          "time_en": "10:30 - 11:45 (75m)",
+          "cost_he": "10€ (20 BAM, מקבלים אשראי)",
+          "cost_en": "€10 (20 BAM, contactless card accepted)",
+          "dur_he": "75 דק׳",
+          "dur_en": "75 mins",
+          "skip_he": "🔥 חובה - באוקטובר/נובמבר הזרימה חזקה והמקום ריק מתיירים",
+          "skip_en": "🔥 MUST-SEE - Strong autumn water flow and zero summer crowds",
+          "isMust": true,
+          "in_he": "חוץ (קניון מפלים): יורדים בשביל המדורג אל גשרי העץ ממש למרגלות קשת המפלים.",
+          "in_en": "Outside Canyon Walk: Descend the stepped path to the wooden boardwalks right at the base of the emerald falls.",
+          "wow_he": "למה זה וואו: פרסה חצי-עגולה ברוחב 120 מטר ובגובה 25 מטר של עשרות מפלי מים שנופלים מתוך קירות טחב ירוקים לאגם אזמרגד.",
+          "wow_en": "Why It Is WOW: A 120m-wide horseshoe amphitheater of 25m cascading waterfalls plunging over mossy tufa cliffs into an emerald pool.",
+          "enroute_he": "על הדרך מקוטור: חולפים על פני אגם Bileća הטורקיז והרמה הקרסטית של מזרח הרצגובינה.",
+          "enroute_en": "En-Route from Kotor: Drive past turquoise Lake Bileća across the dramatic limestone plateau of eastern Herzegovina.",
+          "wx_he": "☀️ 18°C: רסס מים קליל ליד הגשר התחתון.",
+          "wx_en": "☀️ 18°C: Light waterfall mist near the lower wooden bridge.",
+          "photo_tip": "עדשה 0.5x מהדק המרכזי שמול הקשת המלאה של המפלים.",
+          "photo_tip_en": "0.5x ultra-wide from the central wooden platform capturing the full semicircular curtain of water.",
+          "move": "25 דק׳ נסיעה אל כפר המצוק העות׳מאני Počitelj",
+          "move_en": "25m drive to the Ottoman cliff village of Počitelj"
+        },
+        {
+          "id": "d3-s2",
+          "num": 10,
+          "isTier1": true,
+          "tier": "Tier 1 Anchor | 19/20 (A:5 B:5 C:5 D:4)",
+          "name": "כפר האבן העות׳מאני המדורג Počitelj ומגדל המצודה Gavrankapetanović",
+          "name_en": "Počitelj Stepped Ottoman Stone Cliff Village & Fortress Keep",
+          "map_name": "Pocitelj Fortress Bosnia",
+          "lat": 43.1339,
+          "lng": 17.7317,
+          "time": "12:10 - 13:15 (65m)",
+          "time_en": "12:10 - 13:15 (65m)",
+          "cost_he": "חינם לחלוטין (0€ גם לחניה וגם למצודה)",
+          "cost_en": "100% Free (€0 parking and €0 fortress climb)",
+          "dur_he": "65 דק׳",
+          "dur_en": "65 mins",
+          "skip_he": "🔥 חובה - אחד מכפרי האבן הפוטוגניים ביותר בבלקן",
+          "skip_en": "🔥 MUST-SEE - One of the most photogenic stone amphitheaters in the Balkans",
+          "isMust": true,
+          "in_he": "חוץ + טיפוס לראש מגדל המצודה הפתוח (0€): מטפסים במדרגות האבן בין מסגד Šišman Ibrahim Paša, החמאם ומגדל השעון עד למבצר העליון.",
+          "in_en": "Outside + Open Fortress Tower (€0): Climb the cobbled stairs past the 1563 domed mosque and clock tower into the hexagonal hilltop keep.",
+          "wow_he": "למה זה וואו: כפר-מצודה עות׳מאני מהמאה ה-15 הבנוי כולו מאבן גיר אפורה בתוך מכתש סלע תלול מעל עיקול נהר הנרטווה הירוק.",
+          "wow_en": "Why It Is WOW: A 15th-century fortified Ottoman stone amphitheater of domes, minarets, and watchtowers clinging to a steep karst crater above the emerald Neretva River.",
+          "enroute_he": "על הדרך: הכפר מתגלה בפתאומיות מימין לכביש המהיר לאורך נהר הנרטווה.",
+          "enroute_en": "En-Route: The fortified stone cone suddenly rises directly above the emerald river bend.",
+          "wx_he": "☀️ 19°C שמשי: טיפוס של 15 דק׳ למצודה העליונה.",
+          "wx_en": "☀️ 19°C sunny: Quick 15-min stone stair climb to the top bastion.",
+          "photo_tip": "עדשה 1x מחלון האבן של המצודה העליונה כלפי מטה על כיפת המסגד, הצריח ועיקול הנהר הירוק.",
+          "photo_tip_en": "1x lens through the upper fortress embrasure framing the mosque dome, minaret, and green river bend below.",
+          "move": "25 דק׳ נסיעה אל Blagaj Tekke",
+          "move_en": "25m drive north to Blagaj Tekke"
+        },
+        {
+          "id": "d3-s3",
+          "num": 11,
+          "isTier1": false,
+          "tier": "Tier 2 Spine | 18/20 (A:5 B:5 C:4 D:4)",
+          "name": "Blagaj Tekke (מנזר הדרווישים מ-1520 מתחת למצוק אנכי בגובה 200m ומוצא נהר ה-Buna)",
+          "name_en": "Blagaj Tekke (1520 Dervish Monastery under a 200m Vertical Cliff & Buna Cave Spring)",
+          "map_name": "Blagaj Tekke Bosnia",
+          "lat": 43.2571,
+          "lng": 17.9035,
+          "time": "13:40 - 14:40 (60m)",
+          "time_en": "13:40 - 14:40 (60m)",
+          "cost_he": "חינם מהגשר ומהמצפה מעבר לנהר (0€; כניסה לחדרים בפנים 5€ - הוואו הוא מבחוץ)",
+          "cost_en": "Free (€0) from the river bridge & cliff viewpoint across the water (skip €5 interior)",
+          "dur_he": "60 דק׳",
+          "dur_en": "60 mins",
+          "skip_he": "🔥 חובה - גיאולוגיה ואדריכלות בלתי נתפסות",
+          "skip_en": "🔥 MUST-SEE - Surreal cliff-cave architecture",
+          "isMust": true,
+          "in_he": "חוץ בלבד (100% מהוואו הוא מהגדה שמנגד): חצה את גשר הולכי הרגל אל שביל הסלע שממול המערה.",
+          "in_en": "Outside Only: Cross the footbridge to the rocky ledge directly facing the cave mouth and timber-framed monastery.",
+          "wow_he": "למה זה וואו: נהר שלם בצבע טורקיז-קרח פורץ בבת אחת מתוך מערה תת-קרקעית בתחתית מצוק סלע אנכי בגובה 200 מטר, וצמוד לפתח המערה תלוי מנזר עות׳מאני לבן.",
+          "wow_en": "Why It Is WOW: An entire ice-blue river erupts straight out of a dark cavern at the base of a sheer 200m vertical limestone wall beside a whitewashed 1520 Ottoman tekke.",
+          "enroute_he": "על הדרך: עוברים ליד מצודת Stjepan Grad התלויה על ראש הצוק מעל Blagaj.",
+          "enroute_en": "En-Route: Look up at medieval Herceg Stjepan fortress perched atop the 200m cliff directly above the spring.",
+          "wx_he": "☀️ 19°C: קריר ונעים ליד המים הקפואים (8°C) שיוצאים מהמערה.",
+          "wx_en": "☀️ 19°C: Cool microclimate beside the 8°C underground karst spring.",
+          "photo_tip": "עדשה 0.5x אנכית מהגדה שמנגד שתופסת את בית הדרווישים הלבן, פתח המערה והמצוק העצום מעליו.",
+          "photo_tip_en": "Vertical 0.5x ultra-wide from the opposite bank capturing the white Tekke, turquoise cave mouth, and towering 200m cliff.",
+          "move": "20 דק׳ נסיעה אל מוסטר (חניה חינם ב-Apartments GB המוזמן ב-Maršala Tita 95 ב-15:00)",
+          "move_en": "20m drive to Mostar (free parking at booked Apartments GB, Maršala Tita 95 by 15:00)"
+        },
+        {
+          "id": "d3-s4",
+          "num": 12,
+          "isTier1": true,
+          "tier": "Tier 1 Anchor | 20/20 (A:5 B:5 C:5 D:5)",
+          "name": "Mostar: הגשר העתיק (Stari Most), צריח Koski Mehmed Paša, הגשר העקום ובזאר Kujundžiluk בשקיעה",
+          "name_en": "Mostar: Stari Most Arch, Koski Mehmed Paša Minaret View, Crooked Bridge & Copper Bazaar at Sunset",
+          "map_name": "Stari Most Mostar Bosnia",
+          "lat": 43.3372,
+          "lng": 17.815,
+          "time": "15:10 - 20:30 (שקיעה 16:40 + סיור לילה)",
+          "time_en": "15:10 - 20:30 (Sunset at 16:40 + Night illumination)",
+          "cost_he": "חינם לגשר ולעיר העתיקה (7€ לעלייה לחצר/צריח מסגד Koski Mehmed לתצפית הפנורמית)",
+          "cost_en": "Free for Stari Most & Old Town (€7 for Koski Mehmed Pasha courtyard/minaret panorama)",
+          "dur_he": "3 שעות (אחה״צ + שקיעה + לילה)",
+          "dur_en": "3 hours (Golden Hour + Blue Hour + Night)",
+          "skip_he": "🔥 חובה מוחלטת - הלב של בוסניה והרצגובינה",
+          "skip_en": "🔥 ABSOLUTE MUST-SEE - Architectural crown jewel of Bosnia",
+          "isMust": true,
+          "in_he": "חוץ + עלייה לצריח Koski Mehmed Paša: חוצים את Stari Most, יורדים לחוף החלוקים מתחת לקשת, וצופים בשקיעה מחצר/צריח המסגד.",
+          "in_en": "Outside + Minaret Climb: Cross the polished stone hump of Stari Most, descend to the river shingle below the arch, and climb Koski Mehmed Pasha minaret before sunset.",
+          "wow_he": "למה זה וואו: קשת אבן לבנה מרחפת בגובה 24 מטר מעל קניון נהר הנרטווה בצבע אזמרגד, מוקפת מגדלי שמירה מימי הביניים (Tara ו-Helebija) וגגות לוחות אבן.",
+          "wow_en": "Why It Is WOW: A soaring 24m-high Ottoman stone arch spanning the emerald Neretva canyon, flanked by medieval stone towers and slate-roofed bazaars.",
+          "enroute_he": "על הדרך: משאירים את הרכב בחניה החינמית של Apartments GB המוזמן (Maršala Tita 95, 350m מהמרכז) וצועדים ברגל לגשר העתיק; שים לב לבנייני הברוטליזם והחזיתות מנוקבות הכדורים בדרך.",
+          "enroute_en": "En-Route: Park at your booked Apartments GB (Maršala Tita 95, 350m from center) and walk to Stari Most.",
+          "wx_he": "🌅 17°C בשקיעה (16:40): בשעה הכחולה הגשר מואר בזרקורים לבנים מול השמיים הכחולים.",
+          "wx_en": "🌅 17°C at 16:40 sunset: At Blue Hour the white limestone arch glows against the twilight sky.",
+          "photo_tip": "זווית 1 (שקיעה): מצריח/חצר Koski Mehmed Paša (עדשה 1x). זווית 2 (שעה כחולה): מחוף הסלעים מתחת ל-Lučki Most או מחלוקי הנהר מתחת לקשת.",
+          "photo_tip_en": "Angle 1 (Sunset): 1x from Koski Mehmed Pasha courtyard/minaret. Angle 2 (Blue Hour): From the river gravel bank looking up through the illuminated arch.",
+          "move": "לינה ב-Apartments GB המוזמן במוסטר (5 דק׳ הליכה)",
+          "move_en": "Sleep at booked Apartments GB in Mostar (5m walk)"
+        }
+      ]
+    },
+    {
+      "day": "4",
+      "title": "יום 4 (שני 02/11) + בוקר שלישי (03/11): גשר Pelješac החדש -> חומות Ston ובריכות המלח -> מצוקי Pelješac -> Cavtat & טיסה",
+      "title_en": "Day 4 (Mon 02/11) + Tue Morning (03/11): Pelješac Bridge -> Walls of Ston & Salt Pans -> Cavtat Sunset & Flight",
+      "subtitle": "יציאה ממוסטר (08:15) -> חזרה לקרואטיה (EU) -> גשר הכבלים Pelješac -> טיפוס חומות Ston -> לינה ב-Cavtat צמוד לשדה DBV",
+      "subtitle_en": "Depart Mostar (08:15) -> Re-enter Croatia (EU) -> Pelješac Cable-Stayed Bridge -> Walls of Ston Climb -> Sleep in Cavtat (8m from DBV)",
+      "color": "#db2777",
+      "stops": [
+        {
+          "id": "d4-s1",
+          "num": 13,
+          "isTier1": false,
+          "tier": "Tier 2 Spine | 17/20 (A:4 B:5 C:4 D:4)",
+          "name": "Pelješac Bridge (גשר המיתרים ההנדסי החדש מעל מפרץ Mali Ston - תצפית Komarna)",
+          "name_en": "Pelješac Cable-Stayed Bridge Viewpoint (2.4km Architectural Span)",
+          "map_name": "Peljesac Bridge Viewpoint Komarna",
+          "lat": 42.9317,
+          "lng": 17.5364,
+          "time": "09:45 - 10:15 (30m)",
+          "time_en": "09:45 - 10:15 (30m)",
+          "cost_he": "חינם לחלוטין (0€ אגרת מעבר)",
+          "cost_en": "100% Free (€0 bridge toll)",
+          "dur_he": "30 דק׳",
+          "dur_en": "30 mins",
+          "skip_he": "⚡ על הדרך - נוסעים עליו בכל מקרה אל Ston",
+          "skip_en": "⚡ Directly on route to Ston",
+          "isMust": false,
+          "in_he": "חוץ: עצירה במצפה המוסדר בקצה הגשר וחצייה שלו ברכב.",
+          "in_en": "Outside Viewpoint + Drive: Stop at the designated rest area viewpoint and drive across the 2.4km span.",
+          "wow_he": "למה זה וואו: גשר מיתרים מודרני לבן באורך 2.4 ק\"מ שתכנן האדריכל הסלובני Marjan Pipenbaher כדי לחבר את דרום קרואטיה מעל הים.",
+          "wow_en": "Why It Is WOW: Marjan Pipenbaher’s sleek 2.4km six-pylon cable-stayed bridge floating across the turquoise Mali Ston channel.",
+          "enroute_he": "על הדרך ממוסטר: חוצים את הגבול חזרה לקרואטיה (איחוד אירופי - הסים של Vodafone IE חוזר ל-0€ אוטומטית!) דרך עמק הדלתא של נהר הנרטווה.",
+          "enroute_en": "En-Route from Mostar: Cross back into EU Croatia (Vodafone IE roaming is €0 again!) through the geometric mandarin marshes of the Neretva Delta.",
+          "wx_he": "☀️ 19°C: ראות חופית פתוחה לאורך המפרץ.",
+          "wx_en": "☀️ 19°C: Clear coastal views across the channel.",
+          "photo_tip": "עדשה 1x מנקודת התצפית הצפונית שמראה את שורת הפילונים הלבנים באלכסון על המים.",
+          "photo_tip_en": "1x lens from the northern pullout showing the diagonal rhythm of the six white pylons.",
+          "move": "20 דק׳ נסיעה לאורך חצי האי אל Ston",
+          "move_en": "20m drive along the peninsula to Ston"
+        },
+        {
+          "id": "d4-s2",
+          "num": 14,
+          "isTier1": true,
+          "tier": "Tier 1 Anchor | 20/20 (A:5 B:5 C:5 D:5)",
+          "name": "Walls of Ston & Solana Ston (חומת האבן הארוכה באירופה מעל בריכות המלח הגיאומטריות)",
+          "name_en": "Walls of Ston Climb & Ancient Geometric Salt Pans (Solana Ston)",
+          "map_name": "Walls of Ston Croatia",
+          "lat": 42.8388,
+          "lng": 17.6964,
+          "time": "10:40 - 12:45 (125m)",
+          "time_en": "10:40 - 12:45 (125m)",
+          "cost_he": "10€ עלייה לחומה (חניה חינם ליד מבצר Veliki Kaštio)",
+          "cost_en": "€10 Wall ticket (free parking by Veliki Kaštio)",
+          "dur_he": "125 דק׳ (הליכה מלאה על החומה מ-Ston ל-Mali Ston)",
+          "dur_en": "125 mins (full ridge walk from Ston over the mountain to Mali Ston)",
+          "skip_he": "🔥 חובה מוחלטת - \"החומה הסינית של אירופה\"",
+          "skip_en": "🔥 ABSOLUTE MUST-SEE - The Great Wall of Europe",
+          "isMust": true,
+          "in_he": "חוץ (הליכה על החומה המבוצרת): מטפסים על החומה מ-Ston מעל אוכף ההר עד Mali Ston וחוזרים בשביל התחתון לצד בריכות המלח.",
+          "in_en": "Outside Rampart Hike: Walk the stone ramparts right up the mountain ridge to Mali Ston and return along the flat valley road past the Roman salt pans.",
+          "wow_he": "למה זה וואו: חומה מבוצרת מהמאה ה-14 שמטפסת בקו אנכי על גב ההר וממנה נשקפת רשת שחמט גיאומטרית של 58 בריכות מלח בנות 2,000 שנה.",
+          "wow_en": "Why It Is WOW: A 14th-century stone rampart zigzagging straight over a mountain spine, looking down on a geometric checkerboard of 2,000-year-old salt evaporation pools.",
+          "enroute_he": "על הדרך: חולפים על פני חוות גידול הצדפות במים השקטים של מפרץ Mali Ston.",
+          "enroute_en": "En-Route: Pass the floating oyster grids dotting the glassy Mali Ston bay.",
+          "wx_he": "☀️ 19°C: חשוף לשמש - קח בקבוק מים לטיפוס על החומה.",
+          "wx_en": "☀️ 19°C: Unshaded stone ridge—carry water for the 40-min wall traverse.",
+          "photo_tip": "עדשה 1x מהמגדל העליון מעל Ston כלפי מטה על בריכות המלח המרובעות והעיירה המחומשת.",
+          "photo_tip_en": "1x lens from the highest ridge tower looking straight down at the rectangular salt pans and pentagonal town.",
+          "move": "45 דק׳ נסיעה על כביש המצוקים האדריאטי (D8) אל תצפית גשר המיתרים Franjo Tuđman ו-Cavtat",
+          "move_en": "45m drive along the dramatic D8 Adriatic coastal cliff highway to Franjo Tuđman Bridge Overlook & Cavtat"
+        },
+        {
+          "id": "d4-s3",
+          "num": 15,
+          "isTier1": false,
+          "tier": "Tier 2 Spine | 18/20 (G:4 E:4 V:5 T:3 L:2)",
+          "name": "תצפית גשר המיתרים Franjo Tuđman & פיורד נהר ה-Ombla (כביש המצוק האדריאטי D8)",
+          "name_en": "Franjo Tuđman Cable-Stayed Bridge Overlook & Ombla River Fjord (Adriatic Highway D8)",
+          "map_name": "Franjo Tudman Bridge Viewpoint Dubrovnik",
+          "lat": 42.6685,
+          "lng": 18.0789,
+          "time": "13:30 - 13:55 (25m תצפית הנדסית על הדרך ללא בזבוז שעת אור בגן בוטני)",
+          "time_en": "13:30 - 13:55 (25m structural bridge & fjord overlook directly on D8)",
+          "cost_he": "[חוץ בלבד] חינם לחלוטין (0€ — מדלגים על 10€ ושעת הליכה בגן העצים של Trsteno כדי להגיע ל-Cavtat באור שמש מלא)",
+          "cost_en": "[Outside Only] 100% Free (€0 — skip the €10 Trsteno botanical garden so you reach Cavtat in full afternoon sun)",
+          "dur_he": "25 דק׳",
+          "dur_en": "25 mins",
+          "skip_he": "🔥 תצפית הנדסית עוצמתית ב-0€ ישר על כביש D8 שחוסכת שעת אור יקרה לפני השקיעה ב-16:38",
+          "skip_en": "🔥 Dramatic cable-stayed bridge & karst fjord overlook at €0 right on highway D8",
+          "isMust": true,
+          "in_he": "[חוץ בלבד - 100% הנדסת גשרים ופיורד]: עצירה במפרץ התצפית המערבי של גשר המיתרים Franjo Tuđman (גובה 141 מטר) מעל שפך נהר ה-Ombla הקארסטי.",
+          "in_en": "[Outside Only - 100% Bridge Engineering & Fjord]: Pull into the western vista bay of the 141m-high Franjo Tuđman cable-stayed bridge spanning the karst Ombla River fjord.",
+          "wow_he": "למה זה וואו: פילון בטון אסימטרי בגובה 141 מטר שמחזיק מפתח כבלים של 518 מטר מעל פיורד מים עמוקים של נהר ה-Ombla היוצא מתוך מערה הררית, מול האיים האלפיטיים.",
+          "wow_en": "Why It Is WOW: A soaring 141m A-frame concrete pylon suspending a 518m cable-stayed deck across the deep emerald canyon of the Ombla karst river mouth.",
+          "enroute_he": "על הדרך: עוקפים את דוברובניק מלמעלה על כביש המצוק הפנורמי D8 בלי להיכנס לפקקי העיר.",
+          "enroute_en": "En-Route: Bypass Dubrovnik high above the coast along the panoramic D8 cliff highway.",
+          "wx_he": "☀️ 20°C באור צהריים בהיר.",
+          "wx_en": "☀️ 20°C crisp afternoon sun.",
+          "photo_tip": "עדשה 1x ממפרץ התצפית המערבי שממסגרת את מניפת הכבלים הלבנה מעל המים הכחולים.",
+          "photo_tip_en": "1x lens from the western pullout framing the white cable fan above the deep blue channel.",
+          "move": "25 דק׳ נסיעה אל עיירת החוף Cavtat (הגעה ב-14:20 לשעתיים מלאות של אור שמש לפני השקיעה!)",
+          "move_en": "25m drive past Dubrovnik to Cavtat peninsula (arrive 14:20 for 2+ hours of sunlight before sunset!)"
+        },
+        {
+          "id": "d4-s4",
+          "num": 16,
+          "isTier1": true,
+          "tier": "Tier 1 Anchor | 18/20 (A:5 B:4 C:5 D:4)",
+          "name": "Cavtat: הקפת חצי האי הסלעי Rat, המאוזוליאום הלבן של Meštrović [חוץ] והחזרת רכב ב-DBV בשלישי 08:45",
+          "name_en": "Cavtat: Rat Peninsula Coastal Loop, Meštrović White Stone Mausoleum [Exterior] & Tue 08:45 DBV Car Return",
+          "map_name": "Racic Mausoleum Cavtat Croatia",
+          "lat": 42.5818,
+          "lng": 18.2153,
+          "time": "שני 14:20 - 20:30 (שקיעה 16:38) + שלישי 08:30 נסיעה של 8 דק׳ ל-DBV (טיסה 10:35)",
+          "time_en": "Mon 14:20 - 20:30 (Sunset 16:38) + Tue 08:30 8-min drive to DBV terminal (10:35 flight)",
+          "cost_he": "[חוץ בלבד] חינם לחלוטין (0€ להקפת חצי האי ולתצפית המאוזוליאום מבחוץ — מדלגים על 4€ לחדר הפנימי הזעיר)",
+          "cost_en": "[Outside Only] 100% Free (€0 for the 2.5km peninsula coastal trail & hilltop mausoleum exterior)",
+          "dur_he": "135 דק׳ באור יום ושקיעה + לינת לילה אחרון",
+          "dur_en": "135 mins in daylight & sunset + final night stay",
+          "skip_he": "🔥 חובה לוגיסטית ונופית - 8 דק׳ מהטרמינל בלי גבולות בבוקר!",
+          "skip_en": "🔥 MUST-SEE & Stress-Free Finale - 8 mins from DBV terminal!",
+          "isMust": true,
+          "in_he": "[חוץ בלבד ב-0€]: הקפה רגלית של 2.5 ק\"מ על מצוקי הסלע והאורנים של חצי האי Rat ועלייה לרחבת התצפית החיצונית של המאוזוליאום המתומן הלבן של Meštrović בשקיעה.",
+          "in_en": "[Outside Only at €0]: Walk the 2.5km rocky seaside pine loop around the Rat peninsula and climb to the hilltop terrace surrounding Ivan Meštrović’s octagonal white stone mausoleum at sunset.",
+          "wow_he": "למה זה וואו: סגירת מעגל אדריכלית מושלמת — אחרי מאוזוליאום הגרניט השחור של Meštrović על הר Lovćen, פוגשים ב-Cavtat את המאוזוליאום המתומן מאבן לבנה מהאי Brač שבנה Meštrović ב-1921 בראש חצי האי מול השקיעה.",
+          "wow_en": "Why It Is WOW: A poetic architectural bookend—after Meštrović’s black granite monument on Mount Lovćen, you finish at his 1921 white Brač-limestone octagonal mausoleum crowning Cavtat’s sea peninsula at sunset.",
+          "enroute_he": "ערב שני: ישנים ב-Apartments Mira המוזמן (Ulica Stjepana Radića 16, Cavtat). בוקר שלישי 03/11: מתעוררים ברוגע ב-08:00, מתדלקים בתחנת INA צמוד לשדה ומחזירים את הרכב בדלפק Enterprise בטרמינל DBV ב-08:45 (6 דק׳ נסיעה) לקראת ההמראה ב-10:35 לדבלין.",
+          "enroute_en": "Monday Night: Sleep at booked Apartments Mira (Ulica Stjepana Radića 16, Cavtat). Tuesday Morning 03/11: Wake up at 08:00, refuel at the airport INA station, and drop the car at Enterprise DBV at 08:45 (6m drive) for your 10:35 flight to Dublin.",
+          "wx_he": "🌅 19°C בשקיעה (16:40): מפרץ Cavtat פונה מערבה כך שהשמש שוקעת ישירות בים.",
+          "wx_en": "🌅 19°C at 16:40 sunset: West-facing bay catches direct sunset over the Adriatic.",
+          "photo_tip": "עדשה 1x משביל הסלעים של חצי האי Rat לעבר נמל הסירות של Cavtat בשעה הכחולה.",
+          "photo_tip_en": "1x lens from the western Rat peninsula rocks looking back across Cavtat harbor at Blue Hour.",
+          "move": "לינה ב-Apartments Mira המוזמן ב-Cavtat -> שלישי 08:35: 6 דק׳ לטרמינל DBV -> טיסה 10:35 לדבלין",
+          "move_en": "Sleep at booked Apartments Mira in Cavtat -> Tue 08:35: 6m drive to DBV terminal -> 10:35 flight to Dublin"
+        }
+      ]
+    }
+  ]
+};
+
+let activeDayFilter = 'all';
+let currentMapDisplay = 'leaflet';
+let map = null;
+let markersLayer = null;
+let polylinesLayer = null;
+let markerRefs = {};
+let activeSpeechTimer = null;
+let activeSpeakingStopId = null;
+let currentAudioSpeed = 1.0;
+
+function applySpeedToAudioPlayers() {
+  ['audio-player-short', 'audio-player-flight'].forEach(id => {
+    const p = document.getElementById(id);
+    if (p) {
+      p.defaultPlaybackRate = currentAudioSpeed;
+      p.playbackRate = currentAudioSpeed;
+    }
+  });
+}
+
+function setAudioSpeed(speed) {
+  const num = parseFloat(speed);
+  if (!isNaN(num) && num >= 0.5 && num <= 3.0) {
+    currentAudioSpeed = num;
+  }
+  document.querySelectorAll('.speed-btn').forEach(btn => {
+    const btnSpeed = parseFloat(btn.getAttribute('data-speed'));
+    const isSelected = Math.abs(btnSpeed - currentAudioSpeed) < 0.01;
+    btn.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+  });
+  applySpeedToAudioPlayers();
+  try {
+    localStorage.setItem('eladb_dbv_trip_speed', String(currentAudioSpeed));
+  } catch (e) {}
+  // If Web Speech is actively speaking a stop right now, restart that stop at the new rate
+  if (activeSpeakingStopId && 'speechSynthesis' in window && window.speechSynthesis.speaking) {
+    const stopToReplay = activeSpeakingStopId;
+    activeSpeakingStopId = null;
+    speakStop(stopToReplay);
+  }
+}
+window.setAudioSpeed = setAudioSpeed;
+
+function setLanguage(lang) {
+  currentLang = (lang === 'en') ? 'en' : 'he';
+  const isEn = (currentLang === 'en');
+  document.documentElement.lang = isEn ? 'en' : 'he';
+  document.documentElement.dir = isEn ? 'ltr' : 'rtl';
+  document.title = isEn
+    ? "Montenegro (Bay of Kotor), Bosnia (Mostar) & Ston via DBV (30/10 11:25 - 03/11 10:35)"
+    : "מונטנגרו (קוטור), בוסניה (מוסטר) וסטון דרך דוברובניק (30/10 11:25 - 03/11 10:35)";
+
+  const btnHe = document.getElementById('langBtnHe');
+  const btnEn = document.getElementById('langBtnEn');
+  if (btnHe) btnHe.setAttribute('aria-pressed', isEn ? 'false' : 'true');
+  if (btnEn) btnEn.setAttribute('aria-pressed', isEn ? 'true' : 'false');
+
+  document.querySelectorAll('[data-he][data-en]').forEach(el => {
+    const val = isEn ? el.getAttribute('data-en') : el.getAttribute('data-he');
+    if (val !== null) {
+      if (val.indexOf('<') !== -1 || val.indexOf('&') !== -1) {
+        el.innerHTML = val;
+      } else {
+        el.textContent = val;
+      }
+    }
+  });
+
+  // Update default audio player sources to match selected language and preserve playback speed
+  const shortPlayer = document.getElementById('audio-player-short');
+  const flightPlayer = document.getElementById('audio-player-flight');
+  if (shortPlayer && shortPlayer.paused) {
+    shortPlayer.src = isEn ? 'audio/dbv_trip_short_en.mp3' : 'audio/dbv_trip_short_he.mp3';
+  }
+  if (flightPlayer && flightPlayer.paused) {
+    flightPlayer.src = isEn ? 'audio/dbv_trip_flight_en.mp3' : 'audio/dbv_trip_flight_he.mp3';
+  }
+  applySpeedToAudioPlayers();
+
+  // Sync theme button label
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const btnTheme = document.getElementById('btn-theme');
+  if (btnTheme) {
+    btnTheme.textContent = isEn
+      ? (isDark ? '☀️ Day Mode (D)' : '🌙 Night Mode (D)')
+      : (isDark ? '☀️ מצב יום (D)' : '🌙 מצב לילה (D)');
+  }
+
+  // Sync CC button label
+  const btnCc = document.getElementById('btn-cc-toggle');
+  if (btnCc) {
+    btnCc.textContent = isEn
+      ? (captionsEnabled ? '💬 CC: ON' : '💬 CC: OFF')
+      : (captionsEnabled ? '💬 כתוביות: פעיל' : '💬 כתוביות: כבוי');
+  }
+
+  try {
+    localStorage.setItem('eladb_dbv_trip_lang', currentLang);
+  } catch (e) {}
+
+  filterDay(activeDayFilter);
+}
+window.setLang = setLanguage;
+window.setLanguage = setLanguage;
+
+function toggleCaptions() {
+  captionsEnabled = !captionsEnabled;
+  const box = document.getElementById('live-caption-box');
+  const btn = document.getElementById('btn-cc-toggle');
+  if (box) box.classList.toggle('visible', captionsEnabled);
+  if (btn) {
+    btn.setAttribute('aria-pressed', captionsEnabled ? 'true' : 'false');
+    btn.textContent = (currentLang === 'en')
+      ? (captionsEnabled ? '💬 CC: ON' : '💬 CC: OFF')
+      : (captionsEnabled ? '💬 כתוביות: פעיל' : '💬 כתוביות: כבוי');
+  }
+}
+
+function updateLiveCaption(text) {
+  const el = document.getElementById('live-caption-text');
+  if (el) el.textContent = text;
+}
+
+function stopLiveNarrator() {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+  if (activeSpeechTimer) {
+    clearInterval(activeSpeechTimer);
+    activeSpeechTimer = null;
+  }
+  const shortPlayer = document.getElementById('audio-player-short');
+  const flightPlayer = document.getElementById('audio-player-flight');
+  if (shortPlayer && !shortPlayer.paused) shortPlayer.pause();
+  if (flightPlayer && !flightPlayer.paused) flightPlayer.pause();
+
+  lastSyncedAudioStopId = null;
+  activeHighlightedStopId = null;
+  document.querySelectorAll('.stop-card.speaking-active').forEach(c => c.classList.remove('speaking-active'));
+  document.querySelectorAll('.custom-pin-inner').forEach(el => el.classList.remove('pin-speaking-active'));
+  document.querySelectorAll('.jump-stop-chip').forEach(ch => ch.setAttribute('aria-pressed', 'false'));
+  document.querySelectorAll('.btn-stop-speak[aria-pressed="true"]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+  const bShort = document.getElementById('btn-tts-short');
+  const bFlight = document.getElementById('btn-tts-flight');
+  if (bShort) bShort.setAttribute('aria-pressed', 'false');
+  if (bFlight) bFlight.setAttribute('aria-pressed', 'false');
+  activeSpeakingStopId = null;
+}
+
+function speakTextWithWebSpeech(text, onDone) {
+  if (!('speechSynthesis' in window)) {
+    updateLiveCaption(text);
+    if (onDone) onDone();
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  window._activeUtterance = utter;
+  const targetLang = (currentLang === 'en') ? 'en-US' : 'he-IL';
+  utter.lang = targetLang;
+  if (typeof window.pickStandardSpeechVoice === 'function') {
+    const v = window.pickStandardSpeechVoice(targetLang);
+    if (v) utter.voice = v;
+  }
+  utter.rate = Math.max(0.5, Math.min(3.0, currentAudioSpeed || 1.0));
+  utter.pitch = 1.0;
+  updateLiveCaption(text);
+  if (activeSpeechTimer) clearInterval(activeSpeechTimer);
+  activeSpeechTimer = setInterval(() => {
+    if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+      window.speechSynthesis.pause();
+      window.speechSynthesis.resume();
+    }
+  }, 10000);
+  utter.onend = () => {
+    if (activeSpeechTimer) { clearInterval(activeSpeechTimer); activeSpeechTimer = null; }
+    if (onDone) onDone();
+  };
+  utter.onerror = () => {
+    if (activeSpeechTimer) { clearInterval(activeSpeechTimer); activeSpeechTimer = null; }
+    if (onDone) onDone();
+  };
+  window.speechSynthesis.speak(utter);
+}
+
+function buildStopNarrationText(stop) {
+  const isEn = (currentLang === 'en');
+  if (isEn) {
+    return `Stop ${stop.num}: ${stop.name_en}. Cost: ${stop.cost_en}. Inside or Outside: ${stop.in_en} Weather Plan A: ${stop.wx_en} En-route sights and story: ${stop.enroute_en} Recommended time: ${stop.dur_en}. Priority if short on time: ${stop.skip_en}. ${stop.wow_en} Smartphone framing: ${stop.photo_tip_en} Transit: ${stop.move_en}`;
+  }
+  return `תחנה מספר ${stop.num}: ${stop.name}. עלות כניסה: ${stop.cost_he}. האם להיכנס פנימה או רק מבחוץ: ${stop.in_he} התאמת מזג אוויר: ${stop.wx_he} מה רואים על הדרך וסיפור מעבר: ${stop.enroute_he} זמן מומלץ במקום: ${stop.dur_he}. האם ניתן לוותר בבלת"ם: ${stop.skip_he}. ${stop.wow_he} זווית צילום: ${stop.photo_tip} הגעה והמשך: ${stop.move}`;
+}
+
+function speakStop(stopId) {
+  if (activeSpeakingStopId === stopId) {
+    stopLiveNarrator();
+    return;
+  }
+  stopLiveNarrator();
+  const info = getStopById(stopId);
+  if (!info) return;
+  const foundStop = info.stop;
+  activeSpeakingStopId = stopId;
+  highlightStopAndFocusMap(stopId, true);
+
+  // Jump the neural MP3 player directly to this stop's timestamp so it plays with studio audio & speed control, with Web Speech fallback
+  const pShort = document.getElementById('audio-player-short');
+  if (pShort) {
+    jumpAudioToStop(foundStop.num);
+    return;
+  }
+  const scriptText = buildStopNarrationText(foundStop);
+  speakTextWithWebSpeech(scriptText, () => {
+    activeSpeakingStopId = null;
+  });
+}
+
+function speakCustomBlock(blockKey) {
+  stopLiveNarrator();
+  if (blockKey === 'intro') {
+    const txt = (currentLang === 'en') ? CITY_INTRO_NARRATION.en : CITY_INTRO_NARRATION.he;
+    speakTextWithWebSpeech(txt);
+  }
+}
+
+function startLiveNarrator(mode) {
+  stopLiveNarrator();
+  const isEn = (currentLang === 'en');
+  const bShort = document.getElementById('btn-tts-short');
+  const bFlight = document.getElementById('btn-tts-flight');
+  if (mode === 'short' && bShort) bShort.setAttribute('aria-pressed', 'true');
+  if (mode === 'flight' && bFlight) bFlight.setAttribute('aria-pressed', 'true');
+
+  // Play the pre-generated high-quality neural MP3 directly in the browser AND step through stops!
+  const player = document.getElementById(mode === 'flight' ? 'audio-player-flight' : 'audio-player-short');
+  if (player) {
+    const wantSrc = (mode === 'flight')
+      ? (isEn ? 'audio/dbv_trip_flight_en.mp3' : 'audio/dbv_trip_flight_he.mp3')
+      : (isEn ? 'audio/dbv_trip_short_en.mp3' : 'audio/dbv_trip_short_he.mp3');
+    if (player.getAttribute('src') !== wantSrc) {
+      player.setAttribute('src', wantSrc);
+    }
+    player.defaultPlaybackRate = currentAudioSpeed;
+    player.playbackRate = currentAudioSpeed;
+    player.currentTime = 0;
+    player.play().catch(() => {
+      // Fallback to Web Speech queue if audio autoplay blocked
+      runSequentialWebSpeechTour();
+    });
+    updateLiveCaption(
+      isEn
+        ? (mode === 'flight'
+            ? `Playing Full In-Flight Deep-Dive Audio (${currentAudioSpeed}x speed)... Use the speed buttons above or download 1x / 2x MP3 below.`
+            : `Playing Practical 16-Stop Audio Guide (${currentAudioSpeed}x speed)... Use the speed buttons above or download 1x / 2x MP3 below.`)
+        : (mode === 'flight'
+            ? `מנגן כעת את מהדורת הטיסה והסיפורים (במהירות ${currentAudioSpeed}x)... ניתן לשנות מהירות למעלה או להוריד MP3 רגיל / x2 למטה.`
+            : `מנגן כעת את מדריך השטח המעשי לכל 16 התחנות (במהירות ${currentAudioSpeed}x)... ניתן לשנות מהירות למעלה או להוריד MP3 רגיל / x2 למטה.`)
+    );
+  } else {
+    runSequentialWebSpeechTour();
+  }
+}
+
+function runSequentialWebSpeechTour() {
+  const queue = [];
+  queue.push({ stop: null, text: (currentLang === 'en') ? CITY_INTRO_NARRATION.en : CITY_INTRO_NARRATION.he });
+  ITINERARY_DATA.days.forEach(d => {
+    d.stops.forEach(s => {
+      queue.push({ stop: s, text: buildStopNarrationText(s) });
+    });
+  });
+  let idx = 0;
+  function nextStep() {
+    if (idx >= queue.length) {
+      stopLiveNarrator();
+      return;
+    }
+    const item = queue[idx++];
+    document.querySelectorAll('.stop-card.speaking-active').forEach(c => c.classList.remove('speaking-active'));
+    if (item.stop) {
+      const card = document.getElementById('card-' + item.stop.id);
+      if (card) {
+        card.classList.add('speaking-active');
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+      focusStop(item.stop.id, item.stop.lat, item.stop.lng);
+    }
+    speakTextWithWebSpeech(item.text, nextStep);
+  }
+  nextStep();
+}
+
+
+function copyTextSafe(text, onDone) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(onDone).catch(() => fallbackCopy(text, onDone));
+  } else {
+    fallbackCopy(text, onDone);
+  }
+}
+
+function fallbackCopy(text, onDone) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+    if (onDone) onDone();
+  } catch (e) {
+    alert('לא ניתן להעתיק אוטומטית');
+  }
+  document.body.removeChild(ta);
+}
+
+function copySingleMap(mapName, btnEl) {
+  const text = mapName + '\n\n\n';
+  copyTextSafe(text, () => {
+    const orig = btnEl.textContent;
+    btnEl.textContent = '✅ הועתק!';
+    setTimeout(() => { btnEl.textContent = orig; }, 1500);
+  });
+}
+
+function buildWhatsAppDay(dayObj, level) {
+  if (level === 1) {
+    return dayObj.stops.map(s => s.map_name).join('\n\n\n');
+  }
+  let lines = [];
+  lines.push('🌊 *' + dayObj.title + '*');
+  lines.push('📍 ' + dayObj.subtitle);
+  lines.push('');
+  dayObj.stops.forEach(s => {
+    lines.push('━━━━━━━━━━━━━━━━━━');
+    lines.push(s.map_name);
+    lines.push('');
+    lines.push('');
+    lines.push('#' + s.num + '. [' + s.time + '] ' + s.name);
+    lines.push('🎟️ עלות: ' + s.cost_he + ' | ⏳ שהייה: ' + s.dur_he);
+    lines.push('🏛️ פנים/חוץ: ' + s.in_he);
+    lines.push('🔍 למה זה וואו: ' + s.wow_he);
+    if (level === 3) {
+      lines.push('📝 על הדרך: ' + s.enroute_he);
+      lines.push('📸 זווית צילום: ' + s.photo_tip);
+      lines.push('🚗 נסיעה: ' + s.move);
+    }
+    lines.push('');
+  });
+  return lines.join('\n');
+}
+
+function copyDayWhatsApp(dayNum, level, btnEl) {
+  const dayObj = ITINERARY_DATA.days.find(d => d.day === String(dayNum));
+  if (!dayObj) return;
+  const text = buildWhatsAppDay(dayObj, level);
+  copyTextSafe(text, () => {
+    const orig = btnEl.textContent;
+    btnEl.textContent = '✅ הועתק ללוח!';
+    setTimeout(() => { btnEl.textContent = orig; }, 2000);
+  });
+}
+
+function copyAllDaysWhatsApp() {
+  const allText = ITINERARY_DATA.days.map(d => buildWhatsAppDay(d, 2)).join('\n\n==============================\n\n');
+  copyTextSafe(allText, () => {
+    alert('כל 4 ימי המסלול הועתקו ללוח בפורמט ווטסאפ (שמות באנגלית ל-Maps + שתי שורות רווח + תקציר מלא)!');
+  });
+}
+
+function renderItinerary() {
+  const container = document.getElementById('itinerary-content');
+  if (!container) return;
+  const isEn = (currentLang === 'en');
+  const daysToShow = activeDayFilter === 'all'
+    ? ITINERARY_DATA.days
+    : ITINERARY_DATA.days.filter(d => d.day === activeDayFilter);
+
+  let html = '';
+  daysToShow.forEach(dayObj => {
+    const dTitle = isEn ? dayObj.title_en : dayObj.title;
+    const dSub = isEn ? dayObj.subtitle_en : dayObj.subtitle;
+    html += `
+      <section class="day-section" aria-label="${dTitle}">
+        <div class="day-header" style="background:${dayObj.color};">
+          <span>${dTitle}</span>
+          <span style="font-size:0.76rem;font-weight:600;opacity:0.95;">${dSub}</span>
+        </div>
+    `;
+    dayObj.stops.forEach(stop => {
+      const sName = isEn ? stop.name_en : stop.name;
+      const sTime = isEn ? stop.time_en : stop.time;
+      const sWow = isEn ? stop.wow_en : stop.wow_he;
+      const sPhoto = isEn ? stop.photo_tip_en : stop.photo_tip;
+      const sMove = isEn ? stop.move_en : stop.move;
+      const sCost = isEn ? stop.cost_en : stop.cost_he;
+      const sInOut = isEn ? stop.in_en : stop.in_he;
+      const sDur = isEn ? stop.dur_en : stop.dur_he;
+      const sSkip = isEn ? stop.skip_en : stop.skip_he;
+      const costLabel = isEn ? '🎟️ Cost:' : '🎟️ עלות:';
+      const inOutLabel = isEn ? '🏛️ Inside/Outside:' : '🏛️ פנים/חוץ:';
+      const durLabel = isEn ? '⏳ Stay:' : '⏳ שהייה:';
+      const skipBg = stop.isMust ? 'rgba(245, 158, 11, 0.16)' : 'rgba(56, 189, 248, 0.14)';
+      const skipBorder = stop.isMust ? '#f59e0b' : '#38bdf8';
+      const photoPrefix = isEn ? '📸 Smartphone Angle: ' : '📸 זווית סמארטפון: ';
+      const listenLabel = isEn ? '🔊 Listen' : '🔊 קריין';
+      const gimgLink = 'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(stop.map_name + ' architecture');
+      const gmapsLink = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(stop.map_name);
+      const badgeClass = stop.isTier1 ? 'badge badge-t1' : 'badge badge-t2';
+      const cardClass = stop.isTier1 ? 'stop-card tier-1' : 'stop-card tier-2';
+      const starPrefix = stop.isTier1 ? '★ ' : '● ';
+      html += `
+        <article class="${cardClass}" id="card-${stop.id}">
+          <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.06);border-radius:6px;padding:5px 8px;margin-bottom:6px;gap:6px;">
+            <span style="font-family:monospace;font-size:0.78rem;font-weight:700;direction:ltr;">${stop.map_name}</span>
+            <button type="button" class="btn-copy-map" onclick="copySingleMap('${stop.map_name.replace(/'/g, "\\'")}', this)" style="background:var(--primary);color:#fff;border:none;border-radius:4px;padding:4px 8px;font-size:0.74rem;font-weight:700;cursor:pointer;white-space:nowrap;">📋 העתק ל-Maps</button>
+          </div>
+          <div class="stop-top">
+            <button type="button" class="stop-title-btn" onclick="focusStop('${stop.id}', ${stop.lat}, ${stop.lng})">
+              <span>${starPrefix}#${stop.num} ${sName}</span>
+            </button>
+            <div class="stop-actions-right">
+              <span class="now-playing-pill">${isEn ? '🔊 Now Playing' : '🔊 מנגן כעת'}</span>
+              <button type="button" id="btn-speak-${stop.id}" class="btn-stop-speak" aria-pressed="false" onclick="speakStop('${stop.id}')">${listenLabel}</button>
+              <span class="${badgeClass}">[${stop.tier}]</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:0.76rem;padding:5px 8px;margin-bottom:5px;border-radius:5px;background:${skipBg};border-inline-start:3px solid ${skipBorder};">
+            <span><strong>${costLabel}</strong> ${sCost}</span>
+            <span>|</span>
+            <span><strong>${durLabel}</strong> ${sDur}</span>
+            <span>|</span>
+            <span><strong>${sSkip}</strong></span>
+            <div style="width:100%;margin-top:2px;padding-top:3px;border-top:1px dashed var(--border);"><strong>${inOutLabel}</strong> ${sInOut}</div>
+          </div>
+          <div class="wow-line">✨ ${sWow}</div>
+          <div style="font-size:0.77rem;padding:5px 8px;margin-bottom:5px;border-radius:5px;background:rgba(16, 185, 129, 0.11);border-inline-start:3px solid #10b981;color:var(--text);">
+            <strong>${isEn ? '🛤️ En-Route Sights &amp; Story:' : '🛤️ מה רואים על הדרך וסיפור מעבר:'}</strong> ${isEn ? stop.enroute_en : stop.enroute_he}
+          </div>
+          <div style="font-size:0.75rem;padding:4px 8px;margin-bottom:5px;border-radius:5px;background:rgba(99, 102, 241, 0.11);border-inline-start:3px solid #6366f1;color:var(--text);">
+            <strong>${isEn ? '🌦️ Weather-Smart Plan A:' : '🌦️ התאמת מזג אוויר (Plan A):'}</strong> ${isEn ? stop.wx_en : stop.wx_he}
+          </div>
+          <div class="photo-line">${photoPrefix}${sPhoto}</div>
+          <div class="move-line">
+            <span>⏰ <strong>${sTime}</strong> | 🚶/🚆 ${sMove}</span>
+            <span class="ext-links">
+              <a href="${gmapsLink}" target="_blank" rel="noopener">📍 Google Maps</a>
+              <a href="${gimgLink}" target="_blank" rel="noopener">🖼️ Google Images</a>
+            </span>
+          </div>
+        </article>
+      `;
+    });
+    html += '</section>';
+  });
+  container.innerHTML = html;
+  buildJumpStopChips();
+}
+
+function switchMapDisplay(mode) {
+  currentMapDisplay = mode;
+  const mapEl = document.getElementById('map');
+  const svgEl = document.getElementById('svg-fallback');
+  const btnLeaflet = document.getElementById('btn-map-leaflet');
+  const btnSvg = document.getElementById('btn-map-svg');
+
+  if (mode === 'svg') {
+    if (mapEl) mapEl.style.display = 'none';
+    if (svgEl) {
+      svgEl.style.display = 'block';
+      renderSvgFallback();
+    }
+    if (btnSvg) btnSvg.setAttribute('aria-pressed', 'true');
+    if (btnLeaflet) btnLeaflet.setAttribute('aria-pressed', 'false');
+  } else {
+    if (typeof L === 'undefined') {
+      switchMapDisplay('svg');
+      return;
+    }
+    if (svgEl) svgEl.style.display = 'none';
+    if (mapEl) mapEl.style.display = 'block';
+    if (btnLeaflet) btnLeaflet.setAttribute('aria-pressed', 'true');
+    if (btnSvg) btnSvg.setAttribute('aria-pressed', 'false');
+    if (!map) {
+      initMap();
+    } else {
+      setTimeout(() => {
+        map.invalidateSize();
+        updateMapMarkers();
+      }, 150);
+    }
+  }
+}
+
+function initMap() {
+  try {
+    if (typeof L === 'undefined') throw new Error('Leaflet offline');
+    const mapEl = document.getElementById('map');
+    if (mapEl && mapEl._leaflet_id) {
+      mapEl._leaflet_id = null;
+      mapEl.innerHTML = '';
+    }
+    map = L.map('map').setView([42.65, 18.35], 9);
+    const tileLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+      attribution: '&copy; Google Maps &copy; OpenStreetMap',
+      maxZoom: 20
+    }).addTo(map);
+    let tileErrors = 0;
+    let switchedToOsm = false;
+    tileLayer.on('tileerror', () => {
+      tileErrors++;
+      if (tileErrors > 4 && !switchedToOsm) {
+        switchedToOsm = true;
+        tileErrors = 0;
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap',
+          maxZoom: 19
+        }).addTo(map);
+      } else if (tileErrors > 12) {
+        switchMapDisplay('svg');
+      }
+    });
+    markersLayer = L.layerGroup().addTo(map);
+    polylinesLayer = L.layerGroup().addTo(map);
+    updateMapMarkers();
+    [120, 350, 800].forEach(ms => {
+      setTimeout(() => {
+        if (map && currentMapDisplay === 'leaflet') {
+          map.invalidateSize();
+          updateMapMarkers();
+        }
+      }, ms);
+    });
+    if ('ResizeObserver' in window && mapEl) {
+      const ro = new ResizeObserver(() => {
+        if (map && currentMapDisplay === 'leaflet') {
+          map.invalidateSize();
+        }
+      });
+      ro.observe(mapEl);
+    }
+  } catch (e) {
+    switchMapDisplay('svg');
+  }
+}
+
+function updateMapMarkers() {
+  if (currentMapDisplay === 'svg') {
+    renderSvgFallback();
+    return;
+  }
+  if (!map || !markersLayer || !polylinesLayer) return;
+  markersLayer.clearLayers();
+  polylinesLayer.clearLayers();
+  markerRefs = {};
+
+  const isEn = (currentLang === 'en');
+  const dirAttr = isEn ? 'ltr' : 'rtl';
+  const daysToShow = activeDayFilter === 'all'
+    ? ITINERARY_DATA.days
+    : ITINERARY_DATA.days.filter(d => d.day === activeDayFilter);
+
+  const allCoords = [];
+  daysToShow.forEach(dayObj => {
+    const dayCoords = [];
+    dayObj.stops.forEach(stop => {
+      const coord = [stop.lat, stop.lng];
+      dayCoords.push(coord);
+      allCoords.push(coord);
+
+      const borderStyle = stop.isTier1 ? '3px solid #fef08a' : '2px solid #ffffff';
+      const size = stop.isTier1 ? 30 : 24;
+      const label = stop.isTier1 ? ('★' + stop.num) : String(stop.num);
+      const isPinActive = (activeHighlightedStopId === stop.id) ? ' pin-speaking-active' : '';
+      const icon = L.divIcon({
+        className: 'custom-pin',
+        html: `<div id="map-pin-${stop.id}" class="custom-pin-inner${isPinActive}" style="background:${dayObj.color};color:#ffffff;width:${size}px;height:${size}px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.72rem;border:${borderStyle};box-shadow:0 2px 5px rgba(0,0,0,0.45);">${label}</div>`,
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2]
+      });
+
+      const sName = isEn ? stop.name_en : stop.name;
+      const sTime = isEn ? stop.time_en : stop.time;
+      const sWow = isEn ? stop.wow_en : stop.wow_he;
+      const sPhoto = isEn ? stop.photo_tip_en : stop.photo_tip;
+      const sMove = isEn ? stop.move_en : stop.move;
+      const gimgLink = 'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(stop.map_name + ' architecture');
+      const gmapsLink = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(stop.map_name);
+
+      const marker = L.marker(coord, { icon }).bindPopup(`
+        <div style="direction:${dirAttr};text-align:start;font-family:sans-serif;min-width:250px;color:#0f172a;">
+          <div style="font-weight:800;font-size:0.9rem;margin-bottom:3px;">#${stop.num}: ${sName}</div>
+          <div style="font-size:0.75rem;color:#b45309;font-weight:800;margin-bottom:4px;">[${stop.tier}]</div>
+          <div style="font-size:0.78rem;color:#334155;margin-bottom:5px;">⏰ ${sTime}</div>
+          <div style="font-size:0.75rem;color:#065f46;background:#ecfdf5;padding:4px 6px;border-radius:4px;margin-bottom:5px;">✨ ${sWow}</div>
+          <div style="font-size:0.76rem;color:#581c87;background:#f3e8ff;padding:4px 6px;border-radius:4px;margin-bottom:5px;">📸 ${sPhoto}</div>
+          <div style="font-size:0.75rem;color:#475569;margin-bottom:6px;">🚶/🚆 ${sMove}</div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <a href="${gmapsLink}" target="_blank" rel="noopener" style="font-size:0.78rem;color:#1d4ed8;font-weight:700;">📍 Google Maps</a>
+            <a href="${gimgLink}" target="_blank" rel="noopener" style="font-size:0.78rem;color:#7c3aed;font-weight:700;">🖼️ Google Images</a>
+          </div>
+        </div>
+      `);
+      marker.addTo(markersLayer);
+      markerRefs[stop.id] = marker;
+    });
+
+    if (dayCoords.length > 1) {
+      L.polyline(dayCoords, {
+        color: dayObj.color,
+        weight: 4,
+        opacity: 0.85,
+        dashArray: '6, 6'
+      }).addTo(polylinesLayer);
+    }
+  });
+
+  const BOOKED_HOTELS = [
+    {
+      days: ['all', '1', '2'],
+      lat: 42.4272,
+      lng: 18.7695,
+      name_he: '🛏️ Hostel Pupa (קוטור, לילות 1+2 מוזמן — US$55)',
+      name_en: '🛏️ Hostel Pupa (Kotor, Nights 1+2 Confirmed — US$55)',
+      addr: 'Pelianovo / Riva bb, Kotor (300m from Sea Gate)',
+      maps: 'https://www.google.com/maps/search/?api=1&query=Hostel+Pupa+Kotor+Montenegro'
+    },
+    {
+      days: ['all', '3'],
+      lat: 43.3428,
+      lng: 17.8139,
+      name_he: '🛏️ Apartments GB (מוסטר, לילה 3 מוזמן — US$28)',
+      name_en: '🛏️ Apartments GB (Mostar, Night 3 Confirmed — US$28)',
+      addr: 'Maršala Tita 95, Mostar (350m from center)',
+      maps: 'https://www.google.com/maps/search/?api=1&query=Apartments+GB+Mostar+Bosnia'
+    },
+    {
+      days: ['all', '4'],
+      lat: 42.5835,
+      lng: 18.2238,
+      name_he: '🛏️ Apartments Mira (Cavtat, לילה 4 מוזמן — US$45)',
+      name_en: '🛏️ Apartments Mira (Cavtat, Night 4 Confirmed — US$45)',
+      addr: 'Ulica Stjepana Radića 16, 20210 Cavtat (6m from DBV)',
+      maps: 'https://www.google.com/maps/search/?api=1&query=Apartments+Mira+Ulica+Stjepana+Radica+16+Cavtat'
+    }
+  ];
+
+  BOOKED_HOTELS.forEach(h => {
+    if (h.days.includes(activeDayFilter)) {
+      const hIcon = L.divIcon({
+        className: 'custom-pin',
+        html: `<div style="background:#059669;color:#ffffff;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;border:2px solid #a7f3d0;box-shadow:0 2px 6px rgba(0,0,0,0.5);" title="${isEn ? h.name_en : h.name_he}">🛏️</div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14]
+      });
+      L.marker([h.lat, h.lng], { icon: hIcon }).bindPopup(`
+        <div style="direction:${dirAttr};text-align:start;font-family:sans-serif;min-width:220px;color:#0f172a;">
+          <div style="font-weight:800;font-size:0.88rem;color:#065f46;margin-bottom:4px;">${isEn ? h.name_en : h.name_he}</div>
+          <div style="font-size:0.76rem;color:#334155;margin-bottom:6px;">📍 ${h.addr}</div>
+          <a href="${h.maps}" target="_blank" rel="noopener" style="font-size:0.78rem;color:#1d4ed8;font-weight:700;">📍 Google Maps Navigation</a>
+        </div>
+      `).addTo(markersLayer);
+    }
+  });
+
+  if (allCoords.length > 0) {
+    map.fitBounds(allCoords, { padding: [32, 32] });
+  }
+}
+
+const AUDIO_STOP_TIMELINE = {
+  "dbv_short_he": [
+    {
+      "id": "d1-s1",
+      "num": 1,
+      "start": 53.1,
+      "end": 115.6
+    },
+    {
+      "id": "d1-s2",
+      "num": 2,
+      "start": 115.6,
+      "end": 173.6
+    },
+    {
+      "id": "d1-s3",
+      "num": 3,
+      "start": 173.6,
+      "end": 243.8
+    },
+    {
+      "id": "d1-s4",
+      "num": 4,
+      "start": 243.8,
+      "end": 298.4
+    },
+    {
+      "id": "d2-s1",
+      "num": 5,
+      "start": 298.4,
+      "end": 380.2
+    },
+    {
+      "id": "d2-s2",
+      "num": 6,
+      "start": 380.2,
+      "end": 448.4
+    },
+    {
+      "id": "d2-s3",
+      "num": 7,
+      "start": 448.4,
+      "end": 509.9
+    },
+    {
+      "id": "d2-s4",
+      "num": 8,
+      "start": 509.9,
+      "end": 565.5
+    },
+    {
+      "id": "d3-s1",
+      "num": 9,
+      "start": 565.5,
+      "end": 637.6
+    },
+    {
+      "id": "d3-s2",
+      "num": 10,
+      "start": 637.6,
+      "end": 697.3
+    },
+    {
+      "id": "d3-s3",
+      "num": 11,
+      "start": 697.3,
+      "end": 766.9
+    },
+    {
+      "id": "d3-s4",
+      "num": 12,
+      "start": 766.9,
+      "end": 847.1
+    },
+    {
+      "id": "d4-s1",
+      "num": 13,
+      "start": 847.1,
+      "end": 915.2
+    },
+    {
+      "id": "d4-s2",
+      "num": 14,
+      "start": 915.2,
+      "end": 987.0
+    },
+    {
+      "id": "d4-s3",
+      "num": 15,
+      "start": 987.0,
+      "end": 1047.0
+    },
+    {
+      "id": "d4-s4",
+      "num": 16,
+      "start": 1047.0,
+      "end": 1126.8
+    }
+  ],
+  "dbv_short_en": [
+    {
+      "id": "d1-s1",
+      "num": 1,
+      "start": 44.3,
+      "end": 97.5
+    },
+    {
+      "id": "d1-s2",
+      "num": 2,
+      "start": 97.5,
+      "end": 148.5
+    },
+    {
+      "id": "d1-s3",
+      "num": 3,
+      "start": 148.5,
+      "end": 205.2
+    },
+    {
+      "id": "d1-s4",
+      "num": 4,
+      "start": 205.2,
+      "end": 250.4
+    },
+    {
+      "id": "d2-s1",
+      "num": 5,
+      "start": 250.4,
+      "end": 319.3
+    },
+    {
+      "id": "d2-s2",
+      "num": 6,
+      "start": 319.3,
+      "end": 381.4
+    },
+    {
+      "id": "d2-s3",
+      "num": 7,
+      "start": 381.4,
+      "end": 432.3
+    },
+    {
+      "id": "d2-s4",
+      "num": 8,
+      "start": 432.3,
+      "end": 483.6
+    },
+    {
+      "id": "d3-s1",
+      "num": 9,
+      "start": 483.6,
+      "end": 549.7
+    },
+    {
+      "id": "d3-s2",
+      "num": 10,
+      "start": 549.7,
+      "end": 603.4
+    },
+    {
+      "id": "d3-s3",
+      "num": 11,
+      "start": 603.4,
+      "end": 663.4
+    },
+    {
+      "id": "d3-s4",
+      "num": 12,
+      "start": 663.4,
+      "end": 730.5
+    },
+    {
+      "id": "d4-s1",
+      "num": 13,
+      "start": 730.5,
+      "end": 790.4
+    },
+    {
+      "id": "d4-s2",
+      "num": 14,
+      "start": 790.4,
+      "end": 851.8
+    },
+    {
+      "id": "d4-s3",
+      "num": 15,
+      "start": 851.8,
+      "end": 900.1
+    },
+    {
+      "id": "d4-s4",
+      "num": 16,
+      "start": 900.1,
+      "end": 966.9
+    }
+  ],
+  "dbv_flight_he": [
+    {
+      "id": "d1-s1",
+      "num": 1,
+      "start": 192.3,
+      "end": 299.1
+    },
+    {
+      "id": "d1-s2",
+      "num": 2,
+      "start": 299.1,
+      "end": 398.6
+    },
+    {
+      "id": "d1-s3",
+      "num": 3,
+      "start": 398.6,
+      "end": 520.0
+    },
+    {
+      "id": "d1-s4",
+      "num": 4,
+      "start": 520.0,
+      "end": 613.8
+    },
+    {
+      "id": "d2-s1",
+      "num": 5,
+      "start": 613.8,
+      "end": 736.3
+    },
+    {
+      "id": "d2-s2",
+      "num": 6,
+      "start": 736.3,
+      "end": 844.2
+    },
+    {
+      "id": "d2-s3",
+      "num": 7,
+      "start": 844.2,
+      "end": 949.1
+    },
+    {
+      "id": "d2-s4",
+      "num": 8,
+      "start": 949.1,
+      "end": 1048.5
+    },
+    {
+      "id": "d3-s1",
+      "num": 9,
+      "start": 1048.5,
+      "end": 1162.0
+    },
+    {
+      "id": "d3-s2",
+      "num": 10,
+      "start": 1162.0,
+      "end": 1260.8
+    },
+    {
+      "id": "d3-s3",
+      "num": 11,
+      "start": 1260.8,
+      "end": 1369.9
+    },
+    {
+      "id": "d3-s4",
+      "num": 12,
+      "start": 1369.9,
+      "end": 1502.4
+    },
+    {
+      "id": "d4-s1",
+      "num": 13,
+      "start": 1502.4,
+      "end": 1615.7
+    },
+    {
+      "id": "d4-s2",
+      "num": 14,
+      "start": 1615.7,
+      "end": 1725.7
+    },
+    {
+      "id": "d4-s3",
+      "num": 15,
+      "start": 1725.7,
+      "end": 1826.2
+    },
+    {
+      "id": "d4-s4",
+      "num": 16,
+      "start": 1826.2,
+      "end": 1967.6
+    }
+  ],
+  "dbv_flight_en": [
+    {
+      "id": "d1-s1",
+      "num": 1,
+      "start": 151.2,
+      "end": 240.0
+    },
+    {
+      "id": "d1-s2",
+      "num": 2,
+      "start": 240.0,
+      "end": 327.5
+    },
+    {
+      "id": "d1-s3",
+      "num": 3,
+      "start": 327.5,
+      "end": 425.2
+    },
+    {
+      "id": "d1-s4",
+      "num": 4,
+      "start": 425.2,
+      "end": 503.8
+    },
+    {
+      "id": "d2-s1",
+      "num": 5,
+      "start": 503.8,
+      "end": 607.6
+    },
+    {
+      "id": "d2-s2",
+      "num": 6,
+      "start": 607.6,
+      "end": 702.7
+    },
+    {
+      "id": "d2-s3",
+      "num": 7,
+      "start": 702.7,
+      "end": 788.7
+    },
+    {
+      "id": "d2-s4",
+      "num": 8,
+      "start": 788.7,
+      "end": 877.4
+    },
+    {
+      "id": "d3-s1",
+      "num": 9,
+      "start": 877.4,
+      "end": 978.4
+    },
+    {
+      "id": "d3-s2",
+      "num": 10,
+      "start": 978.4,
+      "end": 1066.7
+    },
+    {
+      "id": "d3-s3",
+      "num": 11,
+      "start": 1066.7,
+      "end": 1161.5
+    },
+    {
+      "id": "d3-s4",
+      "num": 12,
+      "start": 1161.5,
+      "end": 1266.8
+    },
+    {
+      "id": "d4-s1",
+      "num": 13,
+      "start": 1266.8,
+      "end": 1361.3
+    },
+    {
+      "id": "d4-s2",
+      "num": 14,
+      "start": 1361.3,
+      "end": 1455.5
+    },
+    {
+      "id": "d4-s3",
+      "num": 15,
+      "start": 1455.5,
+      "end": 1537.5
+    },
+    {
+      "id": "d4-s4",
+      "num": 16,
+      "start": 1537.5,
+      "end": 1649.9
+    }
+  ]
+};
+
+let activeHighlightedStopId = null;
+let lastSyncedAudioStopId = null;
+
+function getStopById(stopId) {
+  let found = null;
+  ITINERARY_DATA.days.forEach(d => {
+    d.stops.forEach(s => {
+      if (s.id === stopId) found = { stop: s, day: d.day };
+    });
+  });
+  return found;
+}
+
+function getStopByNum(num) {
+  let found = null;
+  ITINERARY_DATA.days.forEach(d => {
+    d.stops.forEach(s => {
+      if (s.num === num) found = { stop: s, day: d.day };
+    });
+  });
+  return found;
+}
+
+function highlightStopAndFocusMap(stopId, scrollCard = true) {
+  const info = getStopById(stopId);
+  if (!info) return;
+  const { stop, day } = info;
+
+  // Ensure the stop's day is visible in the list and on the map
+  if (activeDayFilter !== 'all' && String(activeDayFilter) !== String(day)) {
+    filterDay('all');
+  }
+
+  activeHighlightedStopId = stopId;
+
+  // 1. Highlight stop card in sidebar list and scroll it into view
+  document.querySelectorAll('.stop-card.speaking-active').forEach(c => c.classList.remove('speaking-active'));
+  document.querySelectorAll('.btn-stop-speak').forEach(b => b.setAttribute('aria-pressed', 'false'));
+  const card = document.getElementById('card-' + stopId);
+  const btn = document.getElementById('btn-speak-' + stopId);
+  if (card) {
+    card.classList.add('speaking-active');
+    if (scrollCard) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+  if (btn) btn.setAttribute('aria-pressed', 'true');
+
+  // 2. Highlight active jump chip (#1..#22)
+  document.querySelectorAll('.jump-stop-chip').forEach(ch => {
+    const isThis = ch.dataset.stopId === stopId;
+    ch.setAttribute('aria-pressed', isThis ? 'true' : 'false');
+  });
+
+  // 3. Highlight active pin on Leaflet map & pan/zoom map to stop
+  document.querySelectorAll('.custom-pin-inner').forEach(el => el.classList.remove('pin-speaking-active'));
+  const pinEl = document.getElementById('map-pin-' + stopId);
+  if (pinEl) pinEl.classList.add('pin-speaking-active');
+
+  if (map && markerRefs[stopId] && currentMapDisplay === 'leaflet') {
+    map.flyTo([stop.lat, stop.lng], 15, { animate: true, duration: 0.75 });
+    markerRefs[stopId].openPopup();
+  } else if (currentMapDisplay === 'svg') {
+    renderSvgFallback();
+  }
+
+  // 4. Update Live Caption banner with current stop details
+  const isEn = (currentLang === 'en');
+  const sName = isEn ? stop.name_en : stop.name;
+  const sCost = isEn ? stop.cost_en : stop.cost_he;
+  const sInOut = isEn ? stop.in_en : stop.in_he;
+  const sWow = isEn ? stop.wow_en : stop.wow_he;
+  updateLiveCaption(
+    isEn
+      ? `🔊 Now Narrating Stop #${stop.num}/16: ${sName} | Cost: ${sCost} | ${sInOut}: ${sWow}`
+      : `🔊 מקריא כעת תחנה #${stop.num}/16: ${sName} | עלות: ${sCost} | ${sInOut}: ${sWow}`
+  );
+}
+
+function focusStop(stopId, lat, lng) {
+  highlightStopAndFocusMap(stopId, false);
+}
+
+function getTrackKeyForPlayer(player) {
+  const src = (player && player.getAttribute('src')) || '';
+  if (src.includes('flight_en')) return 'dbv_flight_en';
+  if (src.includes('flight_he')) return 'dbv_flight_he';
+  if (src.includes('short_en')) return 'dbv_short_en';
+  return 'dbv_short_he';
+}
+
+function syncAudioPlayerToStop(player, forceScroll = false) {
+  if (!player) return;
+  const trackKey = getTrackKeyForPlayer(player);
+  const cues = AUDIO_STOP_TIMELINE[trackKey];
+  if (!cues || !cues.length) return;
+  // If user selected a _2x file directly or standard 1x file, scale by duration ratio
+  const nominalEnd = cues[cues.length - 1].end;
+  const actualDur = (player.duration && isFinite(player.duration) && player.duration > 10) ? player.duration : nominalEnd;
+  const scale = nominalEnd / actualDur;
+  const effectiveSec = player.currentTime * scale;
+
+  let matchedStopId = null;
+  for (let i = 0; i < cues.length; i++) {
+    if (effectiveSec >= cues[i].start - 0.5 && effectiveSec < cues[i].end) {
+      matchedStopId = cues[i].id;
+      break;
+    }
+  }
+
+  const introChip = document.getElementById('jump-chip-intro');
+  if (!matchedStopId) {
+    if (introChip) introChip.setAttribute('aria-pressed', 'true');
+    document.querySelectorAll('#jump-chips-container .jump-stop-chip').forEach(c => c.setAttribute('aria-pressed', 'false'));
+    if (lastSyncedAudioStopId !== 'intro') {
+      lastSyncedAudioStopId = 'intro';
+      const isEn = (currentLang === 'en');
+      updateLiveCaption(
+        isEn
+          ? '🔊 Playing Intro: Historical Background, €1.70 Airport Tram Rule & Contactless vs. Cash Guide (Map & cards will auto-focus at Stop #1)...'
+          : '🔊 מנגן פתיחה: רקע היסטורי, טריק ה-1.70€ מהשדה וכללי קונטקטלס מול מזומן (המפה והכרטיסיות יתמקדו אוטומטית החל מתחנה #1)...'
+      );
+    }
+    return;
+  }
+
+  if (introChip) introChip.setAttribute('aria-pressed', 'false');
+  if (forceScroll || matchedStopId !== lastSyncedAudioStopId) {
+    lastSyncedAudioStopId = matchedStopId;
+    highlightStopAndFocusMap(matchedStopId, true);
+  }
+}
+
+function jumpAudioToStop(stopNum) {
+  // Determine active player (prefer currently playing player, else short player)
+  const pShort = document.getElementById('audio-player-short');
+  const pFlight = document.getElementById('audio-player-flight');
+  const player = (pFlight && !pFlight.paused) ? pFlight : pShort;
+  if (!player) return;
+
+  const isEn = (currentLang === 'en');
+  const isFlight = (player.id === 'audio-player-flight');
+  const wantSrc = isFlight
+    ? (isEn ? 'audio/dbv_trip_flight_en.mp3' : 'audio/dbv_trip_flight_he.mp3')
+    : (isEn ? 'audio/dbv_trip_short_en.mp3' : 'audio/dbv_trip_short_he.mp3');
+  if (player.getAttribute('src') !== wantSrc) {
+    player.setAttribute('src', wantSrc);
+  }
+
+  const trackKey = getTrackKeyForPlayer(player);
+  const cues = AUDIO_STOP_TIMELINE[trackKey] || [];
+  if (stopNum === 0) {
+    lastSyncedAudioStopId = null;
+    player.currentTime = 0;
+    player.defaultPlaybackRate = currentAudioSpeed;
+    player.playbackRate = currentAudioSpeed;
+    player.play().catch(() => {});
+    syncAudioPlayerToStop(player, true);
+    return;
+  }
+
+  const cue = cues.find(c => c.num === stopNum);
+  if (!cue) return;
+  highlightStopAndFocusMap(cue.id, true);
+  lastSyncedAudioStopId = cue.id;
+
+  const applySeekAndPlay = () => {
+    const nominalEnd = cues[cues.length - 1].end;
+    const actualDur = (player.duration && isFinite(player.duration) && player.duration > 10) ? player.duration : nominalEnd;
+    const scale = actualDur / nominalEnd;
+    player.currentTime = Math.max(0, cue.start * scale);
+    player.defaultPlaybackRate = currentAudioSpeed;
+    player.playbackRate = currentAudioSpeed;
+    player.play().catch(() => {});
+  };
+
+  if (player.readyState >= 1) {
+    applySeekAndPlay();
+  } else {
+    player.addEventListener('loadedmetadata', applySeekAndPlay, { once: true });
+    player.load();
+  }
+}
+
+function buildJumpStopChips() {
+  const container = document.getElementById('jump-chips-container');
+  if (!container) return;
+  let chipsHtml = '';
+  ITINERARY_DATA.days.forEach(d => {
+    d.stops.forEach(s => {
+      const isPressed = (activeHighlightedStopId === s.id) ? 'true' : 'false';
+      const titleText = (currentLang === 'en') ? `#${s.num} ${s.name_en}` : `#${s.num} ${s.name}`;
+      chipsHtml += `<button type="button" class="jump-stop-chip" data-stop-id="${s.id}" aria-pressed="${isPressed}" title="${titleText}" onclick="jumpAudioToStop(${s.num})">#${s.num}</button>`;
+    });
+  });
+  container.innerHTML = chipsHtml;
+}
+
+function filterDay(day) {
+  activeDayFilter = day;
+  document.querySelectorAll('.day-tab').forEach(btn => {
+    const isActive = String(btn.dataset.day) === String(day);
+    btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  });
+  const labelEl = document.getElementById('active-filter-label');
+  if (labelEl) {
+    const isEn = (currentLang === 'en');
+    labelEl.textContent = isEn
+      ? (day === 'all' ? 'Showing: All 4 Days' : ('Showing: Day ' + day))
+      : (day === 'all' ? 'מציג: כל 4 הימים' : ('מציג: יום ' + day));
+  }
+  renderItinerary();
+  updateMapMarkers();
+}
+
+function renderSvgFallback() {
+  const el = document.getElementById('svg-fallback');
+  if (!el) return;
+  const daysToShow = activeDayFilter === 'all'
+    ? ITINERARY_DATA.days
+    : ITINERARY_DATA.days.filter(d => d.day === activeDayFilter);
+
+  const stops = [];
+  daysToShow.forEach(d => {
+    d.stops.forEach(s => stops.push({ ...s, color: d.color }));
+  });
+  if (!stops.length) return;
+
+  let minLat = Math.min(...stops.map(s => s.lat)) - 0.02;
+  let maxLat = Math.max(...stops.map(s => s.lat)) + 0.02;
+  let minLng = Math.min(...stops.map(s => s.lng)) - 0.03;
+  let maxLng = Math.max(...stops.map(s => s.lng)) + 0.03;
+
+  const W = 820, H = 500;
+  const project = (lat, lng) => {
+    const x = ((lng - minLng) / (maxLng - minLng)) * (W - 80) + 40;
+    const y = H - (((lat - minLat) / (maxLat - minLat)) * (H - 80) + 40);
+    return [Math.round(x), Math.round(y)];
+  };
+
+  let polylinesSvg = '';
+  let nodesSvg = '';
+  daysToShow.forEach(d => {
+    const pts = d.stops.map(s => project(s.lat, s.lng).join(',')).join(' ');
+    polylinesSvg += `<polyline points="${pts}" fill="none" stroke="${d.color}" stroke-width="3" stroke-dasharray="6,4" />`;
+    d.stops.forEach(s => {
+      const [x, y] = project(s.lat, s.lng);
+      nodesSvg += `
+        <g>
+          ${activeHighlightedStopId === s.id ? `<circle cx="${x}" cy="${y}" r="20" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="4,3" />` : ''}
+          <circle cx="${x}" cy="${y}" r="${activeHighlightedStopId === s.id ? 16 : (s.isTier1 ? 13 : 10)}" fill="${activeHighlightedStopId === s.id ? '#f59e0b' : d.color}" stroke="#ffffff" stroke-width="2" />
+          <text x="${x}" y="${y + 4}" fill="#ffffff" font-size="9.5" font-weight="800" text-anchor="middle">${s.num}</text>
+        </g>
+      `;
+    });
+  });
+
+  el.innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;background:#0f172a;border-radius:8px;" aria-label="Vector Route Map">
+      ${polylinesSvg}
+      ${nodesSvg}
+    </svg>
+  `;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  // Detect initial language from ?lang=en|he or localStorage
+  let initLang = 'he';
+  let initSpeed = 1.0;
+  try {
+    const p = new URLSearchParams(window.location.search);
+    const qLang = (p.get('lang') || '').toLowerCase();
+    if (qLang === 'en' || qLang === 'he') {
+      initLang = qLang;
+    } else {
+      const savedLang = localStorage.getItem('eladb_dbv_trip_lang');
+      if (savedLang === 'en' || savedLang === 'he') initLang = savedLang;
+    }
+    const qSpeed = parseFloat(p.get('speed') || localStorage.getItem('eladb_dbv_trip_speed') || '1');
+    if (!isNaN(qSpeed) && qSpeed >= 0.5 && qSpeed <= 3.0) {
+      initSpeed = qSpeed;
+    }
+  } catch (e) {}
+  ['audio-player-short', 'audio-player-flight'].forEach(id => {
+    const p = document.getElementById(id);
+    if (p) {
+      p.addEventListener('play', () => {
+        // Pause the other player if both were started
+        const otherId = (id === 'audio-player-short') ? 'audio-player-flight' : 'audio-player-short';
+        const other = document.getElementById(otherId);
+        if (other && !other.paused) other.pause();
+        p.defaultPlaybackRate = currentAudioSpeed;
+        p.playbackRate = currentAudioSpeed;
+        syncAudioPlayerToStop(p, true);
+      });
+      p.addEventListener('timeupdate', () => {
+        if (!p.paused) syncAudioPlayerToStop(p, false);
+      });
+      p.addEventListener('seeked', () => {
+        syncAudioPlayerToStop(p, true);
+      });
+      p.addEventListener('loadedmetadata', () => {
+        p.defaultPlaybackRate = currentAudioSpeed;
+        p.playbackRate = currentAudioSpeed;
+      });
+    }
+  });
+  setLanguage(initLang);
+  setAudioSpeed(initSpeed);
+  initMap();
+});
+
+window.addEventListener('load', () => {
+  if (!map && typeof L !== 'undefined') {
+    switchMapDisplay('leaflet');
+  } else if (map) {
+    map.invalidateSize();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.defaultPrevented) return;
+  const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+  if (tag === 'input' || tag === 'textarea' || tag === 'select' || (e.target && e.target.isContentEditable)) return;
+  if (!e.ctrlKey && !e.metaKey && !e.altKey && (e.key === 'l' || e.key === 'L' || e.key === 'ך')) {
+    e.preventDefault();
+    setLanguage(currentLang === 'en' ? 'he' : 'en');
+  }
+});
+</script>
+<!-- ELADB_UNIVERSAL_THEME_JS_START -->
+<script>
+(function() {
+  var STORAGE_KEY = 'eladb_x20_theme_v2';
+  function resolveInitialTheme() {
+    try {
+      var p = new URLSearchParams(window.location.search);
+      var t = (p.get('theme') || '').toLowerCase();
+      if (t === 'dark' || t === 'night') return 'dark';
+      if (t === 'light' || t === 'day') return 'light';
+    } catch (e) {}
+    try {
+      var saved = localStorage.getItem(STORAGE_KEY);
+      if (saved === 'dark' || saved === 'light') return saved;
+    } catch (e) {}
+    var existing = document.documentElement.getAttribute('data-theme');
+    if (existing === 'dark' || existing === 'light') return existing;
+    return 'dark';
+  }
+  function syncButtons(mode) {
+    var isDark = (mode === 'dark');
+    document.body.classList.toggle('night-mode', isDark);
+    var niceBtn = document.getElementById('btn-theme');
+    if (niceBtn) {
+      niceBtn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+      var isEn = document.documentElement.lang === 'en';
+      niceBtn.textContent = isEn
+        ? (isDark ? '☀️ Day Mode (D)' : '🌙 Night Mode (D)')
+        : (isDark ? '☀️ מצב יום (D)' : '🌙 מצב לילה (D)');
+    }
+  }
+  window.setTheme = function(mode) {
+    var next = (mode === 'dark' || mode === 'night') ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+    syncButtons(next);
+  };
+  window.toggleTheme = function() {
+    var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    window.setTheme(cur === 'dark' ? 'light' : 'dark');
+  };
+  var initMode = resolveInitialTheme();
+  window.setTheme(initMode);
+  document.addEventListener('keydown', function(e) {
+    if (e.defaultPrevented) return;
+    var tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+    if (tag === 'input' || tag === 'textarea' || tag === 'select' || (e.target && e.target.isContentEditable)) return;
+    if (!e.ctrlKey && !e.metaKey && !e.altKey && (e.key === 'd' || e.key === 'D' || e.key === 'ג')) {
+      e.preventDefault();
+      window.toggleTheme();
+    }
+  });
+})();
+</script>
+<!-- ELADB_UNIVERSAL_THEME_JS_END -->
+</body>
+</html>
