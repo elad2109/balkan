@@ -364,6 +364,7 @@
     <div style="display:flex;gap:6px;align-items:center;">
       <button type="button" class="btn" id="btn-toggle-tiles" onclick="toggleMapTiles()" style="padding:6px 10px;font-size:0.76rem;min-height:36px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);">🛰️ לוויין</button>
       <button type="button" class="btn" id="btn-toggle-map-size" onclick="toggleMapHeight()" style="padding:6px 10px;font-size:0.76rem;min-height:36px;background:var(--card-bg);color:var(--text);border:1px solid var(--border);">📐 הגדל מפה</button>
+      <button type="button" class="btn" id="btn-kotor-parking" onclick="focusKotorParkingOnMap()" style="padding:6px 10px;font-size:0.76rem;min-height:36px;background:#10b981;color:#fff;border:none;font-weight:800;">🅿️ מפת חניות קוטור</button>
       <button type="button" class="btn" id="btn-fit-day" onclick="fitDayBounds()" style="padding:6px 10px;font-size:0.76rem;min-height:36px;background:var(--primary);color:#fff;border:none;">🎯 מרכז יום</button>
     </div>
   </div>
@@ -1796,6 +1797,7 @@ function filterMapMarkers(dayNum) {
 
   // Remove all markers
   allMarkers.forEach(m => map.removeLayer(m));
+  if (typeof kotorParkingMarkers !== 'undefined') { kotorParkingMarkers.forEach(m => map.removeLayer(m)); }
 
   // Add active day markers
   const activeMarkers = markersByDay[currentActiveDay] || [];
@@ -1871,6 +1873,65 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initMobileMap);
 } else {
   initMobileMap();
+}
+
+
+let kotorParkingMarkers = [];
+let isKotorParkingActive = false;
+
+const KOTOR_PARKING_PINS = [
+  { code: '4ב', color: '#10b981', lat: 42.431361, lng: 18.767468, title: '4ב׳. חינם (0€ 24/7): מפרץ החוף Tabačina / Dobrota', sub: '10 דק׳ הליכה (800m) משער הנהר · ללא מדחן וללא מחסום' },
+  { code: '4א', color: '#10b981', lat: 42.426753, lng: 18.773153, title: '4א׳. חינם (0€ 24/7): רחבת Ulica Tabačina (נהר Škurda)', sub: '4 דק׳ הליכה בלבד (310m) משער הנהר · 9 דק׳ מ-Hostel Pupa' },
+  { code: '2',  color: '#0284c7', lat: 42.426652, lng: 18.769974, title: '2. חניון מחסום עירוני Parking Benovo', sub: '1.10€-1.90€/שעה (24/7) · מאחורי קניון Kamelija (2 דק׳ משער הנהר)' },
+  { code: '⚠️', color: '#ef4444', lat: 42.424852, lng: 18.768706, title: '⚠️ מלכודת תיירים: חניון החזית Riva Parking', sub: '2.40€-4.80€/שעה (35€-55€ ללילה) · לא לחנות כאן בלילה' },
+  { code: '🛏️', color: '#a855f7', lat: 42.422316, lng: 18.770139, title: '🛏️ Hostel Pupa (הלינה המוזמנת שלך)', sub: '3-4 מקומות חינם בחזית על בסיס מקום פנוי · 300m משער הים' },
+  { code: '1א', color: '#0284c7', lat: 42.420896, lng: 18.767536, title: '1א׳. חניון מחסום זול Parking Autoboka', sub: '0.90€-1.30€/שעה (24/7) · 4 דק׳ הליכה (330m) מדרום ל-Hostel Pupa' },
+  { code: '1ב', color: '#0284c7', lat: 42.420934, lng: 18.765116, title: '1ב׳. חניון מחסום עירוני Parking Puč', sub: '~1.00€/שעה (24/7, 30 מקומות) · 7 דק׳ הליכה מ-Hostel Pupa' },
+  { code: '⛔', color: '#ef4444', lat: 42.420778, lng: 18.763578, title: '⛔ שער בית החולים 165 Njegoševa (PORTIRNICA)', sub: 'מחסום פנימי של בית החולים (לא חניה ציבורית) · המשך 100m מערבה ל-3א׳' },
+  { code: '3א', color: '#10b981', lat: 42.421608, lng: 18.762705, title: '3א׳. חינם (0€ 24/7): רחבת Njegoševa West / Peluzica', sub: '100m מערבית לבית החולים (fee=no) · 9 דק׳ הליכה מ-Hostel Pupa ומשער הים' },
+  { code: '3ב', color: '#10b981', lat: 42.416954, lng: 18.765675, title: '3ב׳. חינם (0€ 24/7): מפרצי בית העלמין Škaljari', sub: '10 דק׳ הליכה (780m) מ-Hostel Pupa · לחנות 100% בתוך קווי המפרץ' }
+];
+
+function focusKotorParkingOnMap() {
+  if (!map) return;
+  const mapEl = document.getElementById('mobile-map');
+  if (mapEl && !isMapExpanded) {
+    toggleMapHeight();
+  }
+  const mapWrapper = document.querySelector('.map-card-wrapper');
+  if (mapWrapper) mapWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  allMarkers.forEach(m => map.removeLayer(m));
+  kotorParkingMarkers.forEach(m => map.removeLayer(m));
+  kotorParkingMarkers = [];
+
+  KOTOR_PARKING_PINS.forEach(p => {
+    const icon = createCustomPin(p.code, p.color, true);
+    const marker = L.marker([p.lat, p.lng], { icon: icon });
+    const popupHtml = `
+      <div style="direction:rtl;text-align:right;font-family:-apple-system,BlinkMacSystemFont,sans-serif;min-width:210px;font-size:12.5px;">
+        <strong style="color:${p.color};font-size:13.5px;">${p.title}</strong><br>
+        <span style="color:#334155;font-weight:600;">${p.sub}</span><br>
+        <div style="margin-top:6px;">
+          <a href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}" target="_blank" rel="noopener" style="color:#0284c7;font-weight:800;text-decoration:underline;">📍 פתח סיכה (${p.lat}, ${p.lng}) ב-Google Maps</a>
+        </div>
+      </div>
+    `;
+    marker.bindPopup(popupHtml);
+    marker.addTo(map);
+    kotorParkingMarkers.push(marker);
+  });
+
+  const badge = document.getElementById('map-day-indicator');
+  if (badge) {
+    badge.textContent = '🅿️ מפת כל החניות בקוטור (0€ ירוק / מחסום כחול)';
+    badge.style.color = '#10b981';
+  }
+  const group = L.featureGroup(kotorParkingMarkers);
+  setTimeout(() => {
+    map.invalidateSize();
+    map.fitBounds(group.getBounds(), { padding: [30, 30], maxZoom: 16 });
+  }, 200);
 }
 
 function copyPackingList(btn) {
