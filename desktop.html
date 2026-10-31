@@ -613,6 +613,7 @@
   }
 </style>
 <!-- ELADB_AUTO_DARK_SURFACES_END -->
+  <link rel="manifest" href="./manifest.json">
 </head>
 <body class="night-mode">
   <div class="eladb-golink-topbar" dir="ltr" style="max-width:1200px;margin:8px auto 0;padding:0 16px;display:flex;justify-content:flex-end;"><!-- ELADB_GOLINK_BADGE_START --><a href="http://go/dbv-trip-he" target="_blank" rel="noopener" class="eladb-golink-badge" data-golink-badge="go/dbv-trip-he" title="Shortlink: http://go/dbv-trip-he (Click to copy or open)" onclick="if(navigator.clipboard){navigator.clipboard.writeText('http://go/dbv-trip-he');}" style="display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:4px 11px;border-radius:999px;background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe;font-family:monospace;font-size:12.5px;font-weight:700;text-decoration:none;white-space:nowrap;box-sizing:border-box;">🔗 go/dbv-trip-he</a><!-- ELADB_GOLINK_BADGE_END --></div>
@@ -4563,5 +4564,22 @@ document.addEventListener('keydown', (e) => {
 })();
 </script>
 <!-- ELADB_UNIVERSAL_DOM_COMMENTS_END -->
+<!-- ELADB_PWA_OFFLINE_START -->
+<script>
+(function() {
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('./sw.js').then(function() {
+        var badge = document.getElementById('offlineReadyBadge');
+        if (badge) {
+          badge.textContent = navigator.onLine ? '📴 שמור אוטומטית לאופליין בנייד' : '📴 מצב אופליין פעיל (ללא אינטרנט)';
+          badge.style.display = 'inline-flex';
+        }
+      }).catch(function() {});
+    });
+  }
+})();
+</script>
+<!-- ELADB_PWA_OFFLINE_END -->
 </body>
 </html>

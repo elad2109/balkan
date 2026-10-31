@@ -314,6 +314,7 @@
   }
 </style>
 
+  <link rel="manifest" href="./manifest.json">
 </head>
 <body>
 
@@ -3401,5 +3402,22 @@ function copyPackingList(btn) {
 })();
 </script>
 <!-- ELADB_UNIVERSAL_DOM_COMMENTS_END -->
+<!-- ELADB_PWA_OFFLINE_START -->
+<script>
+(function() {
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('./sw.js').then(function() {
+        var badge = document.getElementById('offlineReadyBadge');
+        if (badge) {
+          badge.textContent = navigator.onLine ? '📴 שמור אוטומטית לאופליין בנייד' : '📴 מצב אופליין פעיל (ללא אינטרנט)';
+          badge.style.display = 'inline-flex';
+        }
+      }).catch(function() {});
+    });
+  }
+})();
+</script>
+<!-- ELADB_PWA_OFFLINE_END -->
 </body>
 </html>

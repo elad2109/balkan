@@ -1,0 +1,8 @@
+{
+  "name": "Balkan Trip (DBV-Kotor-Mostar)",
+  "short_name": "Balkan",
+  "start_url": "./desktop.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0284c7"
+}
