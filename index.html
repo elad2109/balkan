@@ -1684,7 +1684,9 @@ let currentTileMode = 'road';
 let googleRoadLayer = null;
 let googleSatLayer = null;
 let markersByDay = {};
+let polylinesByDay = {};
 let allMarkers = [];
+let allPolylines = [];
 let currentActiveDay = '1';
 let isMapExpanded = false;
 
@@ -1694,6 +1696,35 @@ const DAY_COLORS = {
   '3': '#0284c7',
   '4': '#db2777'
 };
+
+const DAY_START_END_ANCHORS = {
+  '1': {
+    start: { lat: 42.5614, lng: 18.2682, badge: '✈️', bg: '#0284c7', title: '✈️ שדה תעופה DBV (יציאה 12:10 ל-#1 הרצג נובי — 75 דק׳ דלת-לדלת)', maps: 'https://www.google.com/maps/search/?api=1&query=Dubrovnik+Airport+DBV' },
+    end: { lat: 42.4272, lng: 18.7695, badge: '🛏️', bg: '#059669', title: '🛏️ Hostel Pupa קוטור (לינה לילות 1+2 — 300 מ׳ משער הים)', maps: 'https://www.google.com/maps/search/?api=1&query=Hostel+Pupa+Kotor+Montenegro' }
+  },
+  '2': {
+    start: { lat: 42.4272, lng: 18.7695, badge: '🛏️', bg: '#059669', title: '🛏️ Hostel Pupa קוטור (יציאה 07:15 לסרפנטינות ו-#6 לובצ׳ן + חזרה מבודווה 17:25)', maps: 'https://www.google.com/maps/search/?api=1&query=Hostel+Pupa+Kotor+Montenegro' },
+    end: { lat: 42.4272, lng: 18.7695, badge: '🛏️', bg: '#059669', title: '🛏️ Hostel Pupa קוטור (חזרה מבודווה 16:45-17:25 — 40 דק׳ דלת-לדלת)', maps: 'https://www.google.com/maps/search/?api=1&query=Hostel+Pupa+Kotor+Montenegro', sameAsStart: true }
+  },
+  '3': {
+    start: { lat: 42.4272, lng: 18.7695, badge: '🛫', bg: '#059669', title: '🛫 Hostel Pupa קוטור (יציאת בוקר 08:00 ל-#10 טרבינייה — 110 דק׳ דלת-לדלת / 69.6 ק״מ כולל גבול Klobuk)', maps: 'https://www.google.com/maps/search/?api=1&query=Hostel+Pupa+Kotor+Montenegro' },
+    end: { lat: 43.3428, lng: 17.8139, badge: '🛏️', bg: '#059669', title: '🛏️ Apartments GB מוסטר (צ׳ק-אין 15:10 ולינת לילה 3 — Maršala Tita 95)', maps: 'https://www.google.com/maps/search/?api=1&query=Apartments+GB+Mostar+Bosnia' }
+  },
+  '4': {
+    start: { lat: 43.3428, lng: 17.8139, badge: '🛫', bg: '#059669', title: '🛫 Apartments GB מוסטר (יציאת בוקר 08:00 ל-#14 גשר פליישץ — 105 דק׳ דלת-לדלת / 74.1 ק״מ כולל גבול Metković)', maps: 'https://www.google.com/maps/search/?api=1&query=Apartments+GB+Mostar+Bosnia' },
+    end: { lat: 42.5835, lng: 18.2238, badge: '🛏️', bg: '#059669', title: '🛏️ Apartments Mira צ׳בטאט (לינת לילה 4 — 6 דק׳ משדה DBV)', maps: 'https://www.google.com/maps/search/?api=1&query=Apartments+Mira+Ulica+Stjepana+Radica+16+Cavtat' }
+  }
+};
+
+function createAnchorPin(badge, bg) {
+  return L.divIcon({
+    html: `<div style="background:${bg};color:#ffffff;width:28px;height:28px;border-radius:6px;border:2px solid #a7f3d0;box-shadow:0 2px 6px rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;font-size:14px;">${badge}</div>`,
+    className: 'custom-map-pin',
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+    popupAnchor: [0, -14]
+  });
+}
 
 function initMobileMap() {
   if (typeof L === 'undefined') {
@@ -1721,12 +1752,30 @@ function initMobileMap() {
     scrollWheelZoom: false
   });
 
-  // Create markers for all stops
+  // Create markers and door-to-door polylines for all days
   ITINERARY_DATA.days.forEach(d => {
     markersByDay[d.day] = [];
+    const dayCoords = [];
     const color = DAY_COLORS[d.day] || '#0284c7';
+    const anchor = DAY_START_END_ANCHORS[d.day];
+
+    if (anchor && anchor.start) {
+      dayCoords.push([anchor.start.lat, anchor.start.lng]);
+      const startMarker = L.marker([anchor.start.lat, anchor.start.lng], {
+        icon: createAnchorPin(anchor.start.badge, anchor.start.bg)
+      }).bindPopup(`
+        <div style="direction:rtl;text-align:right;font-family:-apple-system,BlinkMacSystemFont,sans-serif;min-width:190px;font-size:12px;">
+          <strong style="color:#065f46;font-size:12.5px;">${anchor.start.title}</strong><br>
+          <a href="${anchor.start.maps}" target="_blank" rel="noopener" style="color:#0284c7;font-weight:700;">📍 ניווט ב-Google Maps</a>
+        </div>
+      `);
+      markersByDay[d.day].push(startMarker);
+      allMarkers.push(startMarker);
+    }
+
     d.stops.forEach(s => {
       if (!s.lat || !s.lng) return;
+      dayCoords.push([s.lat, s.lng]);
       const pin = createCustomPin(s.num, color, s.isTier1);
       const marker = L.marker([s.lat, s.lng], { icon: pin });
       
@@ -1750,6 +1799,33 @@ function initMobileMap() {
       markersByDay[d.day].push(marker);
       allMarkers.push(marker);
     });
+
+    if (anchor && anchor.end) {
+      dayCoords.push([anchor.end.lat, anchor.end.lng]);
+      if (!anchor.end.sameAsStart) {
+        const endMarker = L.marker([anchor.end.lat, anchor.end.lng], {
+          icon: createAnchorPin(anchor.end.badge, anchor.end.bg)
+        }).bindPopup(`
+          <div style="direction:rtl;text-align:right;font-family:-apple-system,BlinkMacSystemFont,sans-serif;min-width:190px;font-size:12px;">
+            <strong style="color:#065f46;font-size:12.5px;">${anchor.end.title}</strong><br>
+            <a href="${anchor.end.maps}" target="_blank" rel="noopener" style="color:#0284c7;font-weight:700;">📍 ניווט ב-Google Maps</a>
+          </div>
+        `);
+        markersByDay[d.day].push(endMarker);
+        allMarkers.push(endMarker);
+      }
+    }
+
+    if (dayCoords.length > 1) {
+      const poly = L.polyline(dayCoords, {
+        color: color,
+        weight: 4,
+        opacity: 0.85,
+        dashArray: '6, 6'
+      });
+      polylinesByDay[d.day] = poly;
+      allPolylines.push(poly);
+    }
   });
 
   filterMapMarkers('1');
@@ -1795,13 +1871,17 @@ function filterMapMarkers(dayNum) {
     badge.style.color = DAY_COLORS[dayNum] || '#0284c7';
   }
 
-  // Remove all markers
+  // Remove all markers and polylines
   allMarkers.forEach(m => map.removeLayer(m));
+  allPolylines.forEach(p => map.removeLayer(p));
   if (typeof kotorParkingMarkers !== 'undefined') { kotorParkingMarkers.forEach(m => map.removeLayer(m)); }
 
-  // Add active day markers
+  // Add active day markers and door-to-door polyline
   const activeMarkers = markersByDay[currentActiveDay] || [];
   activeMarkers.forEach(m => map.addLayer(m));
+  if (polylinesByDay[currentActiveDay]) {
+    map.addLayer(polylinesByDay[currentActiveDay]);
+  }
 
   fitDayBounds();
 }

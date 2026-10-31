@@ -2240,9 +2240,21 @@ function updateMapMarkers() {
     ? ITINERARY_DATA.days
     : ITINERARY_DATA.days.filter(d => d.day === activeDayFilter);
 
+  const DAY_START_END_ANCHORS = {
+    '1': { start: [42.5614, 18.2682], end: [42.4272, 18.7695] },
+    '2': { start: [42.4272, 18.7695], end: [42.4272, 18.7695] },
+    '3': { start: [42.4272, 18.7695], end: [43.3428, 17.8139] },
+    '4': { start: [43.3428, 17.8139], end: [42.5835, 18.2238] }
+  };
+
   const allCoords = [];
   daysToShow.forEach(dayObj => {
     const dayCoords = [];
+    const dayAnchor = DAY_START_END_ANCHORS[dayObj.day];
+    if (dayAnchor && dayAnchor.start) {
+      dayCoords.push(dayAnchor.start);
+      allCoords.push(dayAnchor.start);
+    }
     dayObj.stops.forEach(stop => {
       const coord = [stop.lat, stop.lng];
       dayCoords.push(coord);
@@ -2285,6 +2297,11 @@ function updateMapMarkers() {
       markerRefs[stop.id] = marker;
     });
 
+    if (dayAnchor && dayAnchor.end) {
+      dayCoords.push(dayAnchor.end);
+      allCoords.push(dayAnchor.end);
+    }
+
     if (dayCoords.length > 1) {
       L.polyline(dayCoords, {
         color: dayObj.color,
@@ -2297,29 +2314,58 @@ function updateMapMarkers() {
 
   const BOOKED_HOTELS = [
     {
-      days: ['all', '1', '2'],
+      days: ['all', '1', '4'],
+      lat: 42.5614,
+      lng: 18.2682,
+      badge: '✈️',
+      bg: '#0284c7',
+      border: '#bae6fd',
+      name_he: '✈️ שדה תעופה דוברובניק DBV (יום 1 יציאה 12:10 ל-#1 הרצג נובי, 75 דק׳ | בוקר ג׳ החזרת רכב 08:45)',
+      name_en: '✈️ Dubrovnik Airport DBV (Day 1 Depart 12:10 to #1 Herceg Novi, 75m | Tue Car Drop 08:45)',
+      addr: 'Čilipi, Dubrovnik Airport (Day 1 Start & Final Drop-off)',
+      maps: 'https://www.google.com/maps/search/?api=1&query=Dubrovnik+Airport+DBV'
+    },
+    {
+      days: ['all', '1', '2', '3'],
       lat: 42.4272,
       lng: 18.7695,
-      name_he: '🛏️ Hostel Pupa (קוטור, לילות 1+2 מוזמן — US$55)',
-      name_en: '🛏️ Hostel Pupa (Kotor, Nights 1+2 Confirmed — US$55)',
+      badge: activeDayFilter === '3' ? '🛫' : '🛏️',
+      bg: '#059669',
+      border: '#a7f3d0',
+      name_he: activeDayFilter === '3'
+        ? '🛫 Hostel Pupa קוטור (נקודת יציאת בוקר 08:00 ל-#10 טרבינייה — 110 דק׳ דלת-לדלת / 69.6 ק״מ כולל גבול Klobuk)'
+        : '🛏️ Hostel Pupa (קוטור, לילות 1+2 מוזמן — US$55 | יום 3: יציאה 08:00 לטרבינייה)',
+      name_en: activeDayFilter === '3'
+        ? '🛫 Hostel Pupa Kotor (Morning 08:00 Departure to #10 Trebinje — 110m door-to-door / 69.6km incl. Klobuk border)'
+        : '🛏️ Hostel Pupa (Kotor, Nights 1+2 Confirmed — US$55 | Day 3: 08:00 Departure to Trebinje)',
       addr: 'Pelianovo / Riva bb, Kotor (300m from Sea Gate)',
       maps: 'https://www.google.com/maps/search/?api=1&query=Hostel+Pupa+Kotor+Montenegro'
     },
     {
-      days: ['all', '3'],
+      days: ['all', '3', '4'],
       lat: 43.3428,
       lng: 17.8139,
-      name_he: '🛏️ Apartments GB (מוסטר, לילה 3 מוזמן — US$28)',
-      name_en: '🛏️ Apartments GB (Mostar, Night 3 Confirmed — US$28)',
-      addr: 'Maršala Tita 95, Mostar (350m from center)',
+      badge: activeDayFilter === '4' ? '🛫' : '🛏️',
+      bg: '#059669',
+      border: '#a7f3d0',
+      name_he: activeDayFilter === '4'
+        ? '🛫 Apartments GB מוסטר (נקודת יציאת בוקר 08:00 ל-#14 גשר פליישץ — 105 דק׳ דלת-לדלת / 74.1 ק״מ כולל גבול Metković)'
+        : '🛏️ Apartments GB (מוסטר, לילה 3 מוזמן — US$28 | הגעה 15:10 ויציאת בוקר שני 08:00)',
+      name_en: activeDayFilter === '4'
+        ? '🛫 Apartments GB Mostar (Morning 08:00 Departure to #14 Pelješac Bridge — 105m door-to-door / 74.1km incl. Metković border)'
+        : '🛏️ Apartments GB (Mostar, Night 3 Confirmed — US$28 | Arrive 15:10 & Mon 08:00 Departure)',
+      addr: 'Maršala Tita 95, Mostar (350m from center, free private parking)',
       maps: 'https://www.google.com/maps/search/?api=1&query=Apartments+GB+Mostar+Bosnia'
     },
     {
       days: ['all', '4'],
       lat: 42.5835,
       lng: 18.2238,
-      name_he: '🛏️ Apartments Mira (Cavtat, לילה 4 מוזמן — US$45)',
-      name_en: '🛏️ Apartments Mira (Cavtat, Night 4 Confirmed — US$45)',
+      badge: '🛏️',
+      bg: '#059669',
+      border: '#a7f3d0',
+      name_he: '🛏️ Apartments Mira (Cavtat, לילה 4 מוזמן — US$45 | בוקר ג׳: 8 דק׳ לשדה DBV)',
+      name_en: '🛏️ Apartments Mira (Cavtat, Night 4 Confirmed — US$45 | Tue Morning: 8m to DBV)',
       addr: 'Ulica Stjepana Radića 16, 20210 Cavtat (6m from DBV)',
       maps: 'https://www.google.com/maps/search/?api=1&query=Apartments+Mira+Ulica+Stjepana+Radica+16+Cavtat'
     }
@@ -2329,7 +2375,7 @@ function updateMapMarkers() {
     if (h.days.includes(activeDayFilter)) {
       const hIcon = L.divIcon({
         className: 'custom-pin',
-        html: `<div style="background:#059669;color:#ffffff;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;border:2px solid #a7f3d0;box-shadow:0 2px 6px rgba(0,0,0,0.5);" title="${isEn ? h.name_en : h.name_he}">🛏️</div>`,
+        html: `<div style="background:${h.bg || '#059669'};color:#ffffff;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;border:2px solid ${h.border || '#a7f3d0'};box-shadow:0 2px 6px rgba(0,0,0,0.5);" title="${isEn ? h.name_en : h.name_he}">${h.badge || '🛏️'}</div>`,
         iconSize: [28, 28],
         iconAnchor: [14, 14]
       });
