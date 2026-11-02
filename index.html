@@ -314,7 +314,6 @@
   }
 </style>
 
-  <link rel="manifest" href="./manifest.json">
 </head>
 <body>
 
@@ -402,11 +401,40 @@
       <span class="wa-title">📲 העתקה לווטסאפ / פתקים — יום 1</span>
       <div class="wa-btn-group">
         <button type="button" class="wa-btn" onclick="openWhatsAppDirect('1', 2)">📲 פתח יום 1 ב-WhatsApp</button>
-        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('1', 1, this)">📋 שמות ל-Maps (רווח כפול)</button>
+        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('1', 1, this)">📋 שמות ל-Maps (כולל הוסטל התחלה/סיום ולוגיסטיקה)</button>
         <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('1', 2, this)">📋 העתק תקציר מלא</button>
       </div>
     </div>
-        <article class="stop-card" id="card-d1-s1">
+        <!-- DAILY_START_AND_LOGISTICS_D1_START -->
+    <div class="anchor-logistics-block" id="start-logistics-d1" style="margin:10px 0 14px 0;padding:12px 14px;border-radius:10px;background:rgba(16,185,129,0.08);border:2px solid #10b981;">
+      <div style="font-weight:900;font-size:0.94rem;color:#10b981;margin-bottom:6px;">✈️ התחלת היום: שדה התעופה דוברובניק (DBV) ואיסוף הרכב השכור <span style="font-size:0.8rem;color:var(--muted);font-weight:700;">(11:25 - 12:10)</span></div>
+      <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+        <span class="map-name-text">Dubrovnik Airport DBV</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Dubrovnik Airport DBV', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div style="font-size:0.83rem;line-height:1.45;color:var(--text);margin-bottom:8px;">נחיתה ב-11:25, איסוף רכב בדלפק השכרת הרכב (בדיקת מד דלק 8/8 או צילום 5/6 בחוזה) ויציאה ב-12:10 דרומה למעבר הגבול Karasovići (75 דק׳ דלת-לדלת ל-#1 הרצג נובי). <a href="https://www.google.com/maps/search/?api=1&query=Dubrovnik+Airport+DBV" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+      <div style="border-top:1px dashed rgba(16,185,129,0.4);padding-top:8px;margin-top:6px;">
+        <div style="font-weight:900;font-size:0.88rem;color:#f59e0b;margin-bottom:4px;">⛽🛒🚌 נקודות לוגיסטיות מומלצות על הציר ליום 1 (דלק / סופר זול / תחנה מרכזית):</div>
+      <div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);">
+        <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:4px;">🛒 סופר זול להצטיידות מים ונשנושים לרכב: Idea / Voli בקניון Kamelija קוטור (או Aroma מול שער הים) <span style="color:var(--muted);font-weight:600;font-size:0.8rem;">(16:30 / 20:15)</span></div>
+        <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+          <span class="map-name-text">Shopping Center Kamelija Kotor Montenegro</span>
+          <button type="button" class="btn-copy-map" onclick="copySingleMap('Shopping Center Kamelija Kotor Montenegro', this)">📋 העתק ל-Maps</button>
+        </div>
+        <div style="font-size:0.82rem;line-height:1.45;color:var(--text);">פתוח בשישי ושבת עד 21:00-22:00 (מקבל אשראי קונטקטלס). חובה להצטייד כאן בשישי בערב או בשבת למסלול יום ראשון, כי ביום ראשון כל הסופרים במונטנגרו סגורים בחוק! <a href="https://www.google.com/maps/search/?api=1&query=Shopping+Center+Kamelija+Kotor+Montenegro" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+      </div>
+      <div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);">
+        <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:4px;">🚌 תחנה מרכזית קוטור וחניוני המחסום הזולים Autoboka / Puč (4 דק׳ מ-Hostel Pupa) <span style="color:var(--muted);font-weight:600;font-size:0.8rem;">(16:35 (גיבוי חניה 24/7))</span></div>
+        <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+          <span class="map-name-text">Autoboka Bus Station Kotor Montenegro</span>
+          <button type="button" class="btn-copy-map" onclick="copySingleMap('Autoboka Bus Station Kotor Montenegro', this)">📋 העתק ל-Maps</button>
+        </div>
+        <div style="font-size:0.82rem;line-height:1.45;color:var(--text);">330 מטר מדרום ל-Hostel Pupa. אם 3-4 מקומות החניה בחזית ההוסטל תפוסים, חניון Autoboka צמוד לתחנה המרכזית עולה רק 0.90€-1.30€/שעה (או רחבת Ulica Tabačina ב-0€). <a href="https://www.google.com/maps/search/?api=1&query=Autoboka+Bus+Station+Kotor+Montenegro" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+      </div>
+      </div>
+    </div>
+<!-- DAILY_START_AND_LOGISTICS_D1_END -->
+    <article class="stop-card" id="card-d1-s1">
       <div class="stop-header">
         <div class="stop-name">#1. Herceg Novi & מצודת הים Forte Mare בכניסה לפיורד</div>
         <span class="stop-tier tier-sec">● שלד</span>
@@ -494,7 +522,17 @@
         <a href="https://www.google.com/maps/search/?api=1&query=Kotor+Old+Town+Cathedral+of+Saint+Tryphon" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
-  </div>
+<!-- DAILY_END_ANCHOR_D1_START -->
+    <div class="anchor-end-block" id="end-anchor-d1" style="margin:14px 0 6px 0;padding:12px 14px;border-radius:10px;background:rgba(99,102,241,0.1);border:2px solid #6366f1;">
+      <div style="font-weight:900;font-size:0.94rem;color:#818cf8;margin-bottom:6px;">🛏️ סיום היום ולינה (לילות 1+2): Hostel Pupa בקוטור (300 מ׳ משער הים) <span style="font-size:0.8rem;color:var(--muted);font-weight:700;">(16:35 צ׳ק-אין | 20:35 שינה)</span></div>
+      <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+        <span class="map-name-text">Hostel Pupa Kotor Montenegro</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Hostel Pupa Kotor Montenegro', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div style="font-size:0.83rem;line-height:1.45;color:var(--text);">חדר פרטי מוזמן ב-Booking (Pelianovo / Riva bb). צ׳ק-אין והנחת תיק ב-16:35-16:50, וחזרה ברגל מסמטאות קוטור ב-20:30 לשינה ב-20:35. <a href="https://www.google.com/maps/search/?api=1&query=Hostel+Pupa+Kotor+Montenegro" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+    </div>
+<!-- DAILY_END_ANCHOR_D1_END -->
+</div>
 </div>
 <div class="tab-content " id="tab-day-2">
   <div class="day-card">
@@ -520,11 +558,40 @@
       <span class="wa-title">📲 העתקה לווטסאפ / פתקים — יום 2</span>
       <div class="wa-btn-group">
         <button type="button" class="wa-btn" onclick="openWhatsAppDirect('2', 2)">📲 פתח יום 2 ב-WhatsApp</button>
-        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('2', 1, this)">📋 שמות ל-Maps (רווח כפול)</button>
+        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('2', 1, this)">📋 שמות ל-Maps (כולל הוסטל התחלה/סיום ולוגיסטיקה)</button>
         <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('2', 2, this)">📋 העתק תקציר מלא</button>
       </div>
     </div>
-        <article class="stop-card" id="card-d2-s0">
+        <!-- DAILY_START_AND_LOGISTICS_D2_START -->
+    <div class="anchor-logistics-block" id="start-logistics-d2" style="margin:10px 0 14px 0;padding:12px 14px;border-radius:10px;background:rgba(16,185,129,0.08);border:2px solid #10b981;">
+      <div style="font-weight:900;font-size:0.94rem;color:#10b981;margin-bottom:6px;">🛏️ התחלת היום בהוסטל: Hostel Pupa בקוטור (07:15 לתצפית ברגל ב-0€ -> 08:10 יציאה ברכב לסרפנטינות) <span style="font-size:0.8rem;color:var(--muted);font-weight:700;">(07:15 ברגל | 08:10 ברכב)</span></div>
+      <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+        <span class="map-name-text">Hostel Pupa Kotor Montenegro</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Hostel Pupa Kotor Montenegro', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div style="font-size:0.83rem;line-height:1.45;color:var(--text);margin-bottom:8px;">יוצאים ב-07:15 ברגל מ-Hostel Pupa לשער הנהר לתצפית Our Lady of Remedy בחינם לפני פתיחת הקופה ב-08:00, וב-08:10 יוצאים עם הרכב ל-25 הסרפנטינות ופסגת Lovćen. <a href="https://www.google.com/maps/search/?api=1&query=Hostel+Pupa+Kotor+Montenegro" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+      <div style="border-top:1px dashed rgba(16,185,129,0.4);padding-top:8px;margin-top:6px;">
+        <div style="font-weight:900;font-size:0.88rem;color:#f59e0b;margin-bottom:4px;">⛽🛒🚌 נקודות לוגיסטיות מומלצות על הציר ליום 2 (דלק / סופר זול / תחנה מרכזית):</div>
+      <div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);">
+        <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:4px;">🛒 סופר זול להצטיידות חובה לפני יום ראשון: HDL Hypermarket Radanovići (או Voli בודווה/קוטור) <span style="color:var(--muted);font-weight:600;font-size:0.8rem;">(16:30 / 17:30 (לפני יום א׳!))</span></div>
+        <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+          <span class="map-name-text">HDL Lakovic Radanovici Kotor</span>
+          <button type="button" class="btn-copy-map" onclick="copySingleMap('HDL Lakovic Radanovici Kotor', this)">📋 העתק ל-Maps</button>
+        </div>
+        <div style="font-size:0.82rem;line-height:1.45;color:var(--text);">יושב ממש על ציר החזרה מבודווה לקוטור (לפני מנהרת Vrmac, פתוח בשבת עד 21:30). הסופר הזול והגדול באזור להצטיידות במים ואוכל ליום ראשון (שבו הסופרים סגורים). <a href="https://www.google.com/maps/search/?api=1&query=HDL+Lakovic+Radanovici+Kotor" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+      </div>
+      <div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);">
+        <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:4px;">⛽ תחנת דלק מומלצת במונטנגרו (לפי צורך): Eko / Petrol Kotor Radanovići <span style="color:var(--muted);font-weight:600;font-size:0.8rem;">(16:50 (בדרך מבודווה לקוטור))</span></div>
+        <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+          <span class="map-name-text">Eko Jugopetrol Radanovici Kotor</span>
+          <button type="button" class="btn-copy-map" onclick="copySingleMap('Eko Jugopetrol Radanovici Kotor', this)">📋 העתק ל-Maps</button>
+        </div>
+        <div style="font-size:0.82rem;line-height:1.45;color:var(--text);">דלק Eurosuper 95 רגיל (~1.40€/ליטר, תשלום באשראי). אם המיכל מעל חצי, עדיף להמתין לתדלוק הזול יותר בבוסניה ביום ראשון/שני (~1.22€/ליטר). <a href="https://www.google.com/maps/search/?api=1&query=Eko+Jugopetrol+Radanovici+Kotor" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+      </div>
+      </div>
+    </div>
+<!-- DAILY_START_AND_LOGISTICS_D2_END -->
+    <article class="stop-card" id="card-d2-s0">
       <div class="stop-header">
         <div class="stop-name">#5. תצפית הבוקר הרגלית: כנסיית Our Lady of Remedy ו"החלון של קוטור" (כניסה ב-0€ משער הנהר River Gate לפני פתיחת הקופה ב-08:00)</div>
         <span class="stop-tier tier-must">★ חובה</span>
@@ -634,7 +701,17 @@
         <a href="https://www.google.com/maps/search/?api=1&query=Budva+Old+Town+Citadela+Montenegro" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
-  </div>
+<!-- DAILY_END_ANCHOR_D2_START -->
+    <div class="anchor-end-block" id="end-anchor-d2" style="margin:14px 0 6px 0;padding:12px 14px;border-radius:10px;background:rgba(99,102,241,0.1);border:2px solid #6366f1;">
+      <div style="font-weight:900;font-size:0.94rem;color:#818cf8;margin-bottom:6px;">🛏️ סיום היום ולינה (לילה 2): Hostel Pupa בקוטור (חזרה מבודווה דרך מנהרת Vrmac) <span style="font-size:0.8rem;color:var(--muted);font-weight:700;">(17:25 הגעה | 20:30 שינה)</span></div>
+      <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+        <span class="map-name-text">Hostel Pupa Kotor Montenegro</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Hostel Pupa Kotor Montenegro', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div style="font-size:0.83rem;line-height:1.45;color:var(--text);">נסיעה של 40 דק׳ דלת-לדלת מבודווה (16:45-17:25) חזרה לאותו חדר ב-Hostel Pupa בקוטור. שינה מוקדמת ב-20:30 לקראת צ׳ק-אוט ב-07:50 בבוקר יום ראשון. <a href="https://www.google.com/maps/search/?api=1&query=Hostel+Pupa+Kotor+Montenegro" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+    </div>
+<!-- DAILY_END_ANCHOR_D2_END -->
+</div>
 </div>
 <div class="tab-content " id="tab-day-3">
   <div class="day-card">
@@ -651,11 +728,40 @@
       <span class="wa-title">📲 העתקה לווטסאפ / פתקים — יום 3</span>
       <div class="wa-btn-group">
         <button type="button" class="wa-btn" onclick="openWhatsAppDirect('3', 2)">📲 פתח יום 3 ב-WhatsApp</button>
-        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('3', 1, this)">📋 שמות ל-Maps (רווח כפול)</button>
+        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('3', 1, this)">📋 שמות ל-Maps (כולל הוסטל התחלה/סיום ולוגיסטיקה)</button>
         <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('3', 2, this)">📋 העתק תקציר מלא</button>
       </div>
     </div>
-        <article class="stop-card" id="card-d3-s1">
+        <!-- DAILY_START_AND_LOGISTICS_D3_START -->
+    <div class="anchor-logistics-block" id="start-logistics-d3" style="margin:10px 0 14px 0;padding:12px 14px;border-radius:10px;background:rgba(16,185,129,0.08);border:2px solid #10b981;">
+      <div style="font-weight:900;font-size:0.94rem;color:#10b981;margin-bottom:6px;">🛫 התחלת היום בהוסטל: צ׳ק-אוט מ-Hostel Pupa בקוטור ויציאה ב-08:00 לבוסניה <span style="font-size:0.8rem;color:var(--muted);font-weight:700;">(07:50 צ׳ק-אוט | 08:00 יציאה)</span></div>
+      <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+        <span class="map-name-text">Hostel Pupa Kotor Montenegro</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Hostel Pupa Kotor Montenegro', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div style="font-size:0.83rem;line-height:1.45;color:var(--text);margin-bottom:8px;">צ׳ק-אוט ב-07:50 ויציאה ב-08:00 מ-Hostel Pupa דרך כביש החוף וגבול Klobuk אל גשר Arslanagića Most בטרבינייה (110 דק׳ דלת-לדלת / 69.6 ק״מ). <a href="https://www.google.com/maps/search/?api=1&query=Hostel+Pupa+Kotor+Montenegro" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+      <div style="border-top:1px dashed rgba(16,185,129,0.4);padding-top:8px;margin-top:6px;">
+        <div style="font-weight:900;font-size:0.88rem;color:#f59e0b;margin-bottom:4px;">⛽🛒🚌 נקודות לוגיסטיות מומלצות על הציר ליום 3 (דלק / סופר זול / תחנה מרכזית):</div>
+      <div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);">
+        <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:4px;">🛒 סופר זול שפתוח ביום ראשון ברפובליקה סרפסקה: Tropic / Kort Market Trebinje <span style="color:var(--muted);font-weight:600;font-size:0.8rem;">(09:50-10:15 (פתוח ביום ראשון!))</span></div>
+        <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+          <span class="map-name-text">Market Kort Trebinje Bosnia</span>
+          <button type="button" class="btn-copy-map" onclick="copySingleMap('Market Kort Trebinje Bosnia', this)">📋 העתק ל-Maps</button>
+        </div>
+        <div style="font-size:0.82rem;line-height:1.45;color:var(--text);">בניגוד למונטנגרו ולפדרציה במוסטר (שבהן הסופרים סגורים ביום א׳), בטרבינייה הסופרים פתוחים ביום ראשון עד 21:00 ומחירי המים והאוכל בבוסניה נמוכים ב-35% (תשלום באשראי ב-BAM). <a href="https://www.google.com/maps/search/?api=1&query=Market+Kort+Trebinje+Bosnia" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+      </div>
+      <div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);">
+        <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:4px;">⛽ תחנת דלק זולה בטרבינייה / מוסטר: Nestro / Gazprom (~1.22€/ליטר לעומת 1.55€ בקרואטיה) <span style="color:var(--muted);font-weight:600;font-size:0.8rem;">(10:15 (ארביטראז׳ דלק בבוסניה))</span></div>
+        <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+          <span class="map-name-text">Nestro Petrol Trebinje Bosnia</span>
+          <button type="button" class="btn-copy-map" onclick="copySingleMap('Nestro Petrol Trebinje Bosnia', this)">📋 העתק ל-Maps</button>
+        </div>
+        <div style="font-size:0.82rem;line-height:1.45;color:var(--text);">דלק Eurosuper 95 רגיל בבוסניה עולה ~2.38 BAM (~1.22€/ליטר — זול ב-22% מקרואטיה). תמיד לבחור אקדח BMB 95 רגיל (לא Class Plus/Q Max היקר) ולשלם בכרטיס אשראי ב-BAM. <a href="https://www.google.com/maps/search/?api=1&query=Nestro+Petrol+Trebinje+Bosnia" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+      </div>
+      </div>
+    </div>
+<!-- DAILY_START_AND_LOGISTICS_D3_END -->
+    <article class="stop-card" id="card-d3-s1">
       <div class="stop-header">
         <div class="stop-name">#10. גשר הקשתות העות׳מאני Arslanagića Most ב-Trebinje (1574) ואגם הטורקיז Bileća</div>
         <span class="stop-tier tier-sec">● שלד</span>
@@ -753,7 +859,17 @@
         <a href="https://www.google.com/maps/search/?api=1&query=Stari+Most+Mostar+Bosnia" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
-  </div>
+<!-- DAILY_END_ANCHOR_D3_START -->
+    <div class="anchor-end-block" id="end-anchor-d3" style="margin:14px 0 6px 0;padding:12px 14px;border-radius:10px;background:rgba(99,102,241,0.1);border:2px solid #6366f1;">
+      <div style="font-weight:900;font-size:0.94rem;color:#818cf8;margin-bottom:6px;">🛏️ סיום היום ולינה (לילה 3): Apartments GB במוסטר (חניה פרטית 0€, 350 מ׳ מהגשר העתיק) <span style="font-size:0.8rem;color:var(--muted);font-weight:700;">(15:10 צ׳ק-אין | 20:35 שינה)</span></div>
+      <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+        <span class="map-name-text">Apartments GB Mostar Bosnia</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Apartments GB Mostar Bosnia', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div style="font-size:0.83rem;line-height:1.45;color:var(--text);">דירה פרטית מוזמנת ב-Booking (Maršala Tita 95, Mostar) עם חניה פרטית חינם צמודה. צ׳ק-אין והנחת הרכב ב-15:10-15:25, סיור שקיעה וערב במוסטר, וחזרה ברגל ב-20:30 לשינה ב-20:35. <a href="https://www.google.com/maps/search/?api=1&query=Apartments+GB+Mostar+Bosnia" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+    </div>
+<!-- DAILY_END_ANCHOR_D3_END -->
+</div>
 </div>
 <div class="tab-content " id="tab-day-4">
   <div class="day-card">
@@ -776,11 +892,48 @@
       <span class="wa-title">📲 העתקה לווטסאפ / פתקים — יום 4</span>
       <div class="wa-btn-group">
         <button type="button" class="wa-btn" onclick="openWhatsAppDirect('4', 2)">📲 פתח יום 4 ב-WhatsApp</button>
-        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('4', 1, this)">📋 שמות ל-Maps (רווח כפול)</button>
+        <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('4', 1, this)">📋 שמות ל-Maps (כולל הוסטל התחלה/סיום ולוגיסטיקה)</button>
         <button type="button" class="wa-btn wa-btn-sec" onclick="copyDayWhatsApp('4', 2, this)">📋 העתק תקציר מלא</button>
       </div>
     </div>
-        <article class="stop-card" id="card-d4-s1">
+        <!-- DAILY_START_AND_LOGISTICS_D4_START -->
+    <div class="anchor-logistics-block" id="start-logistics-d4" style="margin:10px 0 14px 0;padding:12px 14px;border-radius:10px;background:rgba(16,185,129,0.08);border:2px solid #10b981;">
+      <div style="font-weight:900;font-size:0.94rem;color:#10b981;margin-bottom:6px;">🛫 התחלת היום בהוסטל: צ׳ק-אוט מ-Apartments GB במוסטר ויציאה ב-08:00 לגשר Pelješac ו-Ston <span style="font-size:0.8rem;color:var(--muted);font-weight:700;">(07:50 צ׳ק-אוט | 08:00 יציאה)</span></div>
+      <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+        <span class="map-name-text">Apartments GB Mostar Bosnia</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Apartments GB Mostar Bosnia', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div style="font-size:0.83rem;line-height:1.45;color:var(--text);margin-bottom:8px;">צ׳ק-אוט ב-07:50 ויציאה ב-08:00 ממוסטר דרומה על כביש M17 לעבר תחנת התדלוק האחרונה בבוסניה (08:35 ב-Doljani) ומעבר הגבול Metković אל גשר Pelješac. <a href="https://www.google.com/maps/search/?api=1&query=Apartments+GB+Mostar+Bosnia" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+      <div style="border-top:1px dashed rgba(16,185,129,0.4);padding-top:8px;margin-top:6px;">
+        <div style="font-weight:900;font-size:0.88rem;color:#f59e0b;margin-bottom:4px;">⛽🛒🚌 נקודות לוגיסטיות מומלצות על הציר ליום 4 (דלק / סופר זול / תחנה מרכזית):</div>
+      <div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);">
+        <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:4px;">⛽ תחנת דלק מומלצת #1 (ארביטראז׳ בוסניה): Gazprom / INA Doljani Čapljina (תדלוק 6/6 ב-1.22€/ל׳) <span style="color:var(--muted);font-weight:600;font-size:0.8rem;">(שני 08:35 (2 ק״מ לפני גבול קרואטיה))</span></div>
+        <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+          <span class="map-name-text">Gazprom Doljani Capljina M17</span>
+          <button type="button" class="btn-copy-map" onclick="copySingleMap('Gazprom Doljani Capljina M17', this)">📋 העתק ל-Maps</button>
+        </div>
+        <div style="font-size:0.82rem;line-height:1.45;color:var(--text);">2 ק״מ לפני גבול Metković: מלא Eurosuper 95 רגיל עד הקליק הראשון (6/6) בכרטיס ב-BAM (~1.22€/ל׳). ב-143 ק״מ שנותרו דרך גשר פליישץ וסטון עד שדה DBV הרכב ישרוף ~7 ליטר ויגיע ל-5/6 (או השלם 2-3 ליטר ב-INA Čilipi צמוד לשדה אם החוזה דורש 8/8). <a href="https://www.google.com/maps/search/?api=1&query=Gazprom+Doljani+Capljina+M17" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+      </div>
+      <div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);">
+        <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:4px;">🛒 סופר זול בצ׳בטאט וליד שדה DBV: Tommy / Studenac Market Cavtat (או Lidl בדרך בדוברובניק) <span style="color:var(--muted);font-weight:600;font-size:0.8rem;">(שני 14:40 / 18:30)</span></div>
+        <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+          <span class="map-name-text">Studenac Market Cavtat Croatia</span>
+          <button type="button" class="btn-copy-map" onclick="copySingleMap('Studenac Market Cavtat Croatia', this)">📋 העתק ל-Maps</button>
+        </div>
+        <div style="font-size:0.82rem;line-height:1.45;color:var(--text);">סופרמרקט מקומי זול ונוח בטיילת ובכניסה ל-Cavtat (פתוח בשני 07:00-21:00) להצטיידות ערב ובוקר לפני הטיסה. <a href="https://www.google.com/maps/search/?api=1&query=Studenac+Market+Cavtat+Croatia" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+      </div>
+      <div style="margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);">
+        <div style="font-weight:800;font-size:0.88rem;color:var(--text);margin-bottom:4px;">⛽ תחנת דלק צמודה לשדה DBV (גיבוי השלמת 2-3 ליטר ל-8/8): INA Čilipi Dubrovnik Airport <span style="color:var(--muted);font-weight:600;font-size:0.8rem;">(שלישי 08:35 (2 דק׳ משדה DBV — רק אם נדרש 8/8 מלא))</span></div>
+        <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+          <span class="map-name-text">INA Cilipi Dubrovnik Airport</span>
+          <button type="button" class="btn-copy-map" onclick="copySingleMap('INA Cilipi Dubrovnik Airport', this)">📋 העתק ל-Maps</button>
+        </div>
+        <div style="font-size:0.82rem;line-height:1.45;color:var(--text);">ממוקמת 1.5 ק״מ בלבד לפני דלפק ההחזרה בשדה DBV (פתוחה מ-06:00). אם בחוזה ההשכרה רשום 8/8 (Full), משלימים כאן 2-3 ליטר של Eurosuper 95 רגיל ושומרים את הקבלה. <a href="https://www.google.com/maps/search/?api=1&query=INA+Cilipi+Dubrovnik+Airport" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+      </div>
+      </div>
+    </div>
+<!-- DAILY_START_AND_LOGISTICS_D4_END -->
+    <article class="stop-card" id="card-d4-s1">
       <div class="stop-header">
         <div class="stop-name">#14. Pelješac Bridge (גשר המיתרים ההנדסי החדש מעל מפרץ Mali Ston - תצפית Komarna)</div>
         <span class="stop-tier tier-sec">● שלד</span>
@@ -868,7 +1021,17 @@
         <a href="https://www.google.com/maps/search/?api=1&query=Racic+Mausoleum+Cavtat+Croatia" target="_blank" class="link-pill" rel="noopener">📍 פתח באפליקציית Google Maps</a>
       </div>
     </article>
-  </div>
+<!-- DAILY_END_ANCHOR_D4_START -->
+    <div class="anchor-end-block" id="end-anchor-d4" style="margin:14px 0 6px 0;padding:12px 14px;border-radius:10px;background:rgba(99,102,241,0.1);border:2px solid #6366f1;">
+      <div style="font-weight:900;font-size:0.94rem;color:#818cf8;margin-bottom:6px;">🛏️ סיום היום ולינה (לילה 4): Apartments Mira ב-Cavtat -> בוקר שלישי 08:45 החזרת רכב בשדה DBV <span style="font-size:0.8rem;color:var(--muted);font-weight:700;">(שני 14:20 צ׳ק-אין ולינה | שלישי 08:25->08:45 שדה DBV)</span></div>
+      <div class="map-copy-bar" style="margin:4px 0 6px 0;">
+        <span class="map-name-text">Apartments Mira Ulica Stjepana Radica 16 Cavtat</span>
+        <button type="button" class="btn-copy-map" onclick="copySingleMap('Apartments Mira Ulica Stjepana Radica 16 Cavtat', this)">📋 העתק ל-Maps</button>
+      </div>
+      <div style="font-size:0.83rem;line-height:1.45;color:var(--text);">לינת לילה 4 ב-Apartments Mira (Ulica Stjepana Radića 16, Cavtat, חניה פרטית 0€). בבוקר שלישי 03/11: צ׳ק-אוט ב-08:25 ונסיעה של 8 דק׳ (5 ק״מ) להחזרת הרכב בשדה DBV ב-08:45 וטיסה ב-10:35. <a href="https://www.google.com/maps/search/?api=1&query=Apartments+Mira+Ulica+Stjepana+Radica+16+Cavtat" target="_blank" rel="noopener" style="color:var(--primary);font-weight:700;margin-inline-start:6px;">📍 פתח ב-Google Maps</a></div>
+    </div>
+<!-- DAILY_END_ANCHOR_D4_END -->
+</div>
 </div>
 
 <div class="tab-content" id="tab-day-pack">
@@ -1098,7 +1261,57 @@ const ITINERARY_DATA = {
           "move": "5 דק׳ הליכה (300m) ב-20:30 חזרה ללינה ושינה ב-Hostel Pupa המוזמן בקוטור (הגעה לשינה ב-20:35, לקראת עליית הבוקר ב-07:15 לתצפית קוטור)",
           "move_en": "3m walk (300m) back to booked Hostel Pupa in Kotor"
         }
-      ]
+      ],
+      "start_anchor": {
+        "badge": "✈️",
+        "bg": "#0284c7",
+        "time": "11:25 - 12:10",
+        "title_he": "✈️ התחלת היום: שדה התעופה דוברובניק (DBV) ואיסוף הרכב השכור",
+        "title_en": "✈️ Day Start: Dubrovnik Airport (DBV) & Rental Car Pickup",
+        "desc_he": "נחיתה ב-11:25, איסוף רכב בדלפק השכרת הרכב (בדיקת מד דלק 8/8 או צילום 5/6 בחוזה) ויציאה ב-12:10 דרומה למעבר הגבול Karasovići (75 דק׳ דלת-לדלת ל-#1 הרצג נובי).",
+        "desc_en": "Land at 11:25, pick up rental car (verify fuel gauge on contract), and depart at 12:10 to Karasovići border (75m door-to-door to #1 Herceg Novi).",
+        "map_name": "Dubrovnik Airport DBV",
+        "lat": 42.5614,
+        "lng": 18.2682
+      },
+      "logistics_points": [
+        {
+          "badge": "🛒",
+          "bg": "#0891b2",
+          "time": "16:30 / 20:15",
+          "title_he": "🛒 סופר זול להצטיידות מים ונשנושים לרכב: Idea / Voli בקניון Kamelija קוטור (או Aroma מול שער הים)",
+          "title_en": "🛒 Cheap Supermarket for Water & Road Snacks: Idea / Voli at Kamelija Mall Kotor",
+          "desc_he": "פתוח בשישי ושבת עד 21:00-22:00 (מקבל אשראי קונטקטלס). חובה להצטייד כאן בשישי בערב או בשבת למסלול יום ראשון, כי ביום ראשון כל הסופרים במונטנגרו סגורים בחוק!",
+          "desc_en": "Open Fri & Sat until 21:00-22:00 (contactless card accepted). Stock up on water & snacks here before Sunday when Montenegrin supermarkets are closed by law.",
+          "map_name": "Shopping Center Kamelija Kotor Montenegro",
+          "lat": 42.4265,
+          "lng": 18.7697
+        },
+        {
+          "badge": "🚌",
+          "bg": "#4f46e5",
+          "time": "16:35 (גיבוי חניה 24/7)",
+          "title_he": "🚌 תחנה מרכזית קוטור וחניוני המחסום הזולים Autoboka / Puč (4 דק׳ מ-Hostel Pupa)",
+          "title_en": "🚌 Kotor Central Bus Station & Autoboka / Puč Barrier Parking (4m from Hostel Pupa)",
+          "desc_he": "330 מטר מדרום ל-Hostel Pupa. אם 3-4 מקומות החניה בחזית ההוסטל תפוסים, חניון Autoboka צמוד לתחנה המרכזית עולה רק 0.90€-1.30€/שעה (או רחבת Ulica Tabačina ב-0€).",
+          "desc_en": "330m south of Hostel Pupa. If the 3-4 spots in front of the hostel are full, Autoboka lot by the Bus Station is €0.90-€1.30/hr 24/7.",
+          "map_name": "Autoboka Bus Station Kotor Montenegro",
+          "lat": 42.4209,
+          "lng": 18.7675
+        }
+      ],
+      "end_anchor": {
+        "badge": "🛏️",
+        "bg": "#059669",
+        "time": "16:35 צ׳ק-אין | 20:35 שינה",
+        "title_he": "🛏️ סיום היום ולינה (לילות 1+2): Hostel Pupa בקוטור (300 מ׳ משער הים)",
+        "title_en": "🛏️ Day End & Night 1+2 Lodging: Hostel Pupa Kotor (300m from Sea Gate)",
+        "desc_he": "חדר פרטי מוזמן ב-Booking (Pelianovo / Riva bb). צ׳ק-אין והנחת תיק ב-16:35-16:50, וחזרה ברגל מסמטאות קוטור ב-20:30 לשינה ב-20:35.",
+        "desc_en": "Confirmed private room on Booking.com (Pelianovo / Riva bb). Check in at 16:35-16:50, return from Old Town walk at 20:30 for sleep at 20:35.",
+        "map_name": "Hostel Pupa Kotor Montenegro",
+        "lat": 42.4223,
+        "lng": 18.7701
+      }
     },
     {
       "day": "2",
@@ -1268,7 +1481,58 @@ const ITINERARY_DATA = {
           "move": "40 דק׳ דלת-לדלת (16:45-17:25: 32 דק׳ נהיגה של 22.7 ק״מ דרך מנהרת Vrmac + 8 דק׳ חניה ב-Hostel Pupa או חניון Autoboka/Puč ב-0.90€/שעה) חזרה ללינה ב-Hostel Pupa בקוטור (שינה ב-20:30)",
           "move_en": "40m door-to-door (16:45-17:25: 32m drive 22.7km via Vrmac Tunnel + 8m parking at Hostel Pupa or Autoboka/Puč lot €0.90/hr) back to Hostel Pupa in Kotor (sleep at 20:30)"
         }
-      ]
+      ],
+      "start_anchor": {
+        "badge": "🛏️",
+        "bg": "#059669",
+        "time": "07:15 ברגל | 08:10 ברכב",
+        "title_he": "🛏️ התחלת היום בהוסטל: Hostel Pupa בקוטור (07:15 לתצפית ברגל ב-0€ -> 08:10 יציאה ברכב לסרפנטינות)",
+        "title_en": "🛏️ Day Start at Hostel: Hostel Pupa Kotor (07:15 Foot Viewpoint €0 -> 08:10 Car Departure)",
+        "desc_he": "יוצאים ב-07:15 ברגל מ-Hostel Pupa לשער הנהר לתצפית Our Lady of Remedy בחינם לפני פתיחת הקופה ב-08:00, וב-08:10 יוצאים עם הרכב ל-25 הסרפנטינות ופסגת Lovćen.",
+        "desc_en": "Walk at 07:15 from Hostel Pupa to River Gate for the free €0 Our Lady of Remedy climb before 08:00 booth opening, then drive out at 08:10 to the 25 Serpentines.",
+        "map_name": "Hostel Pupa Kotor Montenegro",
+        "lat": 42.4223,
+        "lng": 18.7701
+      },
+      "logistics_points": [
+        {
+          "badge": "🛒",
+          "bg": "#0891b2",
+          "time": "16:30 / 17:30 (לפני יום א׳!)",
+          "title_he": "🛒 סופר זול להצטיידות חובה לפני יום ראשון: HDL Hypermarket Radanovići (או Voli בודווה/קוטור)",
+          "title_en": "🛒 Cheap Hypermarket Before Sunday Closures: HDL Hypermarket Radanovići / Voli Budva",
+          "desc_he": "יושב ממש על ציר החזרה מבודווה לקוטור (לפני מנהרת Vrmac, פתוח בשבת עד 21:30). הסופר הזול והגדול באזור להצטיידות במים ואוכל ליום ראשון (שבו הסופרים סגורים).",
+          "desc_en": "Directly on the Budva-to-Kotor return road before Vrmac Tunnel (open Sat until 21:30). Best spot to stock up before Sunday supermarket closures.",
+          "map_name": "HDL Lakovic Radanovici Kotor",
+          "lat": 42.3652,
+          "lng": 18.7568
+        },
+        {
+          "badge": "⛽",
+          "bg": "#d97706",
+          "time": "16:50 (בדרך מבודווה לקוטור)",
+          "title_he": "⛽ תחנת דלק מומלצת במונטנגרו (לפי צורך): Eko / Petrol Kotor Radanovići",
+          "title_en": "⛽ Recommended Montenegro Gas Station: Eko / Petrol Kotor Radanovići",
+          "desc_he": "דלק Eurosuper 95 רגיל (~1.40€/ליטר, תשלום באשראי). אם המיכל מעל חצי, עדיף להמתין לתדלוק הזול יותר בבוסניה ביום ראשון/שני (~1.22€/ליטר).",
+          "desc_en": "Standard Eurosuper 95 (~€1.40/L, card accepted). If tank is above half, wait to refuel cheaper in Bosnia on Day 3/4 (~€1.22/L).",
+          "map_name": "Eko Jugopetrol Radanovici Kotor",
+          "lat": 42.3688,
+          "lng": 18.7545
+        }
+      ],
+      "end_anchor": {
+        "badge": "🛏️",
+        "bg": "#059669",
+        "time": "17:25 הגעה | 20:30 שינה",
+        "title_he": "🛏️ סיום היום ולינה (לילה 2): Hostel Pupa בקוטור (חזרה מבודווה דרך מנהרת Vrmac)",
+        "title_en": "🛏️ Day End & Night 2 Lodging: Hostel Pupa Kotor (Return from Budva via Vrmac Tunnel)",
+        "desc_he": "נסיעה של 40 דק׳ דלת-לדלת מבודווה (16:45-17:25) חזרה לאותו חדר ב-Hostel Pupa בקוטור. שינה מוקדמת ב-20:30 לקראת צ׳ק-אוט ב-07:50 בבוקר יום ראשון.",
+        "desc_en": "40m door-to-door drive from Budva (16:45-17:25) back to Hostel Pupa Kotor. Sleep at 20:30 before Sunday 07:50 check-out.",
+        "map_name": "Hostel Pupa Kotor Montenegro",
+        "lat": 42.4223,
+        "lng": 18.7701,
+        "same_as_start": true
+      }
     },
     {
       "day": "3",
@@ -1463,7 +1727,57 @@ const ITINERARY_DATA = {
             }
           ]
         }
-      ]
+      ],
+      "start_anchor": {
+        "badge": "🛫",
+        "bg": "#059669",
+        "time": "07:50 צ׳ק-אוט | 08:00 יציאה",
+        "title_he": "🛫 התחלת היום בהוסטל: צ׳ק-אוט מ-Hostel Pupa בקוטור ויציאה ב-08:00 לבוסניה",
+        "title_en": "🛫 Day Start at Hostel: Check-Out from Hostel Pupa Kotor & 08:00 Departure to Bosnia",
+        "desc_he": "צ׳ק-אוט ב-07:50 ויציאה ב-08:00 מ-Hostel Pupa דרך כביש החוף וגבול Klobuk אל גשר Arslanagića Most בטרבינייה (110 דק׳ דלת-לדלת / 69.6 ק״מ).",
+        "desc_en": "Check out at 07:50 and depart at 08:00 from Hostel Pupa via Klobuk border to Arslanagića Most in Trebinje (110m door-to-door / 69.6km).",
+        "map_name": "Hostel Pupa Kotor Montenegro",
+        "lat": 42.4223,
+        "lng": 18.7701
+      },
+      "logistics_points": [
+        {
+          "badge": "🛒",
+          "bg": "#0891b2",
+          "time": "09:50-10:15 (פתוח ביום ראשון!)",
+          "title_he": "🛒 סופר זול שפתוח ביום ראשון ברפובליקה סרפסקה: Tropic / Kort Market Trebinje",
+          "title_en": "🛒 Cheap Supermarket Open on Sunday in Republika Srpska: Tropic / Kort Market Trebinje",
+          "desc_he": "בניגוד למונטנגרו ולפדרציה במוסטר (שבהן הסופרים סגורים ביום א׳), בטרבינייה הסופרים פתוחים ביום ראשון עד 21:00 ומחירי המים והאוכל בבוסניה נמוכים ב-35% (תשלום באשראי ב-BAM).",
+          "desc_en": "Unlike Montenegro and Mostar (where supermarkets close on Sundays), Trebinje supermarkets are open Sunday until 21:00 at ~35% lower Bosnian prices (card in BAM).",
+          "map_name": "Market Kort Trebinje Bosnia",
+          "lat": 42.7112,
+          "lng": 18.3478
+        },
+        {
+          "badge": "⛽",
+          "bg": "#d97706",
+          "time": "10:15 (ארביטראז׳ דלק בבוסניה)",
+          "title_he": "⛽ תחנת דלק זולה בטרבינייה / מוסטר: Nestro / Gazprom (~1.22€/ליטר לעומת 1.55€ בקרואטיה)",
+          "title_en": "⛽ Cheap Bosnia Gas Station: Nestro Trebinje / Gazprom Mostar (~€1.22/L vs €1.55 in Croatia)",
+          "desc_he": "דלק Eurosuper 95 רגיל בבוסניה עולה ~2.38 BAM (~1.22€/ליטר — זול ב-22% מקרואטיה). תמיד לבחור אקדח BMB 95 רגיל (לא Class Plus/Q Max היקר) ולשלם בכרטיס אשראי ב-BAM.",
+          "desc_en": "Standard Eurosuper 95 in Bosnia costs ~2.38 BAM (~€1.22/L, 22% cheaper than Croatia). Choose standard BMB 95 nozzle and pay by card in BAM.",
+          "map_name": "Nestro Petrol Trebinje Bosnia",
+          "lat": 42.7145,
+          "lng": 18.3502
+        }
+      ],
+      "end_anchor": {
+        "badge": "🛏️",
+        "bg": "#059669",
+        "time": "15:10 צ׳ק-אין | 20:35 שינה",
+        "title_he": "🛏️ סיום היום ולינה (לילה 3): Apartments GB במוסטר (חניה פרטית 0€, 350 מ׳ מהגשר העתיק)",
+        "title_en": "🛏️ Day End & Night 3 Lodging: Apartments GB Mostar (Free Private Parking, 350m from Stari Most)",
+        "desc_he": "דירה פרטית מוזמנת ב-Booking (Maršala Tita 95, Mostar) עם חניה פרטית חינם צמודה. צ׳ק-אין והנחת הרכב ב-15:10-15:25, סיור שקיעה וערב במוסטר, וחזרה ברגל ב-20:30 לשינה ב-20:35.",
+        "desc_en": "Confirmed private apartment on Booking.com (Maršala Tita 95, Mostar) with free private parking. Check in at 15:10-15:25, evening walk, sleep at 20:35.",
+        "map_name": "Apartments GB Mostar Bosnia",
+        "lat": 43.3428,
+        "lng": 17.8139
+      }
     },
     {
       "day": "4",
@@ -1631,7 +1945,69 @@ const ITINERARY_DATA = {
             }
           ]
         }
-      ]
+      ],
+      "start_anchor": {
+        "badge": "🛫",
+        "bg": "#059669",
+        "time": "07:50 צ׳ק-אוט | 08:00 יציאה",
+        "title_he": "🛫 התחלת היום בהוסטל: צ׳ק-אוט מ-Apartments GB במוסטר ויציאה ב-08:00 לגשר Pelješac ו-Ston",
+        "title_en": "🛫 Day Start at Lodging: Check-Out from Apartments GB Mostar & 08:00 Departure to Pelješac & Ston",
+        "desc_he": "צ׳ק-אוט ב-07:50 ויציאה ב-08:00 ממוסטר דרומה על כביש M17 לעבר תחנת התדלוק האחרונה בבוסניה (08:35 ב-Doljani) ומעבר הגבול Metković אל גשר Pelješac.",
+        "desc_en": "Check out at 07:50 and depart at 08:00 from Mostar south on M17 to the final Bosnia refuel stop (08:35 at Doljani) and Metković border to Pelješac Bridge.",
+        "map_name": "Apartments GB Mostar Bosnia",
+        "lat": 43.3428,
+        "lng": 17.8139
+      },
+      "logistics_points": [
+        {
+          "badge": "⛽",
+          "bg": "#d97706",
+          "time": "שני 08:35 (2 ק״מ לפני גבול קרואטיה)",
+          "title_he": "⛽ תחנת דלק מומלצת #1 (ארביטראז׳ בוסניה): Gazprom / INA Doljani Čapljina (תדלוק 6/6 ב-1.22€/ל׳)",
+          "title_en": "⛽ Recommended Refuel #1 (Bosnia Arbitrage): Gazprom / INA Doljani Čapljina (Fill 6/6 at €1.22/L)",
+          "desc_he": "2 ק״מ לפני גבול Metković: מלא Eurosuper 95 רגיל עד הקליק הראשון (6/6) בכרטיס ב-BAM (~1.22€/ל׳). ב-143 ק״מ שנותרו דרך גשר פליישץ וסטון עד שדה DBV הרכב ישרוף ~7 ליטר ויגיע ל-5/6 (או השלם 2-3 ליטר ב-INA Čilipi צמוד לשדה אם החוזה דורש 8/8).",
+          "desc_en": "2km before Metković EU border: fill standard Eurosuper 95 to first click (6/6) by card in BAM (~€1.22/L). Remaining 143km to DBV burns ~7L.",
+          "map_name": "Gazprom Doljani Capljina M17",
+          "lat": 43.0632,
+          "lng": 17.6518
+        },
+        {
+          "badge": "🛒",
+          "bg": "#0891b2",
+          "time": "שני 14:40 / 18:30",
+          "title_he": "🛒 סופר זול בצ׳בטאט וליד שדה DBV: Tommy / Studenac Market Cavtat (או Lidl בדרך בדוברובניק)",
+          "title_en": "🛒 Cheap Supermarket in Cavtat: Tommy / Studenac Market Cavtat",
+          "desc_he": "סופרמרקט מקומי זול ונוח בטיילת ובכניסה ל-Cavtat (פתוח בשני 07:00-21:00) להצטיידות ערב ובוקר לפני הטיסה.",
+          "desc_en": "Convenient local supermarket in Cavtat (open Mon 07:00-21:00) for evening & pre-flight supplies.",
+          "map_name": "Studenac Market Cavtat Croatia",
+          "lat": 42.5815,
+          "lng": 18.2192
+        },
+        {
+          "badge": "⛽",
+          "bg": "#d97706",
+          "time": "שלישי 08:35 (2 דק׳ משדה DBV — רק אם נדרש 8/8 מלא)",
+          "title_he": "⛽ תחנת דלק צמודה לשדה DBV (גיבוי השלמת 2-3 ליטר ל-8/8): INA Čilipi Dubrovnik Airport",
+          "title_en": "⛽ Airport-Entrance Gas Station (2m from DBV Return Desk): INA Čilipi Dubrovnik Airport",
+          "desc_he": "ממוקמת 1.5 ק״מ בלבד לפני דלפק ההחזרה בשדה DBV (פתוחה מ-06:00). אם בחוזה ההשכרה רשום 8/8 (Full), משלימים כאן 2-3 ליטר של Eurosuper 95 רגיל ושומרים את הקבלה.",
+          "desc_en": "1.5km before DBV car rental return (open from 06:00). Top up 2-3L of standard Eurosuper 95 here if your rental agreement states 8/8 Full.",
+          "map_name": "INA Cilipi Dubrovnik Airport",
+          "lat": 42.5568,
+          "lng": 18.2755
+        }
+      ],
+      "end_anchor": {
+        "badge": "🛏️",
+        "bg": "#059669",
+        "time": "שני 14:20 צ׳ק-אין ולינה | שלישי 08:25->08:45 שדה DBV",
+        "title_he": "🛏️ סיום היום ולינה (לילה 4): Apartments Mira ב-Cavtat -> בוקר שלישי 08:45 החזרת רכב בשדה DBV",
+        "title_en": "🛏️ Day End & Night 4 Lodging: Apartments Mira Cavtat -> Tue 08:45 Car Drop at DBV Airport",
+        "desc_he": "לינת לילה 4 ב-Apartments Mira (Ulica Stjepana Radića 16, Cavtat, חניה פרטית 0€). בבוקר שלישי 03/11: צ׳ק-אוט ב-08:25 ונסיעה של 8 דק׳ (5 ק״מ) להחזרת הרכב בשדה DBV ב-08:45 וטיסה ב-10:35.",
+        "desc_en": "Night 4 at Apartments Mira (Ulica Stjepana Radića 16, Cavtat, free parking). Tue 03/11: 08:25 check-out and 8m drive (5km) to DBV Airport for 08:45 car return & 10:35 flight.",
+        "map_name": "Apartments Mira Ulica Stjepana Radica 16 Cavtat",
+        "lat": 42.5835,
+        "lng": 18.2238
+      }
     }
   ]
 };
@@ -1723,12 +2099,34 @@ function copySingleMap(mapName, btnEl) {
 
 function buildWhatsAppDay(dayObj, level) {
   if (level === 1) {
-    return dayObj.stops.map(s => s.map_name).join('\n\n\n');
+    const names = [];
+    if (dayObj.start_anchor && dayObj.start_anchor.map_name) {
+      names.push(dayObj.start_anchor.map_name);
+    }
+    (dayObj.stops || []).forEach(s => {
+      if (s && s.map_name) names.push(s.map_name);
+    });
+    (dayObj.logistics_points || []).forEach(lp => {
+      if (lp && lp.map_name) names.push(lp.map_name);
+    });
+    if (dayObj.end_anchor && dayObj.end_anchor.map_name) {
+      names.push(dayObj.end_anchor.map_name);
+    }
+    return names.join('\n\n\n');
   }
   let lines = [];
   lines.push('🌊 *' + dayObj.title + '*');
   lines.push('📍 ' + dayObj.subtitle);
   lines.push('');
+  if (dayObj.start_anchor && dayObj.start_anchor.map_name) {
+    lines.push('━━━━━━━━━━━━━━━━━━');
+    lines.push(dayObj.start_anchor.map_name);
+    lines.push('');
+    lines.push('');
+    lines.push((dayObj.start_anchor.badge || '🛫') + ' *התחלת היום (הוסטל/שדה):* [' + (dayObj.start_anchor.time || '') + '] ' + (dayObj.start_anchor.title_he || ''));
+    if (dayObj.start_anchor.desc_he) lines.push('ℹ️ ' + dayObj.start_anchor.desc_he);
+    lines.push('');
+  }
   dayObj.stops.forEach(s => {
     lines.push('━━━━━━━━━━━━━━━━━━');
     lines.push(s.map_name);
@@ -1745,6 +2143,28 @@ function buildWhatsAppDay(dayObj, level) {
     }
     lines.push('');
   });
+  if (Array.isArray(dayObj.logistics_points) && dayObj.logistics_points.length > 0) {
+    lines.push('━━━━━━━━━━━━━━━━━━');
+    lines.push('⛽🛒🚌 *נקודות לוגיסטיות מומלצות על הציר (דלק / סופר זול / תחנה מרכזית):*');
+    lines.push('');
+    dayObj.logistics_points.forEach(lp => {
+      lines.push(lp.map_name);
+      lines.push('');
+      lines.push('');
+      lines.push((lp.badge || '📍') + ' [' + (lp.time || '') + '] ' + (lp.title_he || ''));
+      if (lp.desc_he) lines.push('💡 ' + lp.desc_he);
+      lines.push('');
+    });
+  }
+  if (dayObj.end_anchor && dayObj.end_anchor.map_name) {
+    lines.push('━━━━━━━━━━━━━━━━━━');
+    lines.push(dayObj.end_anchor.map_name);
+    lines.push('');
+    lines.push('');
+    lines.push((dayObj.end_anchor.badge || '🛏️') + ' *סיום היום ולינה (הוסטל/שדה):* [' + (dayObj.end_anchor.time || '') + '] ' + (dayObj.end_anchor.title_he || ''));
+    if (dayObj.end_anchor.desc_he) lines.push('ℹ️ ' + dayObj.end_anchor.desc_he);
+    lines.push('');
+  }
   return lines.join('\n');
 }
 
@@ -1801,29 +2221,18 @@ const DAY_COLORS = {
   '4': '#db2777'
 };
 
-const DAY_START_END_ANCHORS = {
-  '1': {
-    start: { lat: 42.5614, lng: 18.2682, badge: '✈️', bg: '#0284c7', title: '✈️ שדה תעופה DBV (יציאה 12:10 ל-#1 הרצג נובי — 75 דק׳ דלת-לדלת)', maps: 'https://www.google.com/maps/search/?api=1&query=Dubrovnik+Airport+DBV' },
-    end: { lat: 42.4272, lng: 18.7695, badge: '🛏️', bg: '#059669', title: '🛏️ Hostel Pupa קוטור (לינה לילות 1+2 — 300 מ׳ משער הים)', maps: 'https://www.google.com/maps/search/?api=1&query=Hostel+Pupa+Kotor+Montenegro' }
-  },
-  '2': {
-    start: { lat: 42.4272, lng: 18.7695, badge: '🛏️', bg: '#059669', title: '🛏️ Hostel Pupa קוטור (יציאה 07:15 לסרפנטינות ו-#6 לובצ׳ן + חזרה מבודווה 17:25)', maps: 'https://www.google.com/maps/search/?api=1&query=Hostel+Pupa+Kotor+Montenegro' },
-    end: { lat: 42.4272, lng: 18.7695, badge: '🛏️', bg: '#059669', title: '🛏️ Hostel Pupa קוטור (חזרה מבודווה 16:45-17:25 — 40 דק׳ דלת-לדלת)', maps: 'https://www.google.com/maps/search/?api=1&query=Hostel+Pupa+Kotor+Montenegro', sameAsStart: true }
-  },
-  '3': {
-    start: { lat: 42.4272, lng: 18.7695, badge: '🛫', bg: '#059669', title: '🛫 Hostel Pupa קוטור (יציאת בוקר 08:00 ל-#10 טרבינייה — 110 דק׳ דלת-לדלת / 69.6 ק״מ כולל גבול Klobuk)', maps: 'https://www.google.com/maps/search/?api=1&query=Hostel+Pupa+Kotor+Montenegro' },
-    end: { lat: 43.3428, lng: 17.8139, badge: '🛏️', bg: '#059669', title: '🛏️ Apartments GB מוסטר (צ׳ק-אין 15:10 ולינת לילה 3 — Maršala Tita 95)', maps: 'https://www.google.com/maps/search/?api=1&query=Apartments+GB+Mostar+Bosnia' }
-  },
-  '4': {
-    start: { lat: 43.3428, lng: 17.8139, badge: '🛫', bg: '#059669', title: '🛫 Apartments GB מוסטר (יציאת בוקר 08:00 ל-#14 גשר פליישץ — 105 דק׳ דלת-לדלת / 74.1 ק״מ כולל גבול Metković)', maps: 'https://www.google.com/maps/search/?api=1&query=Apartments+GB+Mostar+Bosnia' },
-    fuel: { lat: 43.0632, lng: 17.6518, badge: '⛽', bg: '#d97706', title: '⛽ תזכורת תדלוק אחרון בבוסניה (08:35 ב-Gazprom / INA Doljani לפני הגבול): מלא 6/6 עד הקליק הראשון בכרטיס ב-BAM (~1.22€/ל׳) -> ב-143 ק״מ עד DBV הרכב ישרוף ~7 ליטר (1/6 מיכל) ויגיע אוטומטית ל-5/6 בהחזרה!', maps: 'https://www.google.com/maps/search/?api=1&query=Gazprom+Doljani+Capljina+M17' },
-    end: { lat: 42.5835, lng: 18.2238, badge: '🛏️', bg: '#059669', title: '🛏️ Apartments Mira צ׳בטאט (לינת לילה 4 — 6 דק׳ משדה DBV)', maps: 'https://www.google.com/maps/search/?api=1&query=Apartments+Mira+Ulica+Stjepana+Radica+16+Cavtat' }
-  }
-};
+const DAY_START_END_ANCHORS = {};
+ITINERARY_DATA.days.forEach(d => {
+  DAY_START_END_ANCHORS[d.day] = {
+    start: d.start_anchor || null,
+    logistics: d.logistics_points || [],
+    end: d.end_anchor || null
+  };
+});
 
 function createAnchorPin(badge, bg) {
   return L.divIcon({
-    html: `<div style="background:${bg};color:#ffffff;width:28px;height:28px;border-radius:6px;border:2px solid #a7f3d0;box-shadow:0 2px 6px rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;font-size:14px;">${badge}</div>`,
+    html: `<div style="background:${bg || '#059669'};color:#ffffff;width:28px;height:28px;border-radius:6px;border:2px solid #a7f3d0;box-shadow:0 2px 6px rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;font-size:14px;">${badge || '🛏️'}</div>`,
     className: 'custom-map-pin',
     iconSize: [28, 28],
     iconAnchor: [14, 14],
@@ -1857,46 +2266,62 @@ function initMobileMap() {
     scrollWheelZoom: false
   });
 
-  // Create markers and door-to-door polylines for all days
   ITINERARY_DATA.days.forEach(d => {
     markersByDay[d.day] = [];
     const dayCoords = [];
     const color = DAY_COLORS[d.day] || '#0284c7';
-    const anchor = DAY_START_END_ANCHORS[d.day];
+    const sa = d.start_anchor;
+    const ea = d.end_anchor;
+    const lps = d.logistics_points || [];
 
-    if (anchor && anchor.start) {
-      dayCoords.push([anchor.start.lat, anchor.start.lng]);
-      const startMarker = L.marker([anchor.start.lat, anchor.start.lng], {
-        icon: createAnchorPin(anchor.start.badge, anchor.start.bg)
+    if (sa && sa.lat && sa.lng) {
+      dayCoords.push([sa.lat, sa.lng]);
+      const saUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(sa.map_name || (sa.lat + ',' + sa.lng));
+      const saQ = (sa.map_name || '').replace(/'/g, "\\'");
+      const startMarker = L.marker([sa.lat, sa.lng], {
+        icon: createAnchorPin(sa.badge || '🛫', sa.bg || '#059669')
       }).bindPopup(`
-        <div style="direction:rtl;text-align:right;font-family:-apple-system,BlinkMacSystemFont,sans-serif;min-width:190px;font-size:12px;">
-          <strong style="color:#065f46;font-size:12.5px;">${anchor.start.title}</strong><br>
-          <a href="${anchor.start.maps}" target="_blank" rel="noopener" style="color:#0284c7;font-weight:700;">📍 ניווט ב-Google Maps</a>
+        <div style="direction:rtl;text-align:right;font-family:-apple-system,BlinkMacSystemFont,sans-serif;min-width:210px;font-size:12px;">
+          <strong style="color:#065f46;font-size:12.5px;">${sa.title_he}</strong><br>
+          <span style="color:#475569;">⏰ ${sa.time || ''}</span><br>
+          <div style="font-family:monospace;font-size:11px;background:#f1f5f9;padding:3px 6px;border-radius:4px;margin:4px 0;direction:ltr;color:#0f172a;">${sa.map_name}</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+            <button type="button" onclick="copySingleMap('${saQ}', this)" style="background:#0284c7;color:#fff;border:none;border-radius:4px;padding:3px 7px;font-size:11px;font-weight:700;cursor:pointer;">📋 העתק ל-Maps</button>
+            <a href="${saUrl}" target="_blank" rel="noopener" style="color:#0284c7;font-weight:700;">📍 ניווט ב-Maps</a>
+          </div>
         </div>
       `);
       markersByDay[d.day].push(startMarker);
       allMarkers.push(startMarker);
     }
-    if (anchor && anchor.fuel) {
-      dayCoords.push([anchor.fuel.lat, anchor.fuel.lng]);
-      const fuelMarker = L.marker([anchor.fuel.lat, anchor.fuel.lng], {
-        icon: createAnchorPin(anchor.fuel.badge, anchor.fuel.bg)
+
+    lps.forEach(lp => {
+      if (!lp.lat || !lp.lng) return;
+      const lpUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(lp.map_name || (lp.lat + ',' + lp.lng));
+      const lpQ = (lp.map_name || '').replace(/'/g, "\\'");
+      const lpMarker = L.marker([lp.lat, lp.lng], {
+        icon: createAnchorPin(lp.badge || '⛽', lp.bg || '#d97706')
       }).bindPopup(`
-        <div style="direction:rtl;text-align:right;font-family:-apple-system,BlinkMacSystemFont,sans-serif;min-width:210px;font-size:12px;">
-          <strong style="color:#b45309;font-size:12.5px;">${anchor.fuel.title}</strong><br>
-          <a href="${anchor.fuel.maps}" target="_blank" rel="noopener" style="color:#0284c7;font-weight:700;">📍 ניווט לתחנת הדלק ב-Google Maps</a>
+        <div style="direction:rtl;text-align:right;font-family:-apple-system,BlinkMacSystemFont,sans-serif;min-width:215px;font-size:12px;">
+          <strong style="color:#b45309;font-size:12.5px;">${lp.title_he}</strong><br>
+          <span style="color:#475569;">⏰ ${lp.time || ''}</span><br>
+          <span style="color:#334155;font-size:11.5px;">${lp.desc_he || ''}</span><br>
+          <div style="font-family:monospace;font-size:11px;background:#f1f5f9;padding:3px 6px;border-radius:4px;margin:4px 0;direction:ltr;color:#0f172a;">${lp.map_name}</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+            <button type="button" onclick="copySingleMap('${lpQ}', this)" style="background:#0284c7;color:#fff;border:none;border-radius:4px;padding:3px 7px;font-size:11px;font-weight:700;cursor:pointer;">📋 העתק ל-Maps</button>
+            <a href="${lpUrl}" target="_blank" rel="noopener" style="color:#0284c7;font-weight:700;">📍 ניווט ב-Maps</a>
+          </div>
         </div>
       `);
-      markersByDay[d.day].push(fuelMarker);
-      allMarkers.push(fuelMarker);
-    }
+      markersByDay[d.day].push(lpMarker);
+      allMarkers.push(lpMarker);
+    });
 
     d.stops.forEach(s => {
       if (!s.lat || !s.lng) return;
       dayCoords.push([s.lat, s.lng]);
       const pin = createCustomPin(s.num, color, s.isTier1);
       const marker = L.marker([s.lat, s.lng], { icon: pin });
-      
       const popupHtml = `
         <div style="direction:rtl;text-align:right;font-family:-apple-system,BlinkMacSystemFont,sans-serif;min-width:180px;font-size:12px;">
           <strong style="color:${color};font-size:13px;">#${s.num}. ${s.name}</strong><br>
@@ -1940,15 +2365,22 @@ function initMobileMap() {
       }
     });
 
-    if (anchor && anchor.end) {
-      dayCoords.push([anchor.end.lat, anchor.end.lng]);
-      if (!anchor.end.sameAsStart) {
-        const endMarker = L.marker([anchor.end.lat, anchor.end.lng], {
-          icon: createAnchorPin(anchor.end.badge, anchor.end.bg)
+    if (ea && ea.lat && ea.lng) {
+      dayCoords.push([ea.lat, ea.lng]);
+      if (!ea.same_as_start) {
+        const eaUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(ea.map_name || (ea.lat + ',' + ea.lng));
+        const eaQ = (ea.map_name || '').replace(/'/g, "\\'");
+        const endMarker = L.marker([ea.lat, ea.lng], {
+          icon: createAnchorPin(ea.badge || '🛏️', ea.bg || '#059669')
         }).bindPopup(`
-          <div style="direction:rtl;text-align:right;font-family:-apple-system,BlinkMacSystemFont,sans-serif;min-width:190px;font-size:12px;">
-            <strong style="color:#065f46;font-size:12.5px;">${anchor.end.title}</strong><br>
-            <a href="${anchor.end.maps}" target="_blank" rel="noopener" style="color:#0284c7;font-weight:700;">📍 ניווט ב-Google Maps</a>
+          <div style="direction:rtl;text-align:right;font-family:-apple-system,BlinkMacSystemFont,sans-serif;min-width:210px;font-size:12px;">
+            <strong style="color:#065f46;font-size:12.5px;">${ea.title_he}</strong><br>
+            <span style="color:#475569;">⏰ ${ea.time || ''}</span><br>
+            <div style="font-family:monospace;font-size:11px;background:#f1f5f9;padding:3px 6px;border-radius:4px;margin:4px 0;direction:ltr;color:#0f172a;">${ea.map_name}</div>
+            <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+              <button type="button" onclick="copySingleMap('${eaQ}', this)" style="background:#0284c7;color:#fff;border:none;border-radius:4px;padding:3px 7px;font-size:11px;font-weight:700;cursor:pointer;">📋 העתק ל-Maps</button>
+              <a href="${eaUrl}" target="_blank" rel="noopener" style="color:#0284c7;font-weight:700;">📍 ניווט ב-Maps</a>
+            </div>
           </div>
         `);
         markersByDay[d.day].push(endMarker);
@@ -2003,26 +2435,19 @@ function createCustomPin(num, color, isTier1) {
 function filterMapMarkers(dayNum) {
   if (!map) return;
   currentActiveDay = String(dayNum);
-  
-  // Update day indicator badge
   const badge = document.getElementById('map-day-indicator');
   if (badge) {
     badge.textContent = 'יום ' + dayNum;
     badge.style.color = DAY_COLORS[dayNum] || '#0284c7';
   }
-
-  // Remove all markers and polylines
   allMarkers.forEach(m => map.removeLayer(m));
-  allPolylines.forEach(p => map.removeLayer(p));
+  if (typeof allPolylines !== 'undefined') { allPolylines.forEach(p => map.removeLayer(p)); }
   if (typeof kotorParkingMarkers !== 'undefined') { kotorParkingMarkers.forEach(m => map.removeLayer(m)); }
-
-  // Add active day markers and door-to-door polyline
   const activeMarkers = markersByDay[currentActiveDay] || [];
   activeMarkers.forEach(m => map.addLayer(m));
-  if (polylinesByDay[currentActiveDay]) {
+  if (typeof polylinesByDay !== 'undefined' && polylinesByDay[currentActiveDay]) {
     map.addLayer(polylinesByDay[currentActiveDay]);
   }
-
   fitDayBounds();
 }
 
@@ -3541,23 +3966,5 @@ function copyPackingList(btn) {
 })();
 </script>
 <!-- ELADB_UNIVERSAL_DOM_COMMENTS_END -->
-
-<!-- ELADB_PWA_OFFLINE_START -->
-<script>
-(function() {
-  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register('./sw.js').then(function() {
-        var badge = document.getElementById('offlineReadyBadge');
-        if (badge) {
-          badge.textContent = navigator.onLine ? '📴 שמור אוטומטית לאופליין בנייד' : '📴 מצב אופליין פעיל (ללא אינטרנט)';
-          badge.style.display = 'inline-flex';
-        }
-      }).catch(function() {});
-    });
-  }
-})();
-</script>
-<!-- ELADB_PWA_OFFLINE_END -->
 </body>
 </html>
